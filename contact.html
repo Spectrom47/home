@@ -7,37 +7,51 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <div class="logo">MyWebsite</div>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="tab">Home</a></li>
+        <li><a href="about.html" class="tab">About</a></li>
+        <li><a href="projects.html" class="tab">Projects</a></li>
+        <li class="tab-active"><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<header>
-  <div class="logo">MyWebsite</div>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li class="tab-active"><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</header>
+  <main>
+    <section class="contact-section">
+      <h1>Contact Me</h1>
+      <p>Feel free to reach out using the form below or directly via email.</p>
 
-<main>
-  <section id="contact">
-    <h1>Contact Me</h1>
-    <p>Email: <a href="mailto:example@example.com">example@example.com</a></p>
-    <p>Socials: <a href="#">Twitter</a> | <a href="#">GitHub</a></p>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
-  </section>
-</main>
+      <div class="row">
+        <!-- Contact Form -->
+        <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
 
-<footer>
-  <p>© 2025 MyWebsite. All rights reserved.</p>
-</footer>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
 
-<script src="script.js"></script>
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+
+          <button type="submit">Send Message</button>
+        </form>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <h2>Direct Contact</h2>
+          <p>Email: your-email@example.com</p>
+          <p>Phone: (123) 456-7890</p>
+          <p>Location: City, Country</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MyWebsite. All rights reserved.</p>
+  </footer>
 </body>
 </html>
