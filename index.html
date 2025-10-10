@@ -1,81 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - My Website</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Home - MyWebsite</title>
+  <style>
+    /* Basic reset + layout */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { display: flex; min-height: 100vh; flex-direction: column; background:#f6f7fb; color:#111; }
+
+    /* Header / nav */
+    header { background:#0f1724; color:#fff; padding:16px 20px; }
+    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo { font-weight:700; letter-spacing:0.6px; }
+    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
+    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
+    nav a:hover { color:#fff; background:rgba(255,255,255,0.03); transform:translateY(-1px); }
+    nav li.tab-active > a,
+    nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.18); }
+
+    /* Main */
+    main { flex:1; padding:28px 20px; max-width:1024px; margin:0 auto; width:100%; }
+    section { background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,23,36,0.06); margin-bottom:16px; }
+    .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+    .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
+
+    /* Footer */
+    footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
+
+    /* Mobile nav collapse (very basic) */
+    @media (max-width:560px){
+      .container { flex-direction:column; align-items:flex-start; gap:12px; }
+      nav ul { width:100%; justify-content:space-between; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Header / Navigation -->
   <header>
-    <div class="logo">MyWebsite</div>
-    <nav>
-      <ul>
-        <li><a href="index.html" class="tab">Home</a></li>
-        <li><a href="about.html" class="tab">About</a></li>
-        <li><a href="projects.html" class="tab">Projects</a></li>
-        <li><a href="contact.html" class="tab tab-active">Contact</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <div class="logo">MyWebsite</div>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="tab">Home</a></li>
+          <li><a href="projects.html" class="tab">Projects</a></li>
+          <li><a href="contact.html" class="tab">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-<main>
-  <!-- Home Section -->
-  <section id="home">
-    <h1>Welcome to My Website</h1>
-    <p>This is the homepage. Briefly introduce yourself or your portfolio here.</p>
+  <main>
+    <section id="home">
+      <h1>Welcome — Home</h1>
+      <p style="margin-top:8px;">This is the homepage. Keep this short and make the links obvious so visitors can jump to Projects or Contact.</p>
 
-    <div class="row">
-      <div class="card">Feature 1</div>
-      <div class="card">Feature 2</div>
-      <div class="card">Feature 3</div>
-    </div>
+      <div class="row" style="margin-top:14px;">
+        <div class="card">Feature A</div>
+        <div class="card">Feature B</div>
+        <div class="card">Feature C</div>
+      </div>
+    </section>
 
-    <div class="row">
-      <img src="https://picsum.photos/400/300?random=10" alt="Homepage Image One">
-      <img src="https://picsum.photos/400/300?random=11" alt="Homepage Image Two">
-    </div>
-  </section>
+    <section id="recent">
+      <h2>Recent Work</h2>
+      <div class="row" style="margin-top:12px;">
+        <div class="card">Project preview 1</div>
+        <div class="card">Project preview 2</div>
+      </div>
+    </section>
+  </main>
 
-  <!-- About Section -->
-  <section id="about">
-    <h1>About Me</h1>
-    <p>Write something about yourself here. Skills, experience, and your story.</p>
+  <footer>
+    © 2025 MyWebsite — built with slightly too much coffee and curiosity.
+  </footer>
 
-    <div class="row">
-      <div class="card">Skill 1</div>
-      <div class="card">Skill 2</div>
-      <div class="card">Skill 3</div>
-    </div>
+  <script>
+    (function () {
+      // Select nav links that act as tabs
+      const links = document.querySelectorAll('nav a.tab');
 
-    <div class="row">
-      <img src="https://picsum.photos/400/300?random=1" alt="About Image One">
-      <img src="https://picsum.photos/400/300?random=2" alt="About Image Two">
-    </div>
-  </section>
-</main>
+      // Determine current file name (treat root as index.html)
+      const path = location.pathname;
+      const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
 
-<footer>
-  <p>© 2025 MyWebsite. All rights reserved.</p>
-</footer>
+      links.forEach(link => {
+        // Resolve link href relative to current origin and extract filename
+        const href = link.getAttribute('href') || '';
+        const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
 
-<script src="script.js"></script>
-
-<!-- Active Tab Script -->
-<script>
-  const currentHash = location.hash || "#home";
-  const links = document.querySelectorAll('nav ul li a');
-
-  links.forEach(link => {
-    if(link.getAttribute('href') === currentHash){
-      link.parentElement.classList.add('tab-active');
-    } else {
-      link.parentElement.classList.remove('tab-active');
-    }
-  });
-</script>
+        const active = linkFile === currentFile;
+        if (active) {
+          link.classList.add('tab-active');
+          if (link.parentElement) link.parentElement.classList.add('tab-active');
+        } else {
+          link.classList.remove('tab-active');
+          if (link.parentElement) link.parentElement.classList.remove('tab-active');
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>

@@ -1,10 +1,13 @@
-const currentPage = window.location.pathname.split("/").pop(); // gets the current file, e.g., "index.html"
-const links = document.querySelectorAll('nav ul li a');
+// Optional: Smooth scroll for nav links
+document.querySelectorAll('nav ul li a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(link.getAttribute('href')).scrollIntoView({
+      behavior: 'smooth'
+    });
 
-links.forEach(link => {
-  if(link.getAttribute('href') === currentPage) {
-    link.classList.add('tab-active'); // add to <a>
-  } else {
-    link.classList.remove('tab-active');
-  }
+    // Highlight active tab
+    document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('tab-active'));
+    link.parentElement.classList.add('tab-active');
+  });
 });
