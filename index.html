@@ -3,66 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Website</title>
+  <title>About - My Website</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Header / Navigation -->
-  <header>
-    <div class="logo">MyWebsite</div>
-    <nav>
-      <ul>
-        <li class="tab-active"><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+<header>
+  <div class="logo">MyWebsite</div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li class="tab-active"><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <!-- Main Content -->
-  <main>
-    <!-- Home Section -->
-    <section id="home">
-      <h1>Welcome To My Portfolio</h1>
-      <p>Think of it like my Virtual Resume Of My Biography</p>
-    </section>
+<main>
+  <section id="about">
+    <h1>About Me</h1>
+    <p>Write something about yourself here. Skills, experience, and your story.</p>
+    
+    <div class="row">
+      <div class="card">Skill 1</div>
+      <div class="card">Skill 2</div>
+      <div class="card">Skill 3</div>
+    </div>
 
-    <!-- About Section -->
-    <section id="about">
-      <h2>About Me</h2>
-      <p>Learn about my background in summary!.</p>
-      <div class="row">
-        <div class="card">Skill 1</div>
-        <div class="card">Skill 2</div>
-        <div class="card">Skill 3</div>
-      </div>
-    </section>
+    <div class="row">
+      <img src="https://picsum.photos/400/300?random=1" alt="About Image One">
+      <img src="https://picsum.photos/400/300?random=2" alt="About Image Two">
+    </div>
+  </section>
+</main>
 
-    <!-- Projects Section -->
-    <section id="projects">
-      <h2>Projects</h2>
-      <div class="row">
-        <div class="card">Project 1</div>
-        <div class="card">Project 2</div>
-        <div class="card">Project 3</div>
-      </div>
-    </section>
+<footer>
+  <p>© 2025 MyWebsite. All rights reserved.</p>
+</footer>
 
-    <!-- Contact Section -->
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:example@example.com">example@example.com</a></p>
-      <p>Socials: <a href="#">Twitter</a> | <a href="#">GitHub</a></p>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 MyWebsite. All rights reserved.</p>
-  </footer>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
