@@ -12,9 +12,9 @@
   <div class="logo">MyWebsite</div>
   <nav>
     <ul>
-      <li class="tab-active"><a href="index.html">Home</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="https://spectrom47.github.io/portfolio/index.html">Home</a></li>
+      <li><a href="https://spectrom47.github.io/portfolio/projects.html">Projects</a></li>
+      <li><a href="https://spectrom47.github.io/portfolio/contact.html">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -60,5 +60,19 @@
 </footer>
 
 <script src="script.js"></script>
+
+<!-- Active Tab Script -->
+<script>
+  const current = location.href;
+  const links = document.querySelectorAll('nav ul li a');
+  links.forEach(link => {
+    if(link.href === current){
+      link.parentElement.classList.add('tab-active');
+    } else {
+      link.parentElement.classList.remove('tab-active');
+    }
+  });
+</script>
+
 </body>
 </html>
