@@ -1,0 +1,76 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+header {
+  background: #1a1a1a;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+header .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+header nav ul li a {
+  color: #ccc;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+header nav ul li.tab-active a {
+  border-bottom: 2px solid white;
+  color: white;
+}
+
+/* Sections */
+main {
+  padding: 2rem;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+h1, h2 {
+  margin-bottom: 1rem;
+}
+
+/* Rows and Cards */
+.row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 150px;
+  background: #eee;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  background: #1a1a1a;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
