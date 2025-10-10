@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Header / Navigation -->
   <header>
     <div class="logo">MyWebsite</div>
     <nav>
@@ -14,11 +15,12 @@
         <li><a href="index.html" class="tab">Home</a></li>
         <li><a href="about.html" class="tab">About</a></li>
         <li><a href="projects.html" class="tab">Projects</a></li>
-        <li class="tab-active"><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html" class="tab tab-active">Contact</a></li>
       </ul>
     </nav>
   </header>
 
+  <!-- Main Content -->
   <main>
     <section class="contact-section">
       <h1>Contact Me</h1>
@@ -28,13 +30,13 @@
         <!-- Contact Form -->
         <form action="mailto:your-email@example.com" method="post" enctype="text/plain">
           <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
+          <input type="text" id="name" name="name" placeholder="Your Name" required>
 
           <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
 
           <label for="message">Message:</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
+          <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
 
           <button type="submit">Send Message</button>
         </form>
@@ -42,7 +44,7 @@
         <!-- Contact Info -->
         <div class="contact-info">
           <h2>Direct Contact</h2>
-          <p>Email: your-email@example.com</p>
+          <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
           <p>Phone: (123) 456-7890</p>
           <p>Location: City, Country</p>
         </div>
@@ -50,6 +52,7 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 MyWebsite. All rights reserved.</p>
   </footer>

@@ -13,22 +13,9 @@
   <nav>
     <ul>
       <li><a href="#home">Home</a></li>
-      <li><a href="contact.html">About</a></li>
+      <li><a href="#about">About</a></li>
     </ul>
   </nav>
-</header>
-
-
-<!-- Example sections for anchor links -->
-<section id="home">
-  <h1>Welcome to MyWebsite</h1>
-</section>
-
-<section id="about">
-  <h2>About Us</h2>
-</section>
-
-
 </header>
 
 <main>
@@ -75,10 +62,11 @@
 
 <!-- Active Tab Script -->
 <script>
-  const current = location.href;
+  const currentHash = location.hash || "#home";
   const links = document.querySelectorAll('nav ul li a');
+
   links.forEach(link => {
-    if(link.href === current){
+    if(link.getAttribute('href') === currentHash){
       link.parentElement.classList.add('tab-active');
     } else {
       link.parentElement.classList.remove('tab-active');
