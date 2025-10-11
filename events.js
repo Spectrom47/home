@@ -74,6 +74,22 @@ export async function resolveRequest(id) {
   }
 }
 
-export function onRequestsChange(callback) {
-  return onSnapshot(requestsCol, callback);
-}
+// This function listens for any changes in the "requests" collection
+onRequestsChange((snapshot) => {
+  const requestsContainer = document.getElementById("requests-container");
+  requestsContainer.innerHTML = ""; // clear the list
+
+  snapshot.forEach((doc) => {
+    const request = doc.data();
+    const id = doc.id;
+
+    const div = document.createElement("div");
+    div.id = id; // set id so we can remove it later
+    div.innerHTML = `
+      <p>${request.message}</p>
+      <button onclick="resolveRequest('${id}')">Resolve</button>
+    `;
+    requestsContainer.appendChild(div);
+  });
+});
+
