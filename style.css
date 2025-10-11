@@ -87,11 +87,14 @@ nav a.tab-active{ background: var(--accent-2); color: white; box-shadow: 0 10px 
 
 /* Contact Form Box (left column) */
 form{
-  composes: card-surface;
+  /* inline card-surface to avoid non-standard `composes` usage */
+  background: var(--surface);
+  padding: 1.6rem;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px var(--shadow);
+  border: 1px solid rgba(10,14,20,0.02);
   display:block;
   width:100%;
-  border-radius: var(--radius);
-  padding: 1.6rem;
   min-width:0;
 }
 form .field{ margin-bottom:1rem; display:flex; flex-direction:column; gap:6px; }
@@ -121,7 +124,7 @@ form input:focus, form textarea:focus{
   border-radius:8px;
   background:#fbfdff;
   border:1px solid #eef3ff;
-  font-size:0. nine rem;
+  font-size:0.9rem;
   white-space:pre-wrap;
   color:#0b1220;
 }
@@ -145,15 +148,19 @@ button:active{ transform:translateY(1px); }
 .btn-neutral{ background:#f3f4f6; color:var(--accent); }
 
 /* small helper text */
-.hint{ font-size:0. nine rem; color:var(--muted); margin-top:8px; }
+.hint{ font-size:0.9rem; color:var(--muted); margin-top:8px; }
 
 /* Contact Info Box (right column) */
 .contact-info{
-  composes: card-surface;
+  /* inline card-surface to avoid non-standard `composes` usage */
+  background: var(--surface);
+  padding:1.6rem;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px var(--shadow);
+  border: 1px solid rgba(10,14,20,0.02);
   display:flex;
   flex-direction:column;
   gap:12px;
-  padding:1.6rem;
   min-width:0;
 }
 .contact-info h2{ margin:0; font-size:1.05rem; }
