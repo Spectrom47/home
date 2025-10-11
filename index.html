@@ -143,14 +143,14 @@
   </style>
 </head>
 
-<!-- Chat Box -->
+<!-- Chat Toggle Bubble -->
 <div id="chatToggle" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
   <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, doc, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -165,15 +165,27 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const chatCol = collection(db, "chat"); // <-- Firestore chat collection
+
+// Firestore collections
+const messagesCol = collection(db, "chat_messages");
+const usersCol = collection(db, "chat_users");
 
 let username = null;
+let userDocRef = null;
 
-// Prompt for username
-function initChatUser() {
+// Initialize chat user
+async function initChatUser() {
   do {
     username = prompt("Enter username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
   } while(!username || username.length < 3 || username.length > 12);
+
+  // Add user to online list
+  userDocRef = await addDoc(usersCol, { username, joinedAt: serverTimestamp() });
+
+  // Auto-remove after 10 minutes
+  setTimeout(async () => {
+    if(userDocRef) await deleteDoc(doc(db, "chat_users", userDocRef.id));
+  }, 10 * 60 * 1000);
 }
 
 // Create chat UI
@@ -183,16 +195,16 @@ function createChatUI() {
   box.style.position = "fixed";
   box.style.bottom = "20px";
   box.style.right = "20px";
-  box.style.width = "300px";
-  box.style.maxHeight = "400px";
-  box.style.background = "rgba(0,0,0,0.8)";
-  box.style.borderRadius = "12px";
+  box.style.width = "320px";
+  box.style.maxHeight = "450px";
+  box.style.background = "rgba(0,0,0,0.85)";
+  box.style.borderRadius = "14px";
   box.style.display = "flex";
   box.style.flexDirection = "column";
   box.style.overflow = "hidden";
   box.style.fontFamily = "Arial";
   box.style.zIndex = 9999;
-  box.style.boxShadow = "0 6px 20px rgba(0,0,0,0.4)";
+  box.style.boxShadow = "0 6px 25px rgba(0,0,0,0.4)";
 
   // Messages container
   const messages = document.createElement("div");
@@ -203,11 +215,22 @@ function createChatUI() {
   messages.style.color = "#fff";
   messages.style.fontSize = "13px";
   messages.style.background = "rgba(0,0,0,0.6)";
+  messages.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
+
+  // Users container
+  const users = document.createElement("div");
+  users.id = "userList";
+  users.style.padding = "6px 10px";
+  users.style.background = "rgba(30,30,30,0.6)";
+  users.style.fontSize = "12px";
+  users.style.color = "#fff";
+  users.style.overflowY = "auto";
+  users.style.maxHeight = "80px";
+  users.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
 
   // Input container
   const inputDiv = document.createElement("div");
   inputDiv.style.display = "flex";
-  inputDiv.style.borderTop = "1px solid rgba(255,255,255,0.2)";
 
   const input = document.createElement("input");
   input.id = "chatInput";
@@ -231,41 +254,60 @@ function createChatUI() {
 
   inputDiv.appendChild(input);
   inputDiv.appendChild(sendBtn);
+
   box.appendChild(messages);
+  box.appendChild(users);
   box.appendChild(inputDiv);
+
   document.body.appendChild(box);
 
   // Send message
   sendBtn.addEventListener("click", async () => {
     const text = input.value.trim();
-    if (!text) return;
-    await addDoc(chatCol, { username, text, timestamp: serverTimestamp() });
-    input.value = "";
+    if(!text) return;
+    try {
+      await addDoc(messagesCol, { username, message: text, timestamp: serverTimestamp() });
+      input.value = "";
+    } catch(e) {
+      console.error("Send failed:", e);
+    }
   });
 
   input.addEventListener("keydown", e => {
     if(e.key === "Enter") sendBtn.click();
   });
 
-  // Listen for new messages
-  const q = query(chatCol, orderBy("timestamp", "asc"));
-  onSnapshot(q, snapshot => {
-    messages.innerHTML = ""; // Clear before re-render
+  // Listen for messages
+  const msgQuery = query(messagesCol, orderBy("timestamp", "asc"), limit(100));
+  onSnapshot(msgQuery, snapshot => {
+    messages.innerHTML = '';
     snapshot.forEach(doc => {
-      const msg = doc.data();
+      const data = doc.data();
       const div = document.createElement("div");
-      div.style.marginBottom = "6px";
-      div.innerHTML = `<strong>${msg.username}</strong>: ${msg.text}`;
+      const time = data.timestamp?.toDate().toLocaleTimeString() || "";
+      div.innerHTML = `<strong>${data.username}</strong> [${time}]: ${data.message}`;
       messages.appendChild(div);
     });
     messages.scrollTop = messages.scrollHeight;
   });
+
+  // Listen for users
+  onSnapshot(usersCol, snapshot => {
+    users.innerHTML = '';
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const joined = data.joinedAt?.toDate().toLocaleTimeString() || "-";
+      const div = document.createElement("div");
+      div.textContent = `${data.username} (joined: ${joined})`;
+      users.appendChild(div);
+    });
+  });
 }
 
-// Toggle chat
+// Toggle chat bubble
 const toggleBtn = document.getElementById("chatToggle");
-toggleBtn.addEventListener("click", () => {
-  if(!username) initChatUser();
+toggleBtn.addEventListener("click", async () => {
+  if(!username) await initChatUser();
   toggleBtn.style.display = "none";
   createChatUI();
 });
