@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 // Firestore functions
 import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from "firebase/firestore";
+// Cloud Functions
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 // Firebase config
 const firebaseConfig = {
@@ -19,6 +21,9 @@ const app = initializeApp(firebaseConfig);
 
 // Firestore
 const db = getFirestore(app);
+
+// Cloud Functions
+const functions = getFunctions(app); // Initialize Cloud Functions SDK
 
 // Reference collections
 const eventsCol = collection(db, "events");
@@ -74,10 +79,37 @@ export async function resolveRequest(id) {
   }
 }
 
+// NEW: Function to call the server-side Cloud Function for collection deletion
+export async function deleteRequestsCollection() {
+  try {
+    // Get a reference to the callable function defined on the server
+    const deleteCollection = httpsCallable(functions, 'deleteCollection');
+
+    // Call the function, passing the collection name
+    const result = await deleteCollection({ collectionPath: 'requests' });
+    console.log("Server response for collection deletion:", result.data);
+    alert('Requests collection deletion triggered successfully!');
+  } catch (e) {
+    console.error("Error calling server-side deleteCollection function:", e);
+    alert('Failed to trigger collection deletion. Check console for details.');
+  }
+}
+
 // This function listens for any changes in the "requests" collection
+export function onRequestsChange(callback) { // Added export for consistency
+  return onSnapshot(requestsCol, callback);
+}
+
 onRequestsChange((snapshot) => {
   const requestsContainer = document.getElementById("requests-container");
+  if (!requestsContainer) return; // defensive check
+
   requestsContainer.innerHTML = ""; // clear the list
+
+  if (snapshot.empty) {
+    requestsContainer.innerHTML = "<p>No current requests.</p>";
+    return;
+  }
 
   snapshot.forEach((doc) => {
     const request = doc.data();
@@ -86,10 +118,25 @@ onRequestsChange((snapshot) => {
     const div = document.createElement("div");
     div.id = id; // set id so we can remove it later
     div.innerHTML = `
-      <p>${request.message}</p>
+      <p>${request.message} (from: ${request.email || 'N/A'})</p>
       <button onclick="resolveRequest('${id}')">Resolve</button>
     `;
     requestsContainer.appendChild(div);
   });
 });
 
+// Example of how you might add a button to trigger the collection deletion
+// (You'd add this to your HTML or directly via JavaScript if dynamically creating UI)
+/*
+// Assuming you have an HTML button like: <button id="clearAllRequestsBtn">Clear All Requests</button>
+document.addEventListener('DOMContentLoaded', () => {
+  const clearButton = document.getElementById('clearAllRequestsBtn');
+  if (clearButton) {
+    clearButton.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to delete ALL requests? This cannot be undone.')) {
+        await deleteRequestsCollection();
+      }
+    });
+  }
+});
+*/
