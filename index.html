@@ -197,9 +197,12 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import {
+  getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
+  query, orderBy, limit, where, Timestamp, getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-// Firebase config
+// Firebase config (keep yours)
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -216,14 +219,32 @@ const messagesCol = collection(db, "chat_messages");
 
 let username = null;
 
-// Initialize user
+// Settings
+const RECENT_WINDOW_MS = 90 * 1000;      // 90 seconds -> "recent" window
+const RECENT_LIMIT = 200;                // how many recent messages to listen to
+const OLDER_PAGE_SIZE = 50;              // how many older messages to load per click
+
+// state
+let recentUnsub = null;
+let oldestTimestamp = null; // Timestamp of the oldest loaded message (for pagination)
+let viewingLatest = true;   // if user is at bottom / viewing latest; controls autoscroll
+let pendingNewCount = 0;
+
+// UTIL: format time
+function formatTime(ts) {
+  try {
+    return ts?.toDate().toLocaleTimeString() || "";
+  } catch(e) { return ""; }
+}
+
+// Ask for username
 async function initChatUser() {
   do {
     username = prompt("Enter username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
   } while(!username || username.length < 3 || username.length > 12);
 }
 
-// Create Chat UI
+// Build chat UI & behaviors
 function createChatUI() {
   const box = document.createElement("div");
   box.id = "chatBox";
@@ -241,26 +262,45 @@ function createChatUI() {
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "✖";
   Object.assign(closeBtn.style, { background:"none", border:"none", color:"#fff", cursor:"pointer" });
-  closeBtn.addEventListener("click", () => { box.remove(); document.getElementById("chatToggle").style.display = "flex"; });
+  closeBtn.addEventListener("click", () => { box.remove(); document.getElementById("chatToggle").style.display = "flex"; if(recentUnsub) recentUnsub(); });
   header.appendChild(closeBtn);
   box.appendChild(header);
 
-  // Info Boxes (Player Count + Active Users)
+  // Info Boxes
   const infoDiv = document.createElement("div");
   Object.assign(infoDiv.style, { display:"flex", justifyContent:"space-between", padding:"6px 10px", fontSize:"12px", color:"#fff", background:"rgba(30,30,30,0.6)" });
-  const playerCountDiv = document.createElement("div"); playerCountDiv.textContent = "Players: 0";
+  const playerCountDiv = document.createElement("div"); playerCountDiv.textContent = "Messages: 0";
   const activeUsersDiv = document.createElement("div"); activeUsersDiv.textContent = "Active: 0";
   infoDiv.appendChild(playerCountDiv);
   infoDiv.appendChild(activeUsersDiv);
   box.appendChild(infoDiv);
 
-  // Messages
+  // Load older button (hidden until needed)
+  const loadOlderBtn = document.createElement("button");
+  loadOlderBtn.textContent = "Load older messages";
+  Object.assign(loadOlderBtn.style, {
+    display: "none", width: "100%", padding: "8px", border: "none",
+    background: "rgba(255,255,255,0.06)", color: "#e5e7eb", cursor: "pointer"
+  });
+  box.appendChild(loadOlderBtn);
+
+  // Messages container
   const messages = document.createElement("div");
   messages.id = "chatMessages";
   Object.assign(messages.style, { flex:"1", padding:"10px", overflowY:"auto", color:"#fff", fontSize:"13px", background:"rgba(0,0,0,0.6)" });
   box.appendChild(messages);
 
-  // Input
+  // New messages indicator
+  const newMsgIndicator = document.createElement("button");
+  newMsgIndicator.textContent = "";
+  Object.assign(newMsgIndicator.style, {
+    display:"none", position:"absolute", right:"40px", bottom:"84px", zIndex:10000,
+    padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer",
+    background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)"
+  });
+  box.appendChild(newMsgIndicator);
+
+  // Input area
   const inputDiv = document.createElement("div"); inputDiv.style.display="flex";
   const input = document.createElement("input"); input.id="chatInput"; input.type="text"; input.placeholder="Type a message...";
   Object.assign(input.style, { flex:"1", padding:"8px", border:"none", outline:"none", background:"rgba(255,255,255,0.05)", color:"#fff" });
@@ -270,36 +310,235 @@ function createChatUI() {
   box.appendChild(inputDiv);
 
   document.body.appendChild(box);
+  document.body.appendChild(newMsgIndicator); // overlay button
 
-  // Send message
-  sendBtn.addEventListener("click", async () => {
+  // helper to create message node
+  function createMessageNode(data) {
+    const div = document.createElement("div");
+    div.dataset.ts = data.timestamp?.toMillis?.() ?? 0;
+    const time = formatTime(data.timestamp);
+    div.innerHTML = `<strong style="margin-right:6px">${escapeHtml(data.username)}</strong> <span style="opacity:.7; font-size:12px">[${time}]</span><div style="margin-top:4px">${escapeHtml(data.message)}</div>`;
+    // mark old if older than RECENT_WINDOW_MS
+    const ageMs = Date.now() - (data.timestamp?.toMillis?.() ?? 0);
+    if (ageMs > RECENT_WINDOW_MS) {
+      div.style.opacity = "0.6";
+      div.style.fontSize = "13px";
+    } else {
+      div.style.opacity = "1";
+    }
+    div.style.padding = "6px 0";
+    return div;
+  }
+
+  // escape simple HTML to avoid XSS from chat display (keep it basic)
+  function escapeHtml(str) {
+    if(!str) return "";
+    return str.replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[s]));
+  }
+
+  // send message action
+  async function sendMessage() {
     const text = input.value.trim();
-    if(!text) return;
-    try { await addDoc(messagesCol, { username, message:text, timestamp:serverTimestamp() }); input.value=""; } 
-    catch(e) { console.error("Send failed:", e); }
-  });
-  input.addEventListener("keydown", e => { if(e.key==="Enter") sendBtn.click(); });
+    if (!text) return;
+    try {
+      await addDoc(messagesCol, { username, message: text, timestamp: serverTimestamp() });
+      input.value = "";
+    } catch(e) {
+      console.error("Send failed:", e);
+    }
+  }
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", e => { if(e.key === "Enter") sendMessage(); });
 
-  // Listen messages
-  const msgQuery = query(messagesCol, orderBy("timestamp","asc"), limit(100));
-  onSnapshot(msgQuery, snapshot => {
-    messages.innerHTML = '';
+  // scroll behavior: detect if user is at bottom (viewing latest)
+  function checkViewingLatest() {
+    const visibleHeight = messages.clientHeight;
+    const scrolled = messages.scrollTop;
+    const total = messages.scrollHeight;
+    // if within 50px of bottom, consider viewingLatest
+    viewingLatest = (total - (scrolled + visibleHeight) <= 50);
+    if (viewingLatest) {
+      newMsgIndicator.style.display = "none";
+      pendingNewCount = 0;
+    }
+  }
+
+  messages.addEventListener("scroll", () => {
+    // if near top show load older button
+    if (messages.scrollTop <= 6) {
+      loadOlderBtn.style.display = "block";
+    } else {
+      loadOlderBtn.style.display = "none";
+    }
+    checkViewingLatest();
+  });
+
+  // when clicking new message indicator, jump to bottom / show latest
+  newMsgIndicator.addEventListener("click", () => {
+    scrollToBottom();
+    // re-attach listeningRecent if necessary - handled by realtime listener
+  });
+
+  function scrollToBottom() {
+    messages.scrollTop = messages.scrollHeight;
+    viewingLatest = true;
+    newMsgIndicator.style.display = "none";
+    pendingNewCount = 0;
+  }
+
+  // prepend older messages (keeps scroll position roughly the same)
+  function prependMessages(nodes) {
+    if (nodes.length === 0) return;
+    // preserve current scroll position relative to content
+    const priorHeight = messages.scrollHeight;
+    nodes.forEach(node => messages.insertBefore(node, messages.firstChild));
+    // attempt to keep viewport where it was
+    const newHeight = messages.scrollHeight;
+    messages.scrollTop = newHeight - priorHeight + messages.scrollTop;
+  }
+
+  // append recent messages (ordered ascending)
+  function replaceRecentMessages(nodes) {
+    messages.innerHTML = "";
+    nodes.forEach(n => messages.appendChild(n));
+  }
+
+  // Load older messages when button clicked
+  loadOlderBtn.addEventListener("click", async () => {
+    loadOlderBtn.disabled = true;
+    loadOlderBtn.textContent = "Loading older messages...";
+    await loadOlderMessages();
+    loadOlderBtn.textContent = "Load older messages";
+    loadOlderBtn.disabled = false;
+  });
+
+  // Expose some helpers for outer scope
+  return {
+    messagesEl: messages,
+    playerCountEl: playerCountDiv,
+    activeUsersEl: activeUsersDiv,
+    createMessageNode,
+    prependMessages,
+    replaceRecentMessages,
+    scrollToBottom,
+    setNewIndicator: (count) => {
+      if (count <= 0) {
+        newMsgIndicator.style.display = "none";
+        pendingNewCount = 0;
+      } else {
+        pendingNewCount = count;
+        newMsgIndicator.textContent = `${count} new message${count>1?"s":""} — show`;
+        newMsgIndicator.style.display = "block";
+      }
+    }
+  };
+}
+
+// We'll keep a reference to UI pieces
+let ui = null;
+
+// Start listening to recent messages (real-time) — messages within last RECENT_WINDOW_MS
+function startListeningRecent() {
+  if (recentUnsub) recentUnsub(); // cleanup old
+  const cutoff = Timestamp.fromDate(new Date(Date.now() - RECENT_WINDOW_MS));
+  const recentQuery = query(messagesCol, where("timestamp", ">=", cutoff), orderBy("timestamp", "asc"), limit(RECENT_LIMIT));
+
+  let lastSnapshotSize = 0;
+
+  recentUnsub = onSnapshot(recentQuery, snapshot => {
+    const nodes = [];
     const usersSet = new Set();
     snapshot.forEach(doc => {
       const data = doc.data();
-      const time = data.timestamp?.toDate().toLocaleTimeString() || "";
-      const div = document.createElement("div");
-      div.innerHTML = `<strong>${data.username}</strong> [${time}]: ${data.message}`;
-      messages.appendChild(div);
       usersSet.add(data.username);
+      nodes.push(ui.createMessageNode(data));
     });
-    messages.scrollTop = messages.scrollHeight;
 
-    // Update info boxes
-    playerCountDiv.textContent = `Messages: ${snapshot.size}`;
-    activeUsersDiv.textContent = `Active: ${usersSet.size}`;
+    // Replace the recent region (we keep ONLY recent messages in this realtime list)
+    // But we must merge with older messages already loaded: since older messages are prepended
+    // we simply append recent nodes after existing older messages if any (we re-render whole list for simplicity).
+    ui.replaceRecentMessages(nodes);
+
+    // update info
+    ui.playerCountEl.textContent = `Messages: ${snapshot.size}`;
+    ui.activeUsersEl.textContent = `Active: ${usersSet.size}`;
+
+    // autoscroll behavior
+    if (ui.messagesEl) {
+      // if user is at bottom -> auto scroll to bottom
+      const atBottom = (ui.messagesEl.scrollHeight - (ui.messagesEl.scrollTop + ui.messagesEl.clientHeight) <= 50);
+      if (atBottom) {
+        ui.scrollToBottom();
+      } else {
+        // not at bottom, increment pending indicator
+        const newCount = snapshot.size - lastSnapshotSize;
+        if (newCount > 0) {
+          ui.setNewIndicator((pendingNewCount || 0) + newCount);
+        }
+      }
+      lastSnapshotSize = snapshot.size;
+    }
+    // update oldestTimestamp if we have messages (used for loading older ones)
+    if (snapshot.size > 0) {
+      const firstDoc = snapshot.docs[0];
+      if (firstDoc && firstDoc.data().timestamp) {
+        // this is the oldest in the *recent* window; if we don't have any older messages loaded yet, set oldestTimestamp
+        if (!oldestTimestamp) oldestTimestamp = firstDoc.data().timestamp;
+      }
+    }
+  }, err => {
+    console.error("Realtime listen failed:", err);
   });
 }
+
+// Load older messages (one page) and prepend them. Pagination uses timestamp < oldestTimestamp
+async function loadOlderMessages() {
+  try {
+    // if we don't have any oldestTimestamp (no recent messages) use now
+    let tsForQuery = oldestTimestamp || Timestamp.fromDate(new Date());
+    // query older messages than tsForQuery
+    const olderQuery = query(messagesCol, where("timestamp", "<", tsForQuery), orderBy("timestamp", "desc"), limit(OLDER_PAGE_SIZE));
+    const snap = await getDocs(olderQuery);
+    if (snap.empty) {
+      // nothing older
+      return;
+    }
+    const loaded = [];
+    snap.forEach(d => {
+      const data = d.data();
+      loaded.push(data);
+    });
+    // reverse because we fetched desc; we want chronological asc for prepend
+    loaded.reverse();
+
+    const nodes = loaded.map(data => ui.createMessageNode(data));
+    ui.prependMessages(nodes);
+
+    // update oldestTimestamp to timestamp of the first item we now have
+    const firstTs = loaded[0].timestamp;
+    if (firstTs) oldestTimestamp = firstTs;
+  } catch (e) {
+    console.error("Loading older messages failed:", e);
+  }
+}
+
+// Hook up chat toggle (open)
+document.getElementById("chatToggle").addEventListener("click", async () => {
+  if (!username) await initChatUser();
+  document.getElementById("chatToggle").style.display = "none";
+  ui = createChatUI();
+
+  // start realtime listener for recent messages
+  startListeningRecent();
+
+  // attach a click handler to the "Load older messages" button (the UI returned handles it)
+  // but we also want to load a first older page only when the user asks; so nothing auto-loaded.
+
+  // small nicety: when opening, scroll to bottom (shows latest)
+  setTimeout(() => ui.scrollToBottom(), 200);
+});
+</script>
+
 
 // Toggle chat button
 document.getElementById("chatToggle").addEventListener("click", async () => {
