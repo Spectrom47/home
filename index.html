@@ -15,114 +15,46 @@
                 url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
     background-size: cover;
   }
-  header {
-    background: rgba(15,23,36,0.85);
-    color: #fff;
-    padding: 16px 20px;
-    backdrop-filter: blur(6px);
-  }
-  .container {
-    max-width: 1024px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
+  header { background: rgba(15,23,36,0.85); color: #fff; padding: 16px 20px; backdrop-filter: blur(6px); }
+  .container { max-width: 1024px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .logo { font-weight: 700; letter-spacing: 0.6px; }
   nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
-  nav a {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #d1d5db;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all .15s ease;
-  }
-  nav a:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.12);
-    transform: translateY(-1px);
-  }
-  nav li.tab-active > a,
-  nav a.tab-active {
-    color: #0f1724;
-    background: #60a5fa;
-    box-shadow: 0 6px 18px rgba(96,165,250,0.3);
-  }
+  nav a { display: inline-block; padding: 8px 12px; color: #d1d5db; text-decoration: none; border-radius: 8px; transition: all .15s ease; }
+  nav a:hover { color: #fff; background: rgba(255,255,255,0.12); transform: translateY(-1px); }
+  nav li.tab-active > a, nav a.tab-active { color: #0f1724; background: #60a5fa; box-shadow: 0 6px 18px rgba(96,165,250,0.3); }
   main { flex: 1; padding: 28px 20px; max-width: 1024px; margin: 40px auto; width: 100%; }
-  section {
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    backdrop-filter: blur(10px);
-    color: #e5e7eb;
-  }
+  section { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); backdrop-filter: blur(10px); color: #e5e7eb; }
   section h1, section h2 { color: #fff; }
   .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-  .card {
-    flex: 1 1 200px;
-    padding: 16px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    text-align: center;
-    color: #f3f4f6;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: all .25s ease;
-  }
-  .card:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateY(-3px);
-  }
+  .card { flex: 1 1 200px; padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.12); text-align: center; color: #f3f4f6; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all .25s ease; }
+  .card:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); }
   .img-card { overflow: hidden; padding: 0; background: rgba(255,255,255,0.15); border-radius: 10px; }
   .img-card a { display: block; text-decoration: none; color: inherit; }
-  .img-card img {
-    display: block;
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-  }
-  .img-card .caption {
-    padding: 10px 12px;
-    font-size: 14px;
-    color: #e5e7eb;
-    background: rgba(15,23,36,0.6);
-  }
-  .feature-btn {
-    display: block;
-    padding: 14px 10px;
-    border-radius: 10px;
-    background: rgba(96,165,250,0.9);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 5px 18px rgba(96,165,250,0.4);
-    transition: all 0.2s ease;
-  }
-  .feature-btn:hover {
-    background: rgba(59,130,246,0.9);
-    transform: translateY(-2px);
-  }
-  footer {
-    padding: 14px 20px;
-    text-align: center;
-    font-size: 13px;
-    color: #9ca3af;
-    background: rgba(15,23,36,0.8);
-    backdrop-filter: blur(4px);
-  }
+  .img-card img { display: block; width: 100%; height: 160px; object-fit: cover; border-radius: 10px 10px 0 0; }
+  .img-card .caption { padding: 10px 12px; font-size: 14px; color: #e5e7eb; background: rgba(15,23,36,0.6); }
+  .feature-btn { display: block; padding: 14px 10px; border-radius: 10px; background: rgba(96,165,250,0.9); color: #fff; text-decoration: none; font-weight: 600; box-shadow: 0 5px 18px rgba(96,165,250,0.4); transition: all 0.2s ease; }
+  .feature-btn:hover { background: rgba(59,130,246,0.9); transform: translateY(-2px); }
+  footer { padding: 14px 20px; text-align: center; font-size: 13px; color: #9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); }
   @media (max-width: 560px) {
     .container { flex-direction: column; align-items: flex-start; gap: 12px; }
     nav ul { width: 100%; justify-content: space-between; }
     .img-card img { height: 120px; }
   }
+
+  /* Chat toggle styling (kept simple) */
+  #chatToggle { position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
+  #chatToggle.locked { background: #94a3b8; cursor: default; opacity: 0.9; }
+
+  /* Admin login modal (simple) */
+  .admin-modal { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index:10000; background: rgba(0,0,0,0.45); }
+  .admin-card { background:#0f1724; color:#fff; border-radius:10px; padding:18px; min-width:320px; box-shadow:0 8px 30px rgba(0,0,0,0.5); }
+  .admin-card input { width:100%; padding:8px; margin-top:8px; border-radius:6px; border:none; outline:none; background:rgba(255,255,255,0.06); color:#fff; }
+  .admin-card button { margin-top:10px; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:#60a5fa; color:#fff; }
+  .admin-card .hint { font-size:12px; color:#cbd5e1; margin-top:8px; }
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="container">
     <div class="logo">Spectroms Kingdom</div>
@@ -191,342 +123,404 @@
 </footer>
 
 <!-- Chat Toggle Button -->
-<div id="chatToggle" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
+<div id="chatToggle" title="Admin-only chat (Shift+Q to open admin login)">
   <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
 </div>
 
+<!-- Firebase and ChatApp script -->
 <script type="module">
-/* Chat: recent realtime + on-demand older pages
-   Keep your Firebase config below. */
+// Top-level module imports (must be at top-level of the module script)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
   query, orderBy, limit, where, Timestamp, getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
-  authDomain: "spectrom-9b7ce.firebaseapp.com",
-  projectId: "spectrom-9b7ce",
-  storageBucket: "spectrom-9b7ce.appspot.com",
-  messagingSenderId: "1022687085021",
-  appId: "1:1022687085021:web:bf2caba43d913c23963634",
-  measurementId: "G-DKSVJKXT00"
-};
+(() => {
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const messagesCol = collection(db, "chat_messages");
+  // --- ChatApp Module (nested submodules: Auth, Utils, Firestore, UI) ---
+  const ChatApp = (function () {
+    // private config
+    const firebaseConfig = {
+      apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
+      authDomain: "spectrom-9b7ce.firebaseapp.com",
+      projectId: "spectrom-9b7ce",
+      storageBucket: "spectrom-9b7ce.appspot.com",
+      messagingSenderId: "1022687085021",
+      appId: "1:1022687085021:web:bf2caba43d913c23963634",
+      measurementId: "G-DKSVJKXT00"
+    };
 
-let username = null;
-
-// Settings
-const RECENT_WINDOW_MS = 90 * 1000;      // 90 seconds -> "recent" window
-const RECENT_LIMIT = 200;                // how many recent messages to listen to
-const OLDER_PAGE_SIZE = 50;              // how many older messages to load per click
-
-// state
-let recentUnsub = null;
-let oldestTimestamp = null; // Timestamp of the oldest loaded message (for pagination)
-let pendingNewCount = 0;
-
-// UTIL: format time
-function formatTime(ts) {
-  try {
-    return ts?.toDate().toLocaleTimeString() || "";
-  } catch(e) { return ""; }
-}
-
-// Ask for username
-async function initChatUser() {
-  do {
-    username = prompt("Enter username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
-  } while(!username || username.length < 3 || username.length > 12);
-}
-
-// Build chat UI & behaviors
-function createChatUI() {
-  const box = document.createElement("div");
-  box.id = "chatBox";
-  Object.assign(box.style, {
-    position: "fixed", bottom: "20px", right: "20px",
-    width: "350px", maxHeight: "500px", background: "rgba(0,0,0,0.85)",
-    borderRadius: "14px", display: "flex", flexDirection: "column",
-    overflow: "hidden", fontFamily: "Arial", zIndex: 9999, boxShadow: "0 6px 25px rgba(0,0,0,0.4)"
-  });
-
-  // Header
-  const header = document.createElement("div");
-  Object.assign(header.style, { background: "#1e1e1e", color: "#fff", padding: "6px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" });
-  header.innerHTML = `<span>Chat</span>`;
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "✖";
-  Object.assign(closeBtn.style, { background:"none", border:"none", color:"#fff", cursor:"pointer" });
-  closeBtn.addEventListener("click", () => { box.remove(); document.getElementById("chatToggle").style.display = "flex"; if(recentUnsub) recentUnsub(); });
-  header.appendChild(closeBtn);
-  box.appendChild(header);
-
-  // Info Boxes
-  const infoDiv = document.createElement("div");
-  Object.assign(infoDiv.style, { display:"flex", justifyContent:"space-between", padding:"6px 10px", fontSize:"12px", color:"#fff", background:"rgba(30,30,30,0.6)" });
-  const playerCountDiv = document.createElement("div"); playerCountDiv.textContent = "Messages: 0";
-  const activeUsersDiv = document.createElement("div"); activeUsersDiv.textContent = "Active: 0";
-  infoDiv.appendChild(playerCountDiv);
-  infoDiv.appendChild(activeUsersDiv);
-  box.appendChild(infoDiv);
-
-  // Load older button (hidden until needed)
-  const loadOlderBtn = document.createElement("button");
-  loadOlderBtn.textContent = "Load older messages";
-  Object.assign(loadOlderBtn.style, {
-    display: "none", width: "100%", padding: "8px", border: "none",
-    background: "rgba(255,255,255,0.06)", color: "#e5e7eb", cursor: "pointer"
-  });
-  box.appendChild(loadOlderBtn);
-
-  // Messages container
-  const messages = document.createElement("div");
-  messages.id = "chatMessages";
-  Object.assign(messages.style, { flex:"1", padding:"10px", overflowY:"auto", color:"#fff", fontSize:"13px", background:"rgba(0,0,0,0.6)" });
-  box.appendChild(messages);
-
-  // New messages indicator
-  const newMsgIndicator = document.createElement("button");
-  newMsgIndicator.textContent = "";
-  Object.assign(newMsgIndicator.style, {
-    display:"none", position:"fixed", right:"80px", bottom:"84px", zIndex:10000,
-    padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer",
-    background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)"
-  });
-  document.body.appendChild(newMsgIndicator);
-
-  // Input area
-  const inputDiv = document.createElement("div"); inputDiv.style.display="flex";
-  const input = document.createElement("input"); input.id="chatInput"; input.type="text"; input.placeholder="Type a message...";
-  Object.assign(input.style, { flex:"1", padding:"8px", border:"none", outline:"none", background:"rgba(255,255,255,0.05)", color:"#fff" });
-  const sendBtn = document.createElement("button"); sendBtn.id="chatSend"; sendBtn.textContent="Send";
-  Object.assign(sendBtn.style, { padding:"8px", background:"#60a5fa", border:"none", color:"#fff", cursor:"pointer" });
-  inputDiv.appendChild(input); inputDiv.appendChild(sendBtn);
-  box.appendChild(inputDiv);
-
-  document.body.appendChild(box);
-
-  // helper to create message node
-  function createMessageNode(data) {
-    const div = document.createElement("div");
-    div.dataset.ts = data.timestamp?.toMillis?.() ?? 0;
-    const time = formatTime(data.timestamp);
-    div.innerHTML = `<strong style="margin-right:6px">${escapeHtml(data.username)}</strong> <span style="opacity:.7; font-size:12px">[${time}]</span><div style="margin-top:4px">${escapeHtml(data.message)}</div>`;
-    // mark old if older than RECENT_WINDOW_MS
-    const ageMs = Date.now() - (data.timestamp?.toMillis?.() ?? 0);
-    if (ageMs > RECENT_WINDOW_MS) {
-      div.style.opacity = "0.6";
-      div.style.fontSize = "13px";
-    } else {
-      div.style.opacity = "1";
-    }
-    div.style.padding = "6px 0";
-    return div;
-  }
-
-  // escape simple HTML to avoid XSS from chat display (keep it basic)
-  function escapeHtml(str) {
-    if(!str) return "";
-    return str.replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[s]));
-  }
-
-  // send message action
-  async function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-    try {
-      await addDoc(messagesCol, { username, message: text, timestamp: serverTimestamp() });
-      input.value = "";
-    } catch(e) {
-      console.error("Send failed:", e);
-    }
-  }
-  sendBtn.addEventListener("click", sendMessage);
-  input.addEventListener("keydown", e => { if(e.key === "Enter") sendMessage(); });
-
-  // scroll behavior: detect if user is at bottom (viewing latest)
-  function checkViewingLatest() {
-    const visibleHeight = messages.clientHeight;
-    const scrolled = messages.scrollTop;
-    const total = messages.scrollHeight;
-    // if within 50px of bottom, consider viewingLatest
-    const viewingLatest = (total - (scrolled + visibleHeight) <= 50);
-    if (viewingLatest) {
-      newMsgIndicator.style.display = "none";
-      pendingNewCount = 0;
-    }
-    return viewingLatest;
-  }
-
-  messages.addEventListener("scroll", () => {
-    // if near top show load older button
-    if (messages.scrollTop <= 6) {
-      loadOlderBtn.style.display = "block";
-    } else {
-      loadOlderBtn.style.display = "none";
-    }
-    checkViewingLatest();
-  });
-
-  // when clicking new message indicator, jump to bottom / show latest
-  newMsgIndicator.addEventListener("click", () => {
-    scrollToBottom();
-  });
-
-  function scrollToBottom() {
-    messages.scrollTop = messages.scrollHeight;
-    newMsgIndicator.style.display = "none";
-    pendingNewCount = 0;
-  }
-
-  // prepend older messages (keeps scroll position roughly the same)
-  function prependMessages(nodes) {
-    if (nodes.length === 0) return;
-    // preserve current scroll position relative to content
-    const priorHeight = messages.scrollHeight;
-    nodes.forEach(node => messages.insertBefore(node, messages.firstChild));
-    // attempt to keep viewport where it was
-    const newHeight = messages.scrollHeight;
-    messages.scrollTop = newHeight - priorHeight + messages.scrollTop;
-  }
-
-  // append recent messages (ordered ascending)
-  function replaceRecentMessages(nodes) {
-    messages.innerHTML = "";
-    nodes.forEach(n => messages.appendChild(n));
-  }
-
-  // Load older messages when button clicked
-  loadOlderBtn.addEventListener("click", async () => {
-    loadOlderBtn.disabled = true;
-    loadOlderBtn.textContent = "Loading older messages...";
-    await loadOlderMessages();
-    loadOlderBtn.textContent = "Load older messages";
-    loadOlderBtn.disabled = false;
-  });
-
-  // Expose some helpers for outer scope
-  return {
-    messagesEl: messages,
-    playerCountEl: playerCountDiv,
-    activeUsersEl: activeUsersDiv,
-    createMessageNode,
-    prependMessages,
-    replaceRecentMessages,
-    scrollToBottom,
-    setNewIndicator: (count) => {
-      if (count <= 0) {
-        newMsgIndicator.style.display = "none";
-        pendingNewCount = 0;
-      } else {
-        pendingNewCount = count;
-        newMsgIndicator.textContent = `${count} new message${count>1?"s":""} — show`;
-        newMsgIndicator.style.display = "block";
+    // ---------- Utils (nested helper functions) ----------
+    const Utils = (function () {
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[s]));
       }
-    }
-  };
-}
+      function formatTime(ts) {
+        try { return ts?.toDate().toLocaleTimeString() || ""; } catch(e) { return ""; }
+      }
+      return { escapeHtml, formatTime };
+    })();
 
-// We'll keep a reference to UI pieces
-let ui = null;
+    // ---------- Auth (admin-only logic) ----------
+    const Auth = (function () {
+      let isAdmin = false;
+      const ADMIN_CREDENTIALS = { user: "sdk", pass: "sdkinteractive2023" };
 
-// Start listening to recent messages (real-time) — messages within last RECENT_WINDOW_MS
-function startListeningRecent() {
-  if (recentUnsub) recentUnsub(); // cleanup old
-  const cutoff = Timestamp.fromDate(new Date(Date.now() - RECENT_WINDOW_MS));
-  const recentQuery = query(messagesCol, where("timestamp", ">=", cutoff), orderBy("timestamp", "asc"), limit(RECENT_LIMIT));
+      function showLoginModal(onSuccess) {
+        // create modal nodes
+        const modal = document.createElement("div");
+        modal.className = "admin-modal";
+        modal.innerHTML = `
+          <div class="admin-card" role="dialog" aria-modal="true">
+            <div style="font-weight:700">Admin Login</div>
+            <div class="hint">Press Shift+Q to open this. Use admin creds to enable chat.</div>
+            <input id="adminUser" placeholder="User" value="" autocomplete="username"/>
+            <input id="adminPass" placeholder="Password" type="password" autocomplete="current-password"/>
+            <div style="display:flex; gap:8px;">
+              <button id="adminSubmit">Sign in</button>
+              <button id="adminCancel" style="background:#374151;">Cancel</button>
+            </div>
+            <div id="adminMsg" class="hint" style="margin-top:8px;"></div>
+          </div>
+        `;
+        document.body.appendChild(modal);
 
-  let lastSnapshotSize = 0;
+        const userEl = modal.querySelector("#adminUser");
+        const passEl = modal.querySelector("#adminPass");
+        const submit = modal.querySelector("#adminSubmit");
+        const cancel = modal.querySelector("#adminCancel");
+        const msg = modal.querySelector("#adminMsg");
+        userEl.focus();
 
-  recentUnsub = onSnapshot(recentQuery, snapshot => {
-    const nodes = [];
-    const usersSet = new Set();
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      usersSet.add(data.username);
-      nodes.push(ui.createMessageNode(data));
-    });
+        function cleanup() { modal.remove(); }
 
-    // Replace recent region
-    ui.replaceRecentMessages(nodes);
+        submit.addEventListener("click", () => {
+          const u = userEl.value.trim();
+          const p = passEl.value;
+          if (u === ADMIN_CREDENTIALS.user && p === ADMIN_CREDENTIALS.pass) {
+            isAdmin = true;
+            msg.textContent = "Welcome, admin.";
+            setTimeout(() => { cleanup(); onSuccess?.(); }, 250);
+          } else {
+            msg.textContent = "Invalid credentials.";
+          }
+        });
 
-    // update info
-    ui.playerCountEl.textContent = `Messages: ${snapshot.size}`;
-    ui.activeUsersEl.textContent = `Active: ${usersSet.size}`;
+        cancel.addEventListener("click", () => {
+          cleanup();
+        });
 
-    // autoscroll behavior
-    if (ui.messagesEl) {
-      const atBottom = (ui.messagesEl.scrollHeight - (ui.messagesEl.scrollTop + ui.messagesEl.clientHeight) <= 50);
-      if (atBottom) {
-        ui.scrollToBottom();
-      } else {
-        const newCount = snapshot.size - lastSnapshotSize;
-        if (newCount > 0) {
-          ui.setNewIndicator((pendingNewCount || 0) + newCount);
+        // quick keyboard submit
+        modal.addEventListener("keydown", e => {
+          if (e.key === "Enter") submit.click();
+          if (e.key === "Escape") cancel.click();
+        });
+      }
+
+      function requireAdminThen(fn) {
+        if (isAdmin) { fn(); return; }
+        showLoginModal(() => { fn(); });
+      }
+
+      function checkAdmin() { return isAdmin; }
+
+      return { requireAdminThen, checkAdmin, showLoginModal };
+    })();
+
+    // ---------- Firestore submodule (nested) ----------
+    const Firestore = (function () {
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const messagesCol = collection(db, "chat_messages");
+      // exports
+      return { db, messagesCol, get Timestamp() { return Timestamp; }, addDoc, onSnapshot, serverTimestamp, query, orderBy, limit, where, getDocs };
+    })();
+
+    // ---------- UI submodule (nested, factory returns UI controller) ----------
+    const UI = (function () {
+      // constants
+      const RECENT_WINDOW_MS = 90 * 1000;
+      const RECENT_LIMIT = 200;
+      const OLDER_PAGE_SIZE = 50;
+
+      function createChatUIFactory(usernameRef) {
+        // encapsulated UI variables
+        let recentUnsub = null;
+        let oldestTimestamp = null;
+        let pendingNewCount = 0;
+
+        // create DOM structure (nested builder functions)
+        function buildBox() {
+          const box = document.createElement("div");
+          box.id = "chatBox";
+          Object.assign(box.style, {
+            position: "fixed", bottom: "20px", right: "20px",
+            width: "350px", maxHeight: "500px", background: "rgba(0,0,0,0.85)",
+            borderRadius: "14px", display: "flex", flexDirection: "column",
+            overflow: "hidden", fontFamily: "Arial", zIndex: 9999, boxShadow: "0 6px 25px rgba(0,0,0,0.4)"
+          });
+          // header
+          const header = document.createElement("div");
+          Object.assign(header.style, { background: "#1e1e1e", color: "#fff", padding: "6px 10px", display: "flex", justifyContent: "space-between", alignItems: "center" });
+          header.innerHTML = `<span>Chat</span>`;
+          const closeBtn = document.createElement("button"); closeBtn.textContent = "✖";
+          Object.assign(closeBtn.style, { background:"none", border:"none", color:"#fff", cursor:"pointer" });
+          closeBtn.addEventListener("click", () => { box.remove(); document.getElementById("chatToggle").style.display = "flex"; if (recentUnsub) recentUnsub(); });
+          header.appendChild(closeBtn);
+          box.appendChild(header);
+
+          // info
+          const infoDiv = document.createElement("div");
+          Object.assign(infoDiv.style, { display:"flex", justifyContent:"space-between", padding:"6px 10px", fontSize:"12px", color:"#fff", background:"rgba(30,30,30,0.6)" });
+          const playerCountDiv = document.createElement("div"); playerCountDiv.textContent = "Messages: 0";
+          const activeUsersDiv = document.createElement("div"); activeUsersDiv.textContent = "Active: 0";
+          infoDiv.appendChild(playerCountDiv);
+          infoDiv.appendChild(activeUsersDiv);
+          box.appendChild(infoDiv);
+
+          // load older
+          const loadOlderBtn = document.createElement("button"); loadOlderBtn.textContent = "Load older messages";
+          Object.assign(loadOlderBtn.style, { display: "none", width: "100%", padding: "8px", border: "none", background: "rgba(255,255,255,0.06)", color: "#e5e7eb", cursor: "pointer" });
+          box.appendChild(loadOlderBtn);
+
+          // messages
+          const messages = document.createElement("div"); messages.id = "chatMessages";
+          Object.assign(messages.style, { flex:"1", padding:"10px", overflowY:"auto", color:"#fff", fontSize:"13px", background:"rgba(0,0,0,0.6)" });
+          box.appendChild(messages);
+
+          // newMsgIndicator
+          const newMsgIndicator = document.createElement("button");
+          Object.assign(newMsgIndicator.style, { display:"none", position:"fixed", right:"80px", bottom:"84px", zIndex:10000, padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer", background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)" });
+          document.body.appendChild(newMsgIndicator);
+
+          // input area
+          const inputDiv = document.createElement("div"); inputDiv.style.display="flex";
+          const input = document.createElement("input"); input.id="chatInput"; input.type="text"; input.placeholder="Type a message...";
+          Object.assign(input.style, { flex:"1", padding:"8px", border:"none", outline:"none", background:"rgba(255,255,255,0.05)", color:"#fff" });
+          const sendBtn = document.createElement("button"); sendBtn.id="chatSend"; sendBtn.textContent="Send";
+          Object.assign(sendBtn.style, { padding:"8px", background:"#60a5fa", border:"none", color:"#fff", cursor:"pointer" });
+          inputDiv.appendChild(input); inputDiv.appendChild(sendBtn);
+          box.appendChild(inputDiv);
+
+          // wire some events
+          loadOlderBtn.addEventListener("click", async () => {
+            loadOlderBtn.disabled = true; loadOlderBtn.textContent = "Loading older messages...";
+            await loadOlderMessages(messages);
+            loadOlderBtn.textContent = "Load older messages"; loadOlderBtn.disabled = false;
+          });
+
+          messages.addEventListener("scroll", () => {
+            if (messages.scrollTop <= 6) loadOlderBtn.style.display = "block"; else loadOlderBtn.style.display = "none";
+            checkViewingLatest(messages, newMsgIndicator);
+          });
+
+          newMsgIndicator.addEventListener("click", () => { scrollToBottom(messages, newMsgIndicator); });
+
+          function checkViewingLatest(messagesEl, indicatorEl) {
+            const viewingLatest = (messagesEl.scrollHeight - (messagesEl.scrollTop + messagesEl.clientHeight) <= 50);
+            if (viewingLatest) { indicatorEl.style.display = "none"; pendingNewCount = 0; }
+            return viewingLatest;
+          }
+
+          function scrollToBottom(messagesEl, indicatorEl) {
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+            indicatorEl.style.display = "none";
+            pendingNewCount = 0;
+          }
+
+          // helper to create message node
+          function createMessageNode(data) {
+            const div = document.createElement("div");
+            div.dataset.ts = data.timestamp?.toMillis?.() ?? 0;
+            const time = Utils.formatTime(data.timestamp);
+            div.innerHTML = `<strong style="margin-right:6px">${Utils.escapeHtml(data.username)}</strong> <span style="opacity:.7; font-size:12px">[${time}]</span><div style="margin-top:4px">${Utils.escapeHtml(data.message)}</div>`;
+            const ageMs = Date.now() - (data.timestamp?.toMillis?.() ?? 0);
+            if (ageMs > RECENT_WINDOW_MS) { div.style.opacity = "0.6"; div.style.fontSize = "13px"; } else { div.style.opacity = "1"; }
+            div.style.padding = "6px 0";
+            return div;
+          }
+
+          // send message logic
+          async function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+            try {
+              await Firestore.addDoc(Firestore.messagesCol, { username: usernameRef(), message: text, timestamp: Firestore.serverTimestamp() });
+              input.value = "";
+            } catch (e) { console.error("Send failed:", e); }
+          }
+
+          sendBtn.addEventListener("click", sendMessage);
+          input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+
+          // public API for UI controller
+          return {
+            nodes: { box, messages, playerCountDiv, activeUsersDiv: null },
+            elements: { messages, newMsgIndicator, loadOlderBtn },
+            createMessageNode,
+            scrollToBottom: () => scrollToBottom(messages, newMsgIndicator),
+            prependMessages: (nodes) => {
+              if (!nodes.length) return;
+              const priorHeight = messages.scrollHeight;
+              nodes.forEach(node => messages.insertBefore(node, messages.firstChild));
+              const newHeight = messages.scrollHeight;
+              messages.scrollTop = newHeight - priorHeight + messages.scrollTop;
+            },
+            replaceRecentMessages: (nodes) => {
+              messages.innerHTML = "";
+              nodes.forEach(n => messages.appendChild(n));
+            },
+            setNewIndicator: (count) => {
+              if (count <= 0) { newMsgIndicator.style.display = "none"; pendingNewCount = 0; }
+              else { pendingNewCount = count; newMsgIndicator.textContent = `${count} new message${count>1?"s":""} — show`; newMsgIndicator.style.display = "block"; }
+            }
+          };
+        } // buildBox
+
+        // firestore listeners and pagination
+        async function startListeningRecent(uiController) {
+          if (recentUnsub) recentUnsub(); // cleanup if any
+          const cutoff = Firestore.Timestamp.fromDate(new Date(Date.now() - RECENT_WINDOW_MS));
+          const recentQuery = Firestore.query(Firestore.messagesCol, Firestore.where("timestamp", ">=", cutoff), Firestore.orderBy("timestamp", "asc"), Firestore.limit(RECENT_LIMIT));
+
+          let lastSnapshotSize = 0;
+
+          recentUnsub = Firestore.onSnapshot(recentQuery, snapshot => {
+            const nodes = []; const usersSet = new Set();
+            snapshot.forEach(doc => { const data = doc.data(); usersSet.add(data.username); nodes.push(uiController.createMessageNode(data)); });
+
+            uiController.replaceRecentMessages(nodes);
+
+            // update info (we don't keep direct refs to those info nodes in this factory; we'll update via DOM)
+            const headerInfo = uiController.nodes.box.querySelectorAll("div")[1];
+            if (headerInfo) {
+              const playerCountDiv = headerInfo.children[0];
+              const activeUsersDiv = headerInfo.children[1];
+              if (playerCountDiv) playerCountDiv.textContent = `Messages: ${snapshot.size}`;
+              if (activeUsersDiv) activeUsersDiv.textContent = `Active: ${usersSet.size}`;
+            }
+
+            // autoscroll or set new indicator
+            const atBottom = (uiController.elements.messages.scrollHeight - (uiController.elements.messages.scrollTop + uiController.elements.messages.clientHeight) <= 50);
+            if (atBottom) uiController.scrollToBottom();
+            else {
+              const newCount = snapshot.size - lastSnapshotSize;
+              if (newCount > 0) uiController.setNewIndicator((pendingNewCount || 0) + newCount);
+            }
+            lastSnapshotSize = snapshot.size;
+
+            // oldest timestamp for pagination
+            if (snapshot.size > 0) {
+              const firstDoc = snapshot.docs[0];
+              if (firstDoc && firstDoc.data().timestamp) { if (!oldestTimestamp) oldestTimestamp = firstDoc.data().timestamp; }
+            }
+          }, err => console.error("Realtime listen failed:", err));
         }
-      }
-      lastSnapshotSize = snapshot.size;
-    }
-    // update oldestTimestamp if we have messages (used for loading older ones)
-    if (snapshot.size > 0) {
-      const firstDoc = snapshot.docs[0];
-      if (firstDoc && firstDoc.data().timestamp) {
-        if (!oldestTimestamp) oldestTimestamp = firstDoc.data().timestamp;
-      }
-    }
-  }, err => {
-    console.error("Realtime listen failed:", err);
-  });
-}
 
-// Load older messages (one page) and prepend them. Pagination uses timestamp < oldestTimestamp
-async function loadOlderMessages() {
-  try {
-    let tsForQuery = oldestTimestamp || Timestamp.fromDate(new Date());
-    const olderQuery = query(messagesCol, where("timestamp", "<", tsForQuery), orderBy("timestamp", "desc"), limit(OLDER_PAGE_SIZE));
-    const snap = await getDocs(olderQuery);
-    if (snap.empty) {
-      return;
+        async function loadOlderMessages(messagesEl) {
+          try {
+            let tsForQuery = oldestTimestamp || Firestore.Timestamp.fromDate(new Date());
+            const olderQuery = Firestore.query(Firestore.messagesCol, Firestore.where("timestamp", "<", tsForQuery), Firestore.orderBy("timestamp", "desc"), Firestore.limit(OLDER_PAGE_SIZE));
+            const snap = await Firestore.getDocs(olderQuery);
+            if (snap.empty) return;
+            const loaded = [];
+            snap.forEach(d => loaded.push(d.data()));
+            loaded.reverse();
+            const nodes = loaded.map(data => uiController.createMessageNode(data));
+            uiController.prependMessages(nodes);
+            const firstTs = loaded[0].timestamp;
+            if (firstTs) oldestTimestamp = firstTs;
+          } catch (e) { console.error("Loading older messages failed:", e); }
+        }
+
+        // UI controller instance
+        const uiController = buildBox();
+
+        return {
+          uiController,
+          startListeningRecent: () => startListeningRecent(uiController),
+          loadOlderMessages: () => loadOlderMessages(uiController.elements.messages)
+        };
+      }
+
+      return { createChatUIFactory, constants: { RECENT_WINDOW_MS, RECENT_LIMIT, OLDER_PAGE_SIZE } };
+    })();
+
+    // ---------- Public API of ChatApp (init, openChat) ----------
+    function init() {
+      // attach keyboard listener for Shift+Q to open admin modal
+      (function attachAdminHotkey() {
+        document.addEventListener("keydown", e => {
+          if (e.key === "Q" && (e.shiftKey || e.key === "q" && e.shiftKey)) {
+            Auth.showLoginModal(() => {
+              document.getElementById("chatToggle").classList.remove("locked");
+              openChatAsAdmin();
+            });
+          }
+        });
+      })();
+
+      // chat toggle click behavior: locked until admin; clicking shows a small hint if locked
+      const chatToggle = document.getElementById("chatToggle");
+      chatToggle.addEventListener("click", () => {
+        if (!Auth.checkAdmin()) {
+          // visual hint (briefly)
+          chatToggle.classList.add("locked");
+          const prevTitle = chatToggle.title;
+          chatToggle.title = "Admin-only chat — press Shift+Q to authenticate";
+          setTimeout(() => { chatToggle.classList.remove("locked"); chatToggle.title = prevTitle; }, 1500);
+          return;
+        }
+        openChatAsAdmin();
+      });
+
+      // initial locked look
+      chatToggle.classList.add("locked");
     }
-    const loaded = [];
-    snap.forEach(d => {
-      loaded.push(d.data());
-    });
-    loaded.reverse(); // make chronological asc
-    const nodes = loaded.map(data => ui.createMessageNode(data));
-    ui.prependMessages(nodes);
-    const firstTs = loaded[0].timestamp;
-    if (firstTs) oldestTimestamp = firstTs;
-  } catch (e) {
-    console.error("Loading older messages failed:", e);
+
+    // open the chat UI (admin-only)
+    let chatInstance = null;
+    function openChatAsAdmin() {
+      if (chatInstance) return; // already open
+      // grab username prompt (simple prompt for admin session)
+      const username = prompt("Admin username to display in chat:", "Admin");
+      const usernameRef = () => username || "Admin";
+
+      const factory = UI.createChatUIFactory(usernameRef);
+      document.getElementById("chatToggle").style.display = "none";
+      document.body.appendChild(factory.uiController.nodes.box);
+      factory.startListeningRecent();
+      // small initial scroll
+      setTimeout(() => factory.uiController.scrollToBottom(), 200);
+      chatInstance = factory;
+    }
+
+    return { init };
+  })();
+
+  // initialize on DOM ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => ChatApp.init());
+  } else {
+    ChatApp.init();
   }
-}
-
-// Hook up chat toggle (open)
-document.getElementById("chatToggle").addEventListener("click", async () => {
-  if (!username) await initChatUser();
-  document.getElementById("chatToggle").style.display = "none";
-  ui = createChatUI();
-  startListeningRecent();
-  setTimeout(() => ui.scrollToBottom(), 200);
-});
+})();
 </script>
 
 <script>
-  // Highlight active tab
-  const tabs = document.querySelectorAll('nav a.tab');
-  const currentPath = window.location.pathname.split('/').pop();
-  tabs.forEach(tab => {
-    if(tab.getAttribute('href') === currentPath) {
-      tab.classList.add('tab-active');
-      if(tab.parentElement) tab.parentElement.classList.add('tab-active');
-    }
-  });
+  // Highlight active tab (keeps your existing small script)
+  (function () {
+    const tabs = document.querySelectorAll('nav a.tab');
+    const currentPath = window.location.pathname.split('/').pop();
+    tabs.forEach(tab => {
+      if (tab.getAttribute('href') === currentPath) {
+        tab.classList.add('tab-active');
+        if (tab.parentElement) tab.parentElement.classList.add('tab-active');
+      }
+    });
+  })();
 </script>
 </body>
 </html>
