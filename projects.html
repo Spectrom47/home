@@ -1,51 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects - My Website</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projects - MyWebsite</title>
+  <style>
+    /* Copy your CSS from index.html */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { display: flex; min-height: 100vh; flex-direction: column; background:#f6f7fb; color:#111; }
+    header { background:#0f1724; color:#fff; padding:16px 20px; }
+    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo { font-weight:700; letter-spacing:0.6px; }
+    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
+    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
+    nav a:hover { color:#fff; background:rgba(255,255,255,0.03); transform:translateY(-1px); }
+    nav li.tab-active > a,
+    nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.18); }
+    main { flex:1; padding:28px 20px; max-width:1024px; margin:0 auto; width:100%; }
+    section { background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,23,36,0.06); margin-bottom:16px; }
+    .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+    .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
+    footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
+    @media (max-width:560px){ .container { flex-direction:column; align-items:flex-start; gap:12px; } nav ul { width:100%; justify-content:space-between; } }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">MyWebsite</div>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li class="tab-active"><a href="projects.html">Projects</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
-</header>
-
-<main>
-  <section id="projects">
-    <h1>Projects</h1>
-    <div class="row">
-      <div class="card">
-        <img src="images/image_one.jpg" alt="Project One">
-        <h3>Project 1</h3>
-        <p>Short description of Project 1.</p>
-      </div>
-      <div class="card">
-        <img src="images/image_two.jpg" alt="Project Two">
-        <h3>Project 2</h3>
-        <p>Short description of Project 2.</p>
-      </div>
-      <div class="card">
-        <img src="images/image_three.jpg" alt="Project Three">
-        <h3>Project 3</h3>
-        <p>Short description of Project 3.</p>
-      </div>
+  <header>
+    <div class="container">
+      <div class="logo">MyWebsite</div>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="tab">Home</a></li>
+          <li><a href="projects.html" class="tab">Projects</a></li>
+          <li><a href="contact.html" class="tab">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </section>
-</main>
+  </header>
 
-<footer>
-  <p>© 2025 MyWebsite. All rights reserved.</p>
-</footer>
+  <main>
+    <section id="projects">
+      <h1>Projects</h1>
+      <p style="margin-top:8px;">Here’s a showcase of my work. Each project is a card with a short description or preview.</p>
 
-<script src="script.js"></script>
+      <div class="row" style="margin-top:14px;">
+        <div class="card">Project 1</div>
+        <div class="card">Project 2</div>
+        <div class="card">Project 3</div>
+        <div class="card">Project 4</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 MyWebsite — built with slightly too much coffee and curiosity.
+  </footer>
+
+  <script>
+    (function () {
+      const links = document.querySelectorAll('nav a.tab');
+      const path = location.pathname;
+      const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
+      links.forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
+        const active = linkFile === currentFile;
+        if (active) {
+          link.classList.add('tab-active');
+          if (link.parentElement) link.parentElement.classList.add('tab-active');
+        } else {
+          link.classList.remove('tab-active');
+          if (link.parentElement) link.parentElement.classList.remove('tab-active');
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>

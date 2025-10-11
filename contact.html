@@ -1,59 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact - My Website</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact - MyWebsite</title>
+  <style>
+    /* Same CSS as index.html */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { display:flex; min-height:100vh; flex-direction:column; background:#f6f7fb; color:#111; }
+    header { background:#0f1724; color:#fff; padding:16px 20px; }
+    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo { font-weight:700; letter-spacing:0.6px; }
+    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
+    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
+    nav a:hover { color:#fff; background:rgba(255,255,255,0.03); transform:translateY(-1px); }
+    nav li.tab-active > a,
+    nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.18); }
+    main { flex:1; padding:28px 20px; max-width:1024px; margin:0 auto; width:100%; }
+    section { background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,23,36,0.06); margin-bottom:16px; }
+    .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
+    .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
+    footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
+    @media (max-width:560px){ .container { flex-direction:column; align-items:flex-start; gap:12px; } nav ul { width:100%; justify-content:space-between; } }
+  </style>
 </head>
 <body>
-  <!-- Header / Navigation -->
+
   <header>
-    <div class="logo">MyWebsite</div>
-    <nav>
-      <ul>
-        <li><a href="index.html" class="tab">Home</a></li>
-        <li><a href="projects.html" class="tab">Projects</a></li>
-        <li><a href="contact.html" class="tab tab-active">Contact</a></li>
-      </ul>
-    </nav>
+    <div class="container">
+      <div class="logo">MyWebsite</div>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="tab">Home</a></li>
+          <li><a href="projects.html" class="tab">Projects</a></li>
+          <li><a href="contact.html" class="tab">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <!-- Main Content -->
   <main>
-    <section class="contact-section">
-      <h1>Contact Me</h1>
-      <p>Feel free to reach out using the form below or directly via email.</p>
+    <section id="contact">
+      <h1>Contact</h1>
+      <p style="margin-top:8px;">Get in touch! Fill out the form below or use one of the methods listed.</p>
 
-      <div class="contact-row">
-        <!-- Contact Form -->
-        <form action="mailto:finalstandcommunity2025@gmail.com" method="post" enctype="text/plain">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" placeholder="Your Name" required>
-
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" required>
-
-          <label for="message">Message:</label>
-          <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
-
-          <button type="submit">Send Message</button>
-        </form>
-
-        <!-- Contact Info -->
-        <div class="contact-info">
-          <h2>Direct Contact</h2>
-          <p>Email: <a href="mailto:finalstandcommunity2025@gmail.com">finalstandcommunity2025@gmail.com</a></p>
-          <p>Discord: <a href="https://discord.gg/rtDWgTtpxh" target="_blank">https://discord.gg/rtDWgTtpxh</a></p>
-          <p>We will be in contact within 1-2 business days!</p>
+      <div class="row" style="margin-top:14px; flex-direction:column;">
+        <div class="card">
+          <h3>Email</h3>
+          <p>hello@mywebsite.com</p>
+        </div>
+        <div class="card">
+          <h3>Phone</h3>
+          <p>+1 234 567 8900</p>
+        </div>
+        <div class="card">
+          <h3>Social</h3>
+          <p>Twitter / LinkedIn / GitHub</p>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer>
-    <p>&copy; Spectrom - All rights reserved.</p>
+    © 2025 MyWebsite — built with slightly too much coffee and curiosity.
   </footer>
+
+  <script>
+    (function () {
+      const links = document.querySelectorAll('nav a.tab');
+      const path = location.pathname;
+      const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
+      links.forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
+        const active = linkFile === currentFile;
+        if (active) {
+          link.classList.add('tab-active');
+          if (link.parentElement) link.parentElement.classList.add('tab-active');
+        } else {
+          link.classList.remove('tab-active');
+          if (link.parentElement) link.parentElement.classList.remove('tab-active');
+        }
+      });
+    })();
+  </script>
+
 </body>
 </html>
