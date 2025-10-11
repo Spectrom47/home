@@ -243,7 +243,16 @@
     <hr style="border-color: rgba(255,255,255,0.03); margin:8px 0;" />
     <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
       <div style="font-weight:700;">Archived Requests</div>
-      <div style="font-size:12px; color:#bcd7ff;">(resolved, moved for filing)</div>
+      <div style="font-size:12px; color:#bcd7ff;">(archived for filing)</div>
+    </div>
+    <div style="display:flex; gap:6px; align-items:center; margin-top:8px;">
+      <select id="archivedFilterSelect" class="input" style="width:120px; padding:6px;">
+        <option value="all">All</option>
+        <option value="type">Type</option>
+        <option value="date">Date</option>
+      </select>
+      <input id="archivedSearchInput" class="input" placeholder="Search archived..." style="flex:1; padding:6px;" />
+      <input id="archivedDateInput" type="date" class="input" style="display:none; width:150px; padding:6px;" />
     </div>
     <div id="archivedList" style="display:none; margin-top:6px;"></div>
     <div class="hint" style="margin:8px 12px 12px 12px;">Click an item to view the request message. This is a read-only mailbox for admins.</div>
@@ -603,8 +612,10 @@
 
       const snap = await requestsCol.orderBy('createdAt','desc').get();
       mailList.innerHTML = '';
-      const archivedListEl = document.getElementById('archivedList');
-      archivedListEl.innerHTML = '';
+  const archivedListEl = document.getElementById('archivedList');
+  archivedListEl.innerHTML = '';
+  // cache for archived items so we can filter client-side
+  window.__archivedRequestsCache = [];
 
       if (snap.empty) {
         mailList.innerHTML = '<div style="padding:10px; color:#bcd7ff;">No requests in mailbox.</div>';
@@ -619,16 +630,33 @@
 
         // Show archived or open lists based on status
         if(r.status && (r.status === 'archived' || r.status === 'resolved')){
-          const archItem = document.createElement('div');
-          archItem.className = 'mail-item';
-          archItem.innerHTML = item.innerHTML;
-          const reopenBtn = document.createElement('button'); reopenBtn.className='btn'; reopenBtn.style.marginTop='6px'; reopenBtn.textContent='Reopen';
-          reopenBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); reopenRequest(r.id); });
-          archItem.appendChild(reopenBtn);
-          archivedListEl.appendChild(archItem);
+          // push to cache; we'll render filtered views from this cache
+          window.__archivedRequestsCache.push(r);
         } else {
           mailList.appendChild(item);
         }
+      });
+
+      // initial render of archived (empty/hidden by default)
+      renderArchived(window.__archivedRequestsCache || []);
+    }
+
+    // Render archivedList from cache with optional filter
+    function renderArchived(list){
+      const archivedListEl = document.getElementById('archivedList');
+      archivedListEl.innerHTML = '';
+      if(!list || !list.length){
+        archivedListEl.innerHTML = '<div style="padding:8px; color:#bcd7ff;">No archived requests.</div>';
+        return;
+      }
+      list.forEach(r=>{
+        const item = document.createElement('div'); item.className='mail-item';
+        item.innerHTML = `<strong>${r.type||'Request'}</strong> <small>${r.dateISO} • ${new Date(r.createdAt).toLocaleString()}</small><div style="margin-top:6px; color:#cfe0ff;">${(r.message||'').length>160? r.message.slice(0,160)+'…' : (r.message||'')}</div>`;
+        item.addEventListener('click', ()=> openRequestView(r.id));
+        const reopenBtn = document.createElement('button'); reopenBtn.className='btn'; reopenBtn.style.marginTop='6px'; reopenBtn.textContent='Reopen';
+        reopenBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); reopenRequest(r.id); });
+        item.appendChild(reopenBtn);
+        archivedListEl.appendChild(item);
       });
     }
 
@@ -677,6 +705,36 @@
         }
       });
     }
+
+    // Archived filters
+    const archivedFilterSelect = document.getElementById('archivedFilterSelect');
+    const archivedSearchInput = document.getElementById('archivedSearchInput');
+    const archivedDateInput = document.getElementById('archivedDateInput');
+
+    function applyArchivedFilter(){
+      const mode = archivedFilterSelect?.value || 'all';
+      const q = (archivedSearchInput?.value || '').trim().toLowerCase();
+      const dateVal = archivedDateInput?.value || '';
+      let list = (window.__archivedRequestsCache || []).slice();
+      if(mode === 'type' && q){
+        list = list.filter(r => (r.type||'').toLowerCase().includes(q));
+      } else if(mode === 'date' && dateVal){
+        list = list.filter(r => r.dateISO === dateVal);
+      } else if(mode === 'all' && q){
+        // search across type and message and date
+        list = list.filter(r => ((r.type||'').toLowerCase().includes(q) || (r.message||'').toLowerCase().includes(q) || (r.dateISO||'').includes(q)));
+      }
+      renderArchived(list);
+    }
+
+    if(archivedFilterSelect) archivedFilterSelect.addEventListener('change', (e)=>{
+      const v = e.target.value;
+      if(v === 'date') { archivedDateInput.style.display = 'block'; archivedSearchInput.style.display = 'none'; }
+      else { archivedDateInput.style.display = 'none'; archivedSearchInput.style.display = 'block'; }
+      applyArchivedFilter();
+    });
+    if(archivedSearchInput) archivedSearchInput.addEventListener('input', ()=> applyArchivedFilter());
+    if(archivedDateInput) archivedDateInput.addEventListener('change', ()=> applyArchivedFilter());
 
     // ---------- Month navigation ----------
     prevBtn.addEventListener('click', ()=> {
