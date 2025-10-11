@@ -1,356 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Home - MyWebsite</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-  body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    color: #111;
-    background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
-                url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-    background-size: cover;
-  }
-  header {
-    background: rgba(15,23,36,0.85);
-    color: #fff;
-    padding: 16px 20px;
-    backdrop-filter: blur(6px);
-  }
-  .container {
-    max-width: 1024px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .logo { font-weight: 700; letter-spacing: 0.6px; }
-  nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
-  nav a {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #d1d5db;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all .15s ease;
-  }
-  nav a:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.12);
-    transform: translateY(-1px);
-  }
-  nav li.tab-active > a,
-  nav a.tab-active {
-    color: #0f1724;
-    background: #60a5fa;
-    box-shadow: 0 6px 18px rgba(96,165,250,0.3);
-  }
-  main { flex: 1; padding: 28px 20px; max-width: 1024px; margin: 40px auto; width: 100%; }
-  section {
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    backdrop-filter: blur(10px);
-    color: #e5e7eb;
-  }
-  section h1, section h2 { color: #fff; }
-  .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-  .card {
-    flex: 1 1 200px;
-    padding: 16px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    text-align: center;
-    color: #f3f4f6;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: all .25s ease;
-  }
-  .card:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateY(-3px);
-  }
-  .img-card { overflow: hidden; padding: 0; background: rgba(255,255,255,0.15); border-radius: 10px; }
-  .img-card a { display: block; text-decoration: none; color: inherit; }
-  .img-card img {
-    display: block;
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-  }
-  .img-card .caption {
-    padding: 10px 12px;
-    font-size: 14px;
-    color: #e5e7eb;
-    background: rgba(15,23,36,0.6);
-  }
-  .feature-btn {
-    display: block;
-    padding: 14px 10px;
-    border-radius: 10px;
-    background: rgba(96,165,250,0.9);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    box-shadow: 0 5px 18px rgba(96,165,250,0.4);
-    transition: all 0.2s ease;
-  }
-  .feature-btn:hover {
-    background: rgba(59,130,246,0.9);
-    transform: translateY(-2px);
-  }
-  footer {
-    padding: 14px 20px;
-    text-align: center;
-    font-size: 13px;
-    color: #9ca3af;
-    background: rgba(15,23,36,0.8);
-    backdrop-filter: blur(4px);
-  }
-  @media (max-width: 560px) {
-    .container { flex-direction: column; align-items: flex-start; gap: 12px; }
-    nav ul { width: 100%; justify-content: space-between; }
-    .img-card img { height: 120px; }
-  }
-</style>
-</head>
+  <meta charset="UTF-8">
+  <title>Chat Widget Integration</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; color: #333; }
+    header { background-color: #282c34; color: #fff; padding: 20px; text-align: center; }
+    header h1 { margin: 0; }
+    nav a { color: #61dafb; text-decoration: none; margin: 0 10px; }
+    main { padding: 20px; }
+    footer { background-color: #282c34; color: #fff; text-align: center; padding: 10px; }
 
+    /* Chat widget styles */
+    #chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+    }
+    #chat-container {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 350px;
+      max-width: 90%;
+      height: 70vh;
+      max-height: 90%;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    #chat-header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #close-chat {
+      cursor: pointer;
+      font-size: 18px;
+    }
+    #chat-body {
+      display: flex;
+      height: calc(100% - 40px);
+    }
+    #chat-left {
+      width: 120px;
+      background-color: #f9f9f9;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    #chat-left h3 {
+      margin-top: 0;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+    #users-list {
+      max-height: 90%;
+      overflow-y: auto;
+    }
+    #chat-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    #messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message-user {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    #message-input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+    #message-input:focus { outline: none; }
+    #send-button {
+      border: none;
+      background-color: #2196F3;
+      color: white;
+      padding: 0 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #send-button:hover {
+      background-color: #1976D2;
+    }
+  </style>
+</head>
 <body>
 
-<header>
-  <div class="container">
-    <div class="logo">Spectroms Kingdom</div>
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="index.html" class="tab">Home</a></li>
-        <li><a href="projects.html" class="tab">Projects</a></li>
-        <li><a href="contact.html" class="tab">Contact</a></li>
-      </ul>
-    </nav>
+  <header>
+    <h1>My Website</h1>
+    <nav><a href="#">Home</a> | <a href="#">About</a> | <a href="#">Contact</a></nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Welcome</h2>
+      <p>This is the main content of the site. Enjoy browsing!</p>
+    </section>
+    <section>
+      <h2>About Us</h2>
+      <p>We provide exceptional service to our customers. Feel free to chat with us if you have any questions.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 My Website</p>
+  </footer>
+
+  <!-- Chat Toggle Button -->
+  <button id="chat-toggle">&#x1F4AC;</button>
+
+  <!-- Chat Widget Container -->
+  <div id="chat-container">
+    <div id="chat-header">
+      Chat <span id="close-chat">&#x2715;</span>
+    </div>
+    <div id="chat-body">
+      <div id="chat-left">
+        <h3>Online (<span id="users-count">0</span>)</h3>
+        <div id="users-list"></div>
+      </div>
+      <div id="chat-right">
+        <div id="messages"></div>
+        <div id="input-area">
+          <input type="text" id="message-input" placeholder="Type a message..." />
+          <button id="send-button">Send</button>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
 
-<main>
-  <section id="home">
-    <h1>Home Page</h1>
-    <p style="margin-top:8px;">My Virtual Resume Of My Best Creations!</p>
-    <div class="row" style="margin-top:14px;">
-      <div class="card">
-        <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
-          Unhearted Evil (Roblox)
-        </a>
-      </div>
-      <div class="card">
-        <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer" title="Fiverr gig">
-          Fiverr Seller Page
-        </a>
-      </div>
-    </div>
-  </section>
+  <!-- Firebase and Chat Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, setDoc, doc, query, orderBy, onSnapshot, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-  <section id="recent">
-    <h2>Recent Work</h2>
-    <p style="margin-top:6px; color: #cbd5e1;">A quick showcase of recent images (image_one → image_four).</p>
-    <div class="row" style="margin-top:12px;">
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_one.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_one.png" alt="Recent work — image one">
-          <div class="caption">image_one</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_two.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_two.png" alt="Recent work — image two">
-          <div class="caption">image_two</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_three.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_three.png" alt="Recent work — image three">
-          <div class="caption">image_three</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_four.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_four.png" alt="Recent work — image four">
-          <div class="caption">image_four</div>
-        </a>
-      </div>
-    </div>
-  </section>
-</main>
+    // TODO: Replace with your Firebase project configuration
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+    };
 
-<footer>
-  © 2025 MyWebsite — built with slightly too much coffee and curiosity.
-</footer>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-<!-- Chat Toggle Button -->
-<div id="chatToggle" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
-  <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
-</div>
+    let user = null;
+    let userName = null;
+    let presenceDocRef = null;
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, limit, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatContainer = document.getElementById('chat-container');
+    const closeChat = document.getElementById('close-chat');
+    const usersList = document.getElementById('users-list');
+    const usersCount = document.getElementById('users-count');
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
 
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
-  authDomain: "spectrom-9b7ce.firebaseapp.com",
-  projectId: "spectrom-9b7ce",
-  storageBucket: "spectrom-9b7ce.appspot.com",
-  messagingSenderId: "1022687085021",
-  appId: "1:1022687085021:web:bf2caba43d913c23963634",
-  measurementId: "G-DKSVJKXT00"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const messagesCol = collection(db, "chat_messages");
-
-let username = null;
-let userDocRef = null;
-
-// Initialize user
-async function initChatUser() {
-  do {
-    username = prompt("Enter username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
-  } while(!username || username.length < 3 || username.length > 12);
-}
-
-// Create Chat UI
-function createChatUI() {
-  const box = document.createElement("div");
-  box.id = "chatBox";
-  box.style.position = "fixed";
-  box.style.bottom = "20px";
-  box.style.right = "20px";
-  box.style.width = "320px";
-  box.style.maxHeight = "450px";
-  box.style.background = "rgba(0,0,0,0.85)";
-  box.style.borderRadius = "14px";
-  box.style.display = "flex";
-  box.style.flexDirection = "column";
-  box.style.overflow = "hidden";
-  box.style.fontFamily = "Arial";
-  box.style.zIndex = 9999;
-  box.style.boxShadow = "0 6px 25px rgba(0,0,0,0.4)";
-
-  // Header with Close
-  const header = document.createElement("div");
-  header.style.background = "#1e1e1e";
-  header.style.color = "#fff";
-  header.style.padding = "6px 10px";
-  header.style.display = "flex";
-  header.style.justifyContent = "space-between";
-  header.style.alignItems = "center";
-  header.innerHTML = `<span>Chat</span>`;
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "✖";
-  closeBtn.style.background = "none";
-  closeBtn.style.border = "none";
-  closeBtn.style.color = "#fff";
-  closeBtn.style.cursor = "pointer";
-  closeBtn.addEventListener("click", () => {
-    box.remove();
-    document.getElementById("chatToggle").style.display = "flex";
-  });
-  header.appendChild(closeBtn);
-  box.appendChild(header);
-
-  // Messages
-  const messages = document.createElement("div");
-  messages.id = "chatMessages";
-  messages.style.flex = "1";
-  messages.style.padding = "10px";
-  messages.style.overflowY = "auto";
-  messages.style.color = "#fff";
-  messages.style.fontSize = "13px";
-  messages.style.background = "rgba(0,0,0,0.6)";
-  box.appendChild(messages);
-
-  // Input
-  const inputDiv = document.createElement("div");
-  inputDiv.style.display = "flex";
-  const input = document.createElement("input");
-  input.id = "chatInput";
-  input.type = "text";
-  input.placeholder = "Type a message...";
-  input.style.flex = "1";
-  input.style.padding = "8px";
-  input.style.border = "none";
-  input.style.outline = "none";
-  input.style.background = "rgba(255,255,255,0.05)";
-  input.style.color = "#fff";
-
-  const sendBtn = document.createElement("button");
-  sendBtn.id = "chatSend";
-  sendBtn.textContent = "Send";
-  sendBtn.style.padding = "8px";
-  sendBtn.style.background = "#60a5fa";
-  sendBtn.style.border = "none";
-  sendBtn.style.color = "#fff";
-  sendBtn.style.cursor = "pointer";
-
-  inputDiv.appendChild(input);
-  inputDiv.appendChild(sendBtn);
-  box.appendChild(inputDiv);
-
-  document.body.appendChild(box);
-
-  sendBtn.addEventListener("click", async () => {
-    const text = input.value.trim();
-    if(!text) return;
-    try {
-      await addDoc(messagesCol, { username, message: text, timestamp: serverTimestamp() });
-      input.value = "";
-    } catch(e) { console.error("Send failed:", e); }
-  });
-
-  input.addEventListener("keydown", e => { if(e.key==="Enter") sendBtn.click(); });
-
-  // Listen messages
-  const msgQuery = query(messagesCol, orderBy("timestamp","asc"), limit(100));
-  onSnapshot(msgQuery, snapshot => {
-    messages.innerHTML = '';
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const time = data.timestamp?.toDate().toLocaleTimeString() || "";
-      const div = document.createElement("div");
-      div.innerHTML = `<strong>${data.username}</strong> [${time}]: ${data.message}`;
-      messages.appendChild(div);
+    // Open chat: sign in anonymously and add to presence list
+    chatToggle.addEventListener('click', async () => {
+      chatContainer.style.display = 'block';
+      chatToggle.style.display = 'none';
+      if (!user) {
+        await signInAnonymously(auth);
+        user = auth.currentUser;
+        // Use a short display name for the anonymous user
+        userName = 'User' + user.uid.substring(1, 6);
+      }
+      if (!presenceDocRef) {
+        presenceDocRef = doc(db, 'onlineUsers', user.uid);
+        await setDoc(presenceDocRef, { name: userName, timestamp: serverTimestamp() });
+        // Automatically remove the user after 10 minutes
+        setTimeout(async () => {
+          await deleteDoc(presenceDocRef);
+          presenceDocRef = null;
+        }, 600000);
+      }
     });
-    messages.scrollTop = messages.scrollHeight;
-  });
-}
 
-// Toggle chat button
-document.getElementById("chatToggle").addEventListener("click", async () => {
-  if(!username) await initChatUser();
-  document.getElementById("chatToggle").style.display = "none";
-  createChatUI();
-});
+    // Close chat: hide widget and remove from presence list
+    closeChat.addEventListener('click', async () => {
+      chatContainer.style.display = 'none';
+      chatToggle.style.display = 'block';
+      if (presenceDocRef) {
+        await deleteDoc(presenceDocRef);
+        presenceDocRef = null;
+      }
+    });
 
-// Active tab logic
-(function () {
-  const links = document.querySelectorAll('nav a.tab');
-  const path = location.pathname;
-  const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
-  links.forEach(link => {
-    const href = link.getAttribute('href') || '';
-    const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
-    const active = linkFile === currentFile;
-    link.classList.toggle('tab-active', active);
-    if (link.parentElement) link.parentElement.classList.toggle('tab-active', active);
-  });
-})();
-</script>
+    // Ensure user is removed if they close or reload the page
+    window.addEventListener('beforeunload', async () => {
+      if (presenceDocRef) {
+        await deleteDoc(presenceDocRef);
+      }
+    });
+
+    // Listen for updates to the online users list
+    const onlineUsersRef = collection(db, 'onlineUsers');
+    onSnapshot(onlineUsersRef, (snapshot) => {
+      let listHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        listHTML += `<div>${data.name}</div>`;
+      });
+      usersList.innerHTML = listHTML;
+      usersCount.textContent = snapshot.size;
+    });
+
+    // Listen for new chat messages (ordered by timestamp)
+    const messagesQuery = query(collection(db, 'messages'), orderBy('timestamp'));
+    onSnapshot(messagesQuery, (snapshot) => {
+      snapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+          const msg = change.doc.data();
+          appendMessage(msg.name, msg.text);
+        }
+      });
+    });
+
+    // Send a new message to Firestore
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      await addDoc(collection(db, 'messages'), {
+        name: userName,
+        text: text,
+        timestamp: serverTimestamp()
+      });
+      messageInput.value = '';
+    }
+
+    // Helper to append a message to the chat display
+    function appendMessage(name, text) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message';
+      msgDiv.innerHTML = '<span class="message-user">' + name + ':</span> ' + text;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  </script>
 </body>
 </html>
