@@ -257,7 +257,7 @@
       <div id="requestViewBody" style="margin-top:8px;"></div>
       <div style="display:flex; gap:8px; margin-top:12px;">
         <button class="btn" id="closeRequestViewBtn">Close</button>
-        <button class="btn" id="markResolvedBtn">Mark Resolved</button>
+        <button class="btn" id="markResolvedBtn">Archive</button>
       </div>
     </div>
   </div>
@@ -596,18 +596,39 @@
         clearAllRequestsAdminBtn.style.display = 'none';
         return;
       }
+
+      mailboxPanel.style.display='block';
+      mailboxPanel.setAttribute('aria-hidden','false');
+      clearAllRequestsAdminBtn.style.display = 'block';
+
       const snap = await requestsCol.orderBy('createdAt','desc').get();
       mailList.innerHTML = '';
+      const archivedListEl = document.getElementById('archivedList');
+      archivedListEl.innerHTML = '';
+
       if (snap.empty) {
         mailList.innerHTML = '<div style="padding:10px; color:#bcd7ff;">No requests in mailbox.</div>';
       }
+
       snap.docs.forEach(d=>{
         const r = { id: d.id, ...d.data() };
         const item = document.createElement('div');
         item.className = 'mail-item';
-        item.innerHTML = `<strong>${r.type||'Request'}</strong> <small>${r.dateISO} • ${new Date(r.createdAt).toLocaleString()}</small><div style="margin-top:6px; color:#cfe0ff;">${r.message.length>80? r.message.slice(0,80)+'…' : r.message}</div>`;
+        item.innerHTML = `<strong>${r.type||'Request'}</strong> <small>${r.dateISO} • ${new Date(r.createdAt).toLocaleString()}</small><div style="margin-top:6px; color:#cfe0ff;">${(r.message||'').length>80? r.message.slice(0,80)+'…' : (r.message||'')}</div>`;
         item.addEventListener('click', ()=> openRequestView(r.id));
-        mailList.appendChild(item);
+
+        // Show archived or open lists based on status
+        if(r.status && (r.status === 'archived' || r.status === 'resolved')){
+          const archItem = document.createElement('div');
+          archItem.className = 'mail-item';
+          archItem.innerHTML = item.innerHTML;
+          const reopenBtn = document.createElement('button'); reopenBtn.className='btn'; reopenBtn.style.marginTop='6px'; reopenBtn.textContent='Reopen';
+          reopenBtn.addEventListener('click', (ev)=>{ ev.stopPropagation(); reopenRequest(r.id); });
+          archItem.appendChild(reopenBtn);
+          archivedListEl.appendChild(archItem);
+        } else {
+          mailList.appendChild(item);
+        }
       });
     }
 
@@ -626,15 +647,36 @@
     closeRequestViewBtn.addEventListener('click', ()=> { requestViewModal.style.display='none'; selectedRequestId = null; });
     markResolvedBtn.addEventListener('click', async ()=>{
       if(!selectedRequestId) return;
-      if(!confirm('Mark this request resolved?')) return;
-      // Note: This marks as resolved, it does NOT delete it.
-      // If you intended to DELETE resolved items, you would use requestsCol.doc(selectedRequestId).delete();
-      await requestsCol.doc(selectedRequestId).update({ status:'resolved', resolvedAt: firebase.firestore.FieldValue.serverTimestamp() }); // Use serverTimestamp
+      if(!confirm('Archive this request? It will be moved to Archived Requests for filing.')) return;
+      await requestsCol.doc(selectedRequestId).update({ status:'archived', archivedAt: firebase.firestore.FieldValue.serverTimestamp() });
       requestViewModal.style.display = 'none';
       selectedRequestId = null;
       refreshMailbox();
       maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); });
     });
+
+    async function reopenRequest(requestId){
+      if(!isAdmin) return alert('Only admin can reopen requests');
+      if(!confirm('Reopen this request? It will move back to Open Requests.')) return;
+      await requestsCol.doc(requestId).update({ status:'open', reopenedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      refreshMailbox();
+    }
+
+    // Toggle archived list visibility
+    const toggleArchivedBtn = document.getElementById('toggleArchivedBtn');
+    if(toggleArchivedBtn){
+      toggleArchivedBtn.addEventListener('click', ()=>{
+        const archivedEl = document.getElementById('archivedList');
+        if(!archivedEl) return;
+        if(archivedEl.style.display === 'none' || archivedEl.style.display === ''){
+          archivedEl.style.display = 'block';
+          toggleArchivedBtn.textContent = 'Hide archived';
+        } else {
+          archivedEl.style.display = 'none';
+          toggleArchivedBtn.textContent = 'Show archived';
+        }
+      });
+    }
 
     // ---------- Month navigation ----------
     prevBtn.addEventListener('click', ()=> {
