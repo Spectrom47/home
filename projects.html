@@ -93,6 +93,17 @@
     }
     .mail-item { padding:10px; border-radius:10px; margin:8px; background: rgba(255,255,255,0.03); color:#eaf2ff; cursor:pointer; }
     .mail-item small { display:block; color:#bcd7ff; font-size:12px; margin-top:6px; }
+    #clearAllRequestsAdminBtn {
+        background-color: #d32f2f; /* Red for danger */
+        margin: 12px auto; /* Centered, adjust as needed */
+        display: block; /* Make it block to take full width of container */
+        width: calc(100% - 24px); /* Account for margin */
+        text-align: center;
+    }
+    #clearAllRequestsAdminBtn:hover {
+        background-color: #ac2323;
+    }
+
 
     @media (max-width: 960px) {
       main { grid-template-columns: 1fr; margin: 20px auto; }
@@ -224,6 +235,7 @@
     <h3>Admin Mailbox</h3>
     <div id="mailList"></div>
     <div class="hint" style="margin:8px 12px 12px 12px;">Click an item to view the request message. This is a read-only mailbox for admins.</div>
+    <button class="btn" id="clearAllRequestsAdminBtn" style="display: none;">Clear ALL Requests (Server-Side)</button>
   </div>
 
   <!-- Request view modal for admin to inspect one request -->
@@ -241,6 +253,8 @@
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- NEW: Add Firebase Functions SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
 
   <script>
   (function () {
@@ -255,6 +269,9 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    // NEW: Initialize Firebase Functions
+    const functions = firebase.app().functions('us-central1'); // Specify region if your function is not in default
+
     const eventsCol = db.collection('events');
     const requestsCol = db.collection('requests');
 
@@ -282,7 +299,13 @@
     const calendarGrid = document.getElementById('calendarGrid');
     const monthLabel = document.getElementById('monthLabel');
     const prevBtn = document.getElementById('prevMonthBtn');
-    const nextBtn = document.getElementById('nextMonthBtn');
+    const nextBtn = document.getElementById('nextBtn'); // Corrected ID from 'nextMonthBtn' if it was a typo in original JS, else keep original
+
+    // If you named your next button 'nextMonthBtn', ensure you use that here
+    // For consistency with your HTML, I'm assuming 'nextMonthBtn' is correct.
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+
+
     const timelineList = document.getElementById('timelineList');
 
     const dayModal = document.getElementById('dayModal');
@@ -314,6 +337,9 @@
 
     const mailboxPanel = document.getElementById('mailboxPanel');
     const mailList = document.getElementById('mailList');
+    // NEW: Ref for the "Clear All Requests" button in the admin mailbox
+    const clearAllRequestsAdminBtn = document.getElementById('clearAllRequestsAdminBtn');
+
 
     const requestViewModal = document.getElementById('requestViewModal');
     const requestViewBody = document.getElementById('requestViewBody');
@@ -412,6 +438,7 @@
         const list = document.createElement('div'); list.className='events-list';
         evts.forEach(e=>{
           const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent = e.title || '(untitled)';
+          if(isAdmin){ eDiv.style.cursor='pointer'; eDiv.title='Click to delete'; eDiv.addEventListener('click', (event)=> { event.stopPropagation(); deleteEvent(e.id); }); }
           list.appendChild(eDiv);
         });
         cell.appendChild(list);
@@ -440,6 +467,9 @@
       dayModalTitle.textContent = formatDayLabel(iso);
       formDateLabel.textContent = 'Add event for '+formatDayLabel(iso);
       adminIndicator.textContent = isAdmin? 'Admin':'Not admin';
+      // Hide add event section for non-admins
+      document.getElementById('addEventSection').style.display = isAdmin ? 'block' : 'none';
+
       evtTitle.value = evtStart.value = evtEnd.value = evtDesc.value = '';
       saveEvtBtn.dataset.editing = '';
 
@@ -451,7 +481,7 @@
         const header = document.createElement('div'); header.className='muted'; header.textContent = 'Events:'; dayEventsContainer.appendChild(header);
         evts.forEach(e=>{
           const d=document.createElement('div'); d.className='evt'; d.textContent = (e.startHHMM?`[${e.startHHMM}] `:'')+ (e.title||'(untitled)');
-          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click', ()=> deleteEvent(e.id)); }
+          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click', (event)=> { event.stopPropagation(); deleteEvent(e.id); }); }
           dayEventsContainer.appendChild(d);
         });
       }
@@ -462,7 +492,7 @@
           const d=document.createElement('div'); d.className='evt';
           d.textContent = `[${r.type||'?'}] ${r.message ? (r.message.length>48? r.message.slice(0,48)+'…' : r.message) : '(no message)'}`;
           // admin can click to view full
-          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to view full request'; d.addEventListener('click', ()=> openRequestView(r.id)); }
+          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to view full request'; d.addEventListener('click', (event)=> { event.stopPropagation(); openRequestView(r.id); }); }
           dayEventsContainer.appendChild(d);
         });
       }
@@ -531,6 +561,7 @@
         adminModal.style.display='none';
         mailboxPanel.style.display='block';
         mailboxPanel.setAttribute('aria-hidden','false');
+        clearAllRequestsAdminBtn.style.display = 'block'; // Show the server-side deletion button
         alert('Admin login success');
         maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); refreshMailbox(); });
       } else {
@@ -539,11 +570,44 @@
     });
     cancelLoginBtn.addEventListener('click', ()=> adminModal.style.display='none');
 
+    // NEW: Function to call the server-side Cloud Function for collection deletion
+    async function deleteRequestsCollectionFromServer() {
+      if (!isAdmin) {
+        alert("You must be an admin to perform this action.");
+        return;
+      }
+      if (!confirm('Are you absolutely sure you want to delete ALL requests? This action is irreversible and uses server-side logic!')) {
+        return;
+      }
+
+      try {
+        // Get a reference to the callable function defined on the server
+        const deleteCollectionCallable = functions.httpsCallable('deleteCollection');
+
+        // Call the function, passing the collection name
+        const result = await deleteCollectionCallable({ collectionPath: 'requests' });
+        console.log("Server response for collection deletion:", result.data);
+        alert('Requests collection deletion triggered successfully: ' + result.data.message);
+      } catch (e) {
+        console.error("Error calling server-side deleteCollection function:", e);
+        alert('Failed to trigger collection deletion. Check console for details. Error: ' + e.message);
+      }
+    }
+
     // ---------- Mailbox (admin) ----------
     async function refreshMailbox(){
-      if(!isAdmin) return;
+      if(!isAdmin) {
+        // Hide admin-only elements if not admin
+        mailboxPanel.style.display='none';
+        mailboxPanel.setAttribute('aria-hidden','true');
+        clearAllRequestsAdminBtn.style.display = 'none';
+        return;
+      }
       const snap = await requestsCol.orderBy('createdAt','desc').get();
       mailList.innerHTML = '';
+      if (snap.empty) {
+        mailList.innerHTML = '<div style="padding:10px; color:#bcd7ff;">No requests in mailbox.</div>';
+      }
       snap.docs.forEach(d=>{
         const r = { id: d.id, ...d.data() };
         const item = document.createElement('div');
@@ -570,7 +634,9 @@
     markResolvedBtn.addEventListener('click', async ()=>{
       if(!selectedRequestId) return;
       if(!confirm('Mark this request resolved?')) return;
-      await requestsCol.doc(selectedRequestId).update({ status:'resolved', resolvedAt: new Date().toISOString() });
+      // Note: This marks as resolved, it does NOT delete it.
+      // If you intended to DELETE resolved items, you would use requestsCol.doc(selectedRequestId).delete();
+      await requestsCol.doc(selectedRequestId).update({ status:'resolved', resolvedAt: firebase.firestore.FieldValue.serverTimestamp() }); // Use serverTimestamp
       requestViewModal.style.display = 'none';
       selectedRequestId = null;
       refreshMailbox();
@@ -583,7 +649,8 @@
       currentYear = d.getFullYear(); currentMonth = d.getMonth();
       maybeRender(()=> renderCalendar(currentYear, currentMonth));
     });
-    nextBtn.addEventListener('click', ()=> {
+    // Assuming you meant 'nextMonthBtn' as per your HTML ID
+    nextMonthBtn.addEventListener('click', ()=> {
       const d = new Date(currentYear, currentMonth+1, 1);
       currentYear = d.getFullYear(); currentMonth = d.getMonth();
       maybeRender(()=> renderCalendar(currentYear, currentMonth));
@@ -609,18 +676,24 @@
       // initial quick render so UI isn't empty while waiting for first snapshot
       maybeRender(()=> renderCalendar(currentYear, currentMonth));
       maybeRender(()=> renderTimeline());
-      // also refresh mailbox if admin later
+      refreshMailbox(); // Initial check for admin status and mailbox content
     })();
 
     // ---------- Realtime snapshots ----------
     // Listen to both collections and debounce updates to prevent duplicate back-to-back renders
-    const onAnyChange = () => maybeRender(()=> { renderCalendar(currentYear, currentMonth); renderTimeline(); if(isAdmin) refreshMailbox(); if(selectedDateISO) openDayModal(selectedDateISO); });
+    const onAnyChange = () => maybeRender(()=> {
+        renderCalendar(currentYear, currentMonth);
+        renderTimeline();
+        if(isAdmin) refreshMailbox();
+        if(selectedDateISO) openDayModal(selectedDateISO); // Re-open day modal to update events/requests
+    });
 
     // Real-time listeners
     eventsCol.onSnapshot(() => onAnyChange());
     requestsCol.onSnapshot(() => onAnyChange());
 
-    // Also refresh mailbox when admin logs in (we call refreshMailbox there)
+    // NEW: Event listener for the server-side collection deletion button
+    clearAllRequestsAdminBtn.addEventListener('click', deleteRequestsCollectionFromServer);
 
   })();
   </script>
