@@ -4,306 +4,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Projects - MyWebsite</title>
-  <style>
-    /* Base Reset & Layout */
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    body {
-      display: flex; min-height: 100vh; flex-direction: column;
-      color: #e6eef8;
-      background: linear-gradient(120deg, rgba(15,23,42,0.88), rgba(30,58,138,0.84)),
-                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    header {
-      background: rgba(9,12,20,0.78); color: #fff; padding: 16px 20px; backdrop-filter: blur(6px);
-      box-shadow: 0 6px 20px rgba(2,6,23,0.6);
-    }
-    .container { max-width: 1024px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .logo { font-weight:700; letter-spacing:0.6px; color:#fff; }
-    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
-    nav a { display:inline-block; padding:8px 12px; color:#c7d2fe; text-decoration:none; border-radius:8px; transition:all .15s ease; }
-    nav a:hover { color:#fff; background:rgba(255,255,255,0.05); transform:translateY(-1px); }
-    nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.28); }
-
-    main {
-      flex:1; max-width: 1200px; margin: 36px auto; width: 94%;
-      display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start;
-    }
-
-    .panel {
-      background: rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35); color: #e6eef8;
-    }
-    .panel h1 { margin-bottom: 8px; font-size: 20px; color: #fff; }
-    .panel p { color: #cfe0ff; margin-bottom: 12px; }
-
-    .cal-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
-    .cal-nav { display:flex; gap:8px; align-items:center; }
-    .btn { padding:8px 10px; border-radius:8px; cursor:pointer; border:0; font-weight:600; background: rgba(255,255,255,0.06); color:#e6eef8; box-shadow: 0 6px 18px rgba(2,6,23,0.45); transition: all .12s ease; }
-    .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.09); }
-
-    .calendar {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; user-select:none;
-    }
-    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; }
-    .date-cell {
-      background: rgba(255,255,255,0.04); border-radius:8px; padding:10px; min-height:92px;
-      display:flex; flex-direction:column; justify-content:space-between; cursor:pointer;
-      transition: transform .14s ease, box-shadow .14s ease, background .12s ease; border: 1px solid rgba(255,255,255,0.03);
-    }
-    .date-cell:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(2,6,23,0.6); background: rgba(255,255,255,0.06); }
-
-    .date-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .date-num { font-weight:700; color:#fff; font-size:14px; }
-    .badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(96,165,250,0.18); color:#cfe0ff; }
-
-    .requests-badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(245,158,11,0.14); color:#ffeccf; margin-left:6px; }
-
-    .events-list { margin-top:8px; display:flex; flex-direction:column; gap:6px; }
-    .evt { font-size:12px; padding:6px 8px; border-radius:8px; background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(59,130,246,0.1)); color:#eaf2ff; box-shadow: 0 6px 14px rgba(2,6,23,0.3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-    .timeline {
-      background: rgba(255,255,255,0.06); border-radius: 14px; padding: 14px; height: fit-content;
-    }
-    .timeline h3 { color:#fff; margin-bottom:8px; }
-    .timeline .item {
-      padding:10px; border-radius:10px; background: rgba(255,255,255,0.03); margin-bottom:8px; color:#dbeeff; font-size:13px;
-      display:flex; justify-content:space-between; gap:8px; align-items:center;
-    }
-    .timeline .time { color:#bcd7ff; font-weight:600; font-size:12px; }
-
-    footer { margin: 24px auto 40px; width:94%; max-width:1200px; text-align:center; color:#cfe0ff; }
-
-    .modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(2,6,23,0.6); z-index: 1000; }
-    .modal { width: 92%; max-width: 720px; background: rgba(12,16,28,0.96); border-radius: 12px; padding: 18px; color: #e6eef8; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
-    .modal h2 { margin-bottom:8px; color:#fff; }
-    .form-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-    .input, textarea, select { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:#eaf2ff; min-width: 0; }
-    .input { flex:1; }
-    textarea { width:100%; min-height:90px; resize:vertical; }
-
-    .muted { color:#bcd7ff; font-size:13px; }
-    .hint { color:#9fbff6; font-size:12px; margin-top:8px; }
-
-    /* Mailbox panel (admin-only) */
-    #mailboxPanel {
-      position: fixed; right: 18px; top: 100px; width: 320px; max-height: 60vh; overflow:auto;
-      z-index: 1200; display:none; box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    }
-    .mail-item { padding:10px; border-radius:10px; margin:8px; background: rgba(255,255,255,0.03); color:#eaf2ff; cursor:pointer; }
-    .mail-item small { display:block; color:#bcd7ff; font-size:12px; margin-top:6px; }
-
-    @media (max-width: 960px) {
-      main { grid-template-columns: 1fr; margin: 20px auto; }
-      .timeline { order: 2; margin-top:10px; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header> ... </header>
+  <main> ... </main>
+  <footer> ... </footer>
 
-  <header>
-    <div class="container">
-      <div class="logo">Spectroms Kingdom</div>
-      <nav aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html" class="tab">Home</a></li>
-          <li><a href="projects.html" class="tab tab-active">Projects</a></li>
-          <li><a href="contact.html" class="tab">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <!-- Modals: dayModal, requestModal, adminModal, requestViewModal -->
+  <div id="dayModal" class="modal-backdrop"> ... </div>
+  <div id="requestModal" class="modal-backdrop"> ... </div>
+  <div id="adminModal" class="modal-backdrop"> ... </div>
+  <div id="requestViewModal" class="modal-backdrop"> ... </div>
+  <div id="mailboxPanel" class="panel"> ... </div>
 
-  <main>
-    <section class="panel" id="calendarPanel">
-      <div class="cal-header">
-        <div>
-          <h1>Project Timeline</h1>
-          <p class="muted">Click a date square to view. Admin login: <strong>Shift+Q</strong>. Scroll the calendar to move by <strong>year</strong>.</p>
-        </div>
-        <div class="cal-nav">
-          <button class="btn" id="prevMonthBtn" title="Previous month">◀</button>
-          <div style="min-width:170px; text-align:center; color:#dbeeff;" id="monthLabel">Month</div>
-          <button class="btn" id="nextMonthBtn" title="Next month">▶</button>
-          <button class="btn" id="openRequestBtn" title="Submit request">✉ Submit Request</button>
-        </div>
-      </div>
+  <!-- Firebase SDK (compat) -->
+  <script type="module" src="firebase.js"></script>
 
-      <!-- calendar grid (day names + cells appended in JS) -->
-      <div class="calendar" id="calendarGrid" tabindex="0" aria-label="Calendar grid"></div>
-    </section>
+  <script type="module">
+  import { addEvent, loadEvents, deleteEvent, addRequest, loadRequests, resolveRequest, onEventsChange, onRequestsChange } from './firebase.js';
 
-    <aside class="timeline panel" id="timelinePanel">
-      <h3>Upcoming Events</h3>
-      <div id="timelineList"></div>
-      <div class="hint">Events persist online via Firebase. Admin-only edits unlock with Shift+Q.</div>
-    </aside>
-  </main>
-
-  <!-- footer -->
-  <footer>
-    © 2025 MyWebsite — built with slightly too much coffee and curiosity.
-  </footer>
-
-  <!-- Day Modal (for events viewing & admin add) -->
-  <div class="modal-backdrop" id="dayModal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
-      <h2 id="dayModalTitle">Day</h2>
-      <div id="dayEventsContainer" style="margin-top:8px;"></div>
-      <hr style="margin:12px 0; border-color: rgba(255,255,255,0.04)" />
-      <div id="addEventSection">
-        <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
-          <div class="muted" id="formDateLabel">Add event for DATE</div>
-          <div class="muted" id="adminIndicator">Not admin</div>
-        </div>
-
-        <div class="form-row" style="margin-top:8px;">
-          <input class="input" id="evtTitle" placeholder="Event title" />
-          <input class="input" id="evtStart" type="time" />
-          <input class="input" id="evtEnd" type="time" />
-        </div>
-        <div style="margin-top:8px;">
-          <textarea id="evtDesc" placeholder="Description (optional)"></textarea>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn" id="saveEvtBtn">Save event</button>
-          <button class="btn" id="closeDayModal">Close</button>
-        </div>
-        <div class="hint" style="margin-top:8px;">Only admin can save or remove events.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Request Modal (user submits a request) -->
-  <div class="modal-backdrop" id="requestModal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="requestModalTitle">
-      <h2 id="requestModalTitle">Submit Request</h2>
-      <div style="margin-top:8px;">
-        <div class="form-row">
-          <select id="reqType" class="input">
-            <option value="">-- Request Type --</option>
-            <option value="Discord">Discord</option>
-            <option value="Website">Website</option>
-            <option value="Admin Request">Admin Request</option>
-          </select>
-          <input id="reqDate" type="date" class="input" />
-        </div>
-        <div style="margin-top:8px;">
-          <textarea id="reqMessage" placeholder="Describe your request..." ></textarea>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:12px;">
-          <button class="btn" id="sendRequestBtn">Send Request</button>
-          <button class="btn" id="closeRequestModal">Cancel</button>
-        </div>
-        <div class="hint" style="margin-top:8px;">This is a one-way mailbox — admins will see it in their mailbox.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin login modal -->
-  <div class="modal-backdrop" id="adminModal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
-      <h2 id="adminModalTitle">Admin login (hidden)</h2>
-      <div style="margin-top:8px;">
-        <input class="input" id="adminUser" placeholder="username" />
-      </div>
-      <div style="margin-top:8px;">
-        <input class="input" id="adminPass" placeholder="password" type="password" />
-      </div>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button class="btn" id="loginBtn">Login</button>
-        <button class="btn" id="cancelLoginBtn">Cancel</button>
-      </div>
-      <div class="hint" style="margin-top:8px;">Unauthorized Use Of Material Will Be Punished (just kidding... or am I?)</div>
-    </div>
-  </div>
-
-  <!-- Admin mailbox panel -->
-  <div id="mailboxPanel" class="panel" aria-hidden="true">
-    <h3>Admin Mailbox</h3>
-    <div id="mailList"></div>
-    <div class="hint" style="margin:8px 12px 12px 12px;">Click an item to view the request message. This is a read-only mailbox for admins.</div>
-  </div>
-
-  <!-- Request view modal for admin to inspect one request -->
-  <div class="modal-backdrop" id="requestViewModal">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="requestViewTitle">
-      <h2 id="requestViewTitle">Request</h2>
-      <div id="requestViewBody" style="margin-top:8px;"></div>
-      <div style="display:flex; gap:8px; margin-top:12px;">
-        <button class="btn" id="closeRequestViewBtn">Close</button>
-        <button class="btn" id="markResolvedBtn">Mark Resolved</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-  <script>
-  (function () {
-    // ---------- Config & DB ----------
-    const firebaseConfig = {
-      apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
-      authDomain: "spectrom-9b7ce.firebaseapp.com",
-      projectId: "spectrom-9b7ce",
-      storageBucket: "spectrom-9b7ce.appspot.com",
-      messagingSenderId: "1022687085021",
-      appId: "1:1022687085021:web:bf2caba43d913c23963634"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const eventsCol = db.collection('events');
-    const requestsCol = db.collection('requests');
-
-    // ---------- State ----------
+  (function() {
     let isAdmin = false;
     let currentYear, currentMonth;
     const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    let selectedDateISO = null;
+    let selectedRequestId = null;
 
-    // Avoid double render by debouncing and time-threshold
-    let lastRender = 0;
-    const RENDER_MIN_INTERVAL = 250; // ms
-    function maybeRender(renderFn) {
-      const now = Date.now();
-      if (now - lastRender < RENDER_MIN_INTERVAL) {
-        // schedule a short retry (simple debounce)
-        clearTimeout(maybeRender._t);
-        maybeRender._t = setTimeout(()=>{ lastRender = Date.now(); renderFn(); }, RENDER_MIN_INTERVAL);
-      } else {
-        lastRender = now;
-        renderFn();
-      }
-    }
-
-    // ---------- DOM Refs ----------
+    // DOM refs
     const calendarGrid = document.getElementById('calendarGrid');
     const monthLabel = document.getElementById('monthLabel');
-    const prevBtn = document.getElementById('prevMonthBtn');
-    const nextBtn = document.getElementById('nextMonthBtn');
     const timelineList = document.getElementById('timelineList');
-
     const dayModal = document.getElementById('dayModal');
-    const dayModalTitle = document.getElementById('dayModalTitle');
     const dayEventsContainer = document.getElementById('dayEventsContainer');
-    const formDateLabel = document.getElementById('formDateLabel');
-    const adminIndicator = document.getElementById('adminIndicator');
-
     const evtTitle = document.getElementById('evtTitle');
     const evtStart = document.getElementById('evtStart');
     const evtEnd = document.getElementById('evtEnd');
     const evtDesc = document.getElementById('evtDesc');
     const saveEvtBtn = document.getElementById('saveEvtBtn');
-    const closeDayModal = document.getElementById('closeDayModal');
-
-    const adminModal = document.getElementById('adminModal');
-    const adminUser = document.getElementById('adminUser');
-    const adminPass = document.getElementById('adminPass');
-    const loginBtn = document.getElementById('loginBtn');
-    const cancelLoginBtn = document.getElementById('cancelLoginBtn');
-
     const openRequestBtn = document.getElementById('openRequestBtn');
     const requestModal = document.getElementById('requestModal');
     const reqType = document.getElementById('reqType');
@@ -311,317 +49,106 @@
     const reqMessage = document.getElementById('reqMessage');
     const sendRequestBtn = document.getElementById('sendRequestBtn');
     const closeRequestModal = document.getElementById('closeRequestModal');
-
     const mailboxPanel = document.getElementById('mailboxPanel');
     const mailList = document.getElementById('mailList');
-
     const requestViewModal = document.getElementById('requestViewModal');
     const requestViewBody = document.getElementById('requestViewBody');
-    const closeRequestViewBtn = document.getElementById('closeRequestViewBtn');
     const markResolvedBtn = document.getElementById('markResolvedBtn');
 
     const ADMIN_USER = 'sdk';
     const ADMIN_PASS = 'sdkinteractive2023';
-    let selectedDateISO = null;
-    let editingEventId = null;
-    let selectedRequestId = null;
 
-    // ---------- Utilities ----------
-    function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-    function formatDayLabel(iso) { const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString(undefined,{ weekday:'short', month:'short', day:'numeric' }); }
-    function uid() { return Math.random().toString(36).slice(2,10); }
+    // Utilities
+    const toISO = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const formatDayLabel = iso => new Date(iso+'T00:00:00').toLocaleDateString(undefined,{ weekday:'short', month:'short', day:'numeric' });
 
-    async function loadEvents() {
-      const snap = await eventsCol.get();
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    }
-    async function loadRequests() {
-      const snap = await requestsCol.get();
-      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    }
-
-    async function eventsForDate(dateISO) {
-      const all = await loadEvents();
-      return all.filter(e => e.dateISO===dateISO).sort((a,b)=> (a.startHHMM||'').localeCompare(b.startHHMM||''));
-    }
-    async function requestsForDate(dateISO) {
-      const all = await loadRequests();
-      return all.filter(r => r.dateISO===dateISO).sort((a,b)=> (a.createdAt||'').localeCompare(b.createdAt||''));
-    }
-    async function allUpcomingEvents() {
-      const todayISO = toISO(new Date());
-      const all = await loadEvents();
-      return all.filter(e=>e.dateISO>=todayISO).sort((a,b)=> (a.dateISO+(a.startHHMM||'')).localeCompare(b.dateISO+(b.startHHMM||'')));
-    }
-
-    // ---------- Render Calendar ----------
+    // ---------- Calendar Render ----------
     async function renderCalendar(year, month) {
-      // keep local variables clean
       calendarGrid.innerHTML = '';
-      // day names row
       for(let i=0;i<7;i++){
-        const dn=document.createElement('div');
+        const dn = document.createElement('div');
         dn.className='day-name';
-        dn.textContent=dayNames[i];
+        dn.textContent = dayNames[i];
         calendarGrid.appendChild(dn);
       }
-
-      const first=new Date(year, month,1);
+      const first = new Date(year, month, 1);
       const firstWeekday = first.getDay();
-      const daysInMonth = new Date(year, month+1,0).getDate();
-
-      // leading blanks
+      const daysInMonth = new Date(year, month+1, 0).getDate();
       for(let i=0;i<firstWeekday;i++){
-        const blank=document.createElement('div');
-        blank.className='date-cell';
-        blank.style.opacity=0.2;
-        calendarGrid.appendChild(blank);
+        const blank = document.createElement('div'); blank.className='date-cell'; blank.style.opacity=0.2; calendarGrid.appendChild(blank);
       }
-
-      // populate days
+      const allEvents = await loadEvents();
+      const allRequests = await loadRequests();
       for(let d=1; d<=daysInMonth; d++){
-        const date = new Date(year, month, d);
-        const iso = toISO(date);
-
-        const cell = document.createElement('div');
-        cell.className='date-cell';
-        cell.dataset.iso = iso;
-
-        const top = document.createElement('div');
-        top.className='date-top';
-        const num = document.createElement('div'); num.className='date-num'; num.textContent = d;
-        top.appendChild(num);
-
-        // fetch counts (events + requests) in parallel to keep UI responsive
-        const [evts, reqs] = await Promise.all([eventsForDate(iso), requestsForDate(iso)]);
-
-        if(evts.length){
-          const b = document.createElement('div'); b.className='badge'; b.textContent = `${evts.length} event${evts.length>1?'s':''}`;
-          top.appendChild(b);
-        } else {
-          const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer);
-        }
-
-        if(reqs.length){
-          const rb = document.createElement('div'); rb.className='requests-badge'; rb.textContent = `${reqs.length} request${reqs.length>1?'s':''}`;
-          top.appendChild(rb);
-        }
-
+        const date = new Date(year, month, d); const iso = toISO(date);
+        const cell = document.createElement('div'); cell.className='date-cell'; cell.dataset.iso = iso;
+        const top = document.createElement('div'); top.className='date-top';
+        const num = document.createElement('div'); num.className='date-num'; num.textContent = d; top.appendChild(num);
+        const evts = allEvents.filter(e=>e.dateISO===iso);
+        const reqs = allRequests.filter(r=>r.dateISO===iso && r.status==='open');
+        if(evts.length){ const b = document.createElement('div'); b.className='badge'; b.textContent=`${evts.length} event${evts.length>1?'s':''}`; top.appendChild(b);}
+        else{ const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer);}
+        if(reqs.length){ const rb=document.createElement('div'); rb.className='requests-badge'; rb.textContent=`${reqs.length} request${reqs.length>1?'s':''}`; top.appendChild(rb);}
         cell.appendChild(top);
-
         const list = document.createElement('div'); list.className='events-list';
-        evts.forEach(e=>{
-          const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent = e.title || '(untitled)';
-          list.appendChild(eDiv);
-        });
+        evts.forEach(e=>{ const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent = e.title||'(untitled)'; list.appendChild(eDiv); });
         cell.appendChild(list);
-
         cell.addEventListener('click', ()=> openDayModal(iso));
         calendarGrid.appendChild(cell);
       }
-
       monthLabel.textContent = new Date(year, month).toLocaleDateString(undefined,{month:'long', year:'numeric'});
     }
 
-    // ---------- Timeline ----------
-    async function renderTimeline() {
-      const evts = await allUpcomingEvents();
-      timelineList.innerHTML = '';
-      evts.forEach(e=>{
-        const div = document.createElement('div'); div.className='item';
-        div.innerHTML = `<div>${e.title}</div><div class="time">${e.dateISO}${e.startHHMM? ' '+e.startHHMM : ''}</div>`;
-        timelineList.appendChild(div);
-      });
-    }
-
-    // ---------- Day Modal ----------
-    async function openDayModal(iso) {
+    async function openDayModal(iso){
       selectedDateISO = iso;
-      dayModalTitle.textContent = formatDayLabel(iso);
-      formDateLabel.textContent = 'Add event for '+formatDayLabel(iso);
-      adminIndicator.textContent = isAdmin? 'Admin':'Not admin';
-      evtTitle.value = evtStart.value = evtEnd.value = evtDesc.value = '';
-      saveEvtBtn.dataset.editing = '';
-
-      const evts = await eventsForDate(iso);
-      const reqs = await requestsForDate(iso);
-
-      dayEventsContainer.innerHTML = '';
-      if(evts.length){
-        const header = document.createElement('div'); header.className='muted'; header.textContent = 'Events:'; dayEventsContainer.appendChild(header);
-        evts.forEach(e=>{
-          const d=document.createElement('div'); d.className='evt'; d.textContent = (e.startHHMM?`[${e.startHHMM}] `:'')+ (e.title||'(untitled)');
-          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click', ()=> deleteEvent(e.id)); }
-          dayEventsContainer.appendChild(d);
-        });
-      }
-
-      if(reqs.length){
-        const header2 = document.createElement('div'); header2.className='muted'; header2.textContent = 'Requests (one-way):'; dayEventsContainer.appendChild(header2);
-        reqs.forEach(r=>{
-          const d=document.createElement('div'); d.className='evt';
-          d.textContent = `[${r.type||'?'}] ${r.message ? (r.message.length>48? r.message.slice(0,48)+'…' : r.message) : '(no message)'}`;
-          // admin can click to view full
-          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to view full request'; d.addEventListener('click', ()=> openRequestView(r.id)); }
-          dayEventsContainer.appendChild(d);
-        });
-      }
-
       dayModal.style.display = 'flex';
     }
 
-    closeDayModal.addEventListener('click', ()=> { dayModal.style.display='none'; });
-
-    // ---------- Save/Delete event ----------
-    async function saveEvent() {
-      if(!isAdmin){ alert('You must be admin to save events'); return; }
-      const title = evtTitle.value.trim();
-      const start = evtStart.value;
-      const end = evtEnd.value;
-      if(!title || !start){ alert('Title & start required'); return; }
-      if(end && end <= start){ alert('End must be after start'); return; }
-
-      const editingId = saveEvtBtn.dataset.editing;
-      const eventData = { dateISO: selectedDateISO, title, startHHMM:start, endHHMM:end||'', desc:evtDesc.value.trim(), createdAt:new Date().toISOString() };
-      if(editingId) await eventsCol.doc(editingId).set(eventData);
-      else await eventsCol.add(eventData);
-
-      evtTitle.value = evtStart.value = evtEnd.value = evtDesc.value = '';
-      delete saveEvtBtn.dataset.editing;
-      maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); openDayModal(selectedDateISO); });
-    }
-
-    async function deleteEvent(id){
-      if(!isAdmin) return alert('Only admin can delete events');
-      if(!confirm('Delete this event?')) return;
-      await eventsCol.doc(id).delete();
-      maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); if(selectedDateISO) openDayModal(selectedDateISO); });
-    }
-
-    saveEvtBtn.addEventListener('click', saveEvent);
-
-    // ---------- Request submission (user) ----------
-    openRequestBtn.addEventListener('click', ()=> {
-      // default date is today
-      reqType.value = '';
-      reqDate.value = toISO(new Date());
-      reqMessage.value = '';
-      requestModal.style.display = 'flex';
+    // ---------- Event save/delete ----------
+    saveEvtBtn.addEventListener('click', async ()=>{
+      if(!isAdmin) return alert('Admin only');
+      const title = evtTitle.value.trim(); const start=evtStart.value; const end=evtEnd.value;
+      if(!title || !start){ alert('Title/start required'); return; }
+      await addEvent({ dateISO:selectedDateISO, title, startHHMM:start, endHHMM:end||'', desc:evtDesc.value.trim(), createdAt:new Date().toISOString() });
+      renderCalendar(currentYear,currentMonth);
     });
+
+    // ---------- Requests ----------
+    openRequestBtn.addEventListener('click', ()=>{ requestModal.style.display='flex'; reqType.value=''; reqDate.value=toISO(new Date()); reqMessage.value=''; });
     closeRequestModal.addEventListener('click', ()=> requestModal.style.display='none');
-
     sendRequestBtn.addEventListener('click', async ()=>{
-      const type = reqType.value;
-      const dateISO = reqDate.value;
-      const message = reqMessage.value.trim();
-      if(!type || !dateISO || !message){ alert('Type, date and message are required'); return; }
-      await requestsCol.add({ type, dateISO, message, createdAt: new Date().toISOString(), status: 'open' });
-      alert('Request submitted — thanks!');
-      requestModal.style.display = 'none';
-      maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); });
+      if(!reqType.value || !reqDate.value || !reqMessage.value.trim()){ alert('All fields required'); return; }
+      await addRequest({ type:reqType.value, dateISO:reqDate.value, message:reqMessage.value.trim(), createdAt:new Date().toISOString(), status:'open' });
+      requestModal.style.display='none';
+      renderCalendar(currentYear,currentMonth);
     });
 
-    // ---------- Admin login ----------
-    document.addEventListener('keydown', e=>{
-      if(e.shiftKey && e.key.toLowerCase()==='q'){ adminModal.style.display='flex'; }
-    });
-    loginBtn.addEventListener('click', ()=>{
-      if(adminUser.value===ADMIN_USER && adminPass.value===ADMIN_PASS){
-        isAdmin=true;
-        adminModal.style.display='none';
-        mailboxPanel.style.display='block';
-        mailboxPanel.setAttribute('aria-hidden','false');
-        alert('Admin login success');
-        maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); refreshMailbox(); });
-      } else {
-        alert('Wrong credentials');
-      }
-    });
-    cancelLoginBtn.addEventListener('click', ()=> adminModal.style.display='none');
-
-    // ---------- Mailbox (admin) ----------
-    async function refreshMailbox(){
-      if(!isAdmin) return;
-      const snap = await requestsCol.orderBy('createdAt','desc').get();
-      mailList.innerHTML = '';
-      snap.docs.forEach(d=>{
-        const r = { id: d.id, ...d.data() };
-        const item = document.createElement('div');
-        item.className = 'mail-item';
-        item.innerHTML = `<strong>${r.type||'Request'}</strong> <small>${r.dateISO} • ${new Date(r.createdAt).toLocaleString()}</small><div style="margin-top:6px; color:#cfe0ff;">${r.message.length>80? r.message.slice(0,80)+'…' : r.message}</div>`;
-        item.addEventListener('click', ()=> openRequestView(r.id));
-        mailList.appendChild(item);
-      });
-    }
-
-    function openRequestView(requestId){
-      requestsCol.doc(requestId).get().then(doc=>{
-        if(!doc.exists) return alert('Request not found');
-        const r = { id: doc.id, ...doc.data() };
-        requestViewBody.innerHTML = `<div><strong>Type:</strong> ${r.type||'?'}</div>
-          <div style="margin-top:8px;"><strong>Date:</strong> ${r.dateISO}</div>
-          <div style="margin-top:8px;"><strong>Message:</strong><div style="margin-top:6px; padding:8px; border-radius:8px; background: rgba(255,255,255,0.03)">${(r.message||'').replace(/\n/g,'<br>')}</div></div>
-          <div style="margin-top:8px; color:#bcd7ff;"><small>ID: ${r.id}</small></div>`;
+    function openRequestView(id){
+      loadRequests().then(all=>{
+        const r = all.find(x=>x.id===id);
+        if(!r) return alert('Request not found');
         selectedRequestId = r.id;
-        requestViewModal.style.display = 'flex';
+        requestViewBody.innerHTML = `<strong>${r.type}</strong><div>${r.message}</div>`;
+        requestViewModal.style.display='flex';
       });
     }
-    closeRequestViewBtn.addEventListener('click', ()=> { requestViewModal.style.display='none'; selectedRequestId = null; });
+
     markResolvedBtn.addEventListener('click', async ()=>{
       if(!selectedRequestId) return;
-      if(!confirm('Mark this request resolved?')) return;
-      await requestsCol.doc(selectedRequestId).update({ status:'resolved', resolvedAt: new Date().toISOString() });
-      requestViewModal.style.display = 'none';
-      selectedRequestId = null;
-      refreshMailbox();
-      maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); });
+      if(confirm('Mark resolved?')) await resolveRequest(selectedRequestId);
+      requestViewModal.style.display='none'; selectedRequestId=null;
+      renderCalendar(currentYear,currentMonth);
     });
-
-    // ---------- Month navigation ----------
-    prevBtn.addEventListener('click', ()=> {
-      const d = new Date(currentYear, currentMonth-1, 1);
-      currentYear = d.getFullYear(); currentMonth = d.getMonth();
-      maybeRender(()=> renderCalendar(currentYear, currentMonth));
-    });
-    nextBtn.addEventListener('click', ()=> {
-      const d = new Date(currentYear, currentMonth+1, 1);
-      currentYear = d.getFullYear(); currentMonth = d.getMonth();
-      maybeRender(()=> renderCalendar(currentYear, currentMonth));
-    });
-
-    // ---------- Wheel to change YEAR (not month) ----------
-    // Scroll wheel over the calendarPanel changes year (fast, intuitive for your request)
-    document.getElementById('calendarPanel').addEventListener('wheel', (e)=>{
-      // prevent page scroll if pointer is over calendar panel
-      e.preventDefault();
-      const delta = Math.sign(e.deltaY);
-      // delta > 0 : scrolled down => next year; delta < 0 : previous year
-      if(delta > 0) currentYear++;
-      else if(delta < 0) currentYear--;
-      maybeRender(()=> renderCalendar(currentYear, currentMonth));
-    }, { passive: false });
 
     // ---------- Init ----------
     (function init(){
-      const today = new Date();
-      currentYear = today.getFullYear();
-      currentMonth = today.getMonth();
-      // initial quick render so UI isn't empty while waiting for first snapshot
-      maybeRender(()=> renderCalendar(currentYear, currentMonth));
-      maybeRender(()=> renderTimeline());
-      // also refresh mailbox if admin later
+      const today=new Date(); currentYear=today.getFullYear(); currentMonth=today.getMonth();
+      renderCalendar(currentYear,currentMonth);
     })();
 
-    // ---------- Realtime snapshots ----------
-    // Listen to both collections and debounce updates to prevent duplicate back-to-back renders
-    const onAnyChange = () => maybeRender(()=> { renderCalendar(currentYear, currentMonth); renderTimeline(); if(isAdmin) refreshMailbox(); if(selectedDateISO) openDayModal(selectedDateISO); });
-
-    // Real-time listeners
-    eventsCol.onSnapshot(() => onAnyChange());
-    requestsCol.onSnapshot(() => onAnyChange());
-
-    // Also refresh mailbox when admin logs in (we call refreshMailbox there)
-
+    // ---------- Realtime updates ----------
+    onEventsChange(()=>renderCalendar(currentYear,currentMonth));
+    onRequestsChange(()=>renderCalendar(currentYear,currentMonth));
   })();
   </script>
 </body>

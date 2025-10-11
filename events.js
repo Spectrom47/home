@@ -1,9 +1,9 @@
-// Firebase App (already imported)
+// Firebase App
 import { initializeApp } from "firebase/app";
 // Firestore functions
 import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
 
-// Your Firebase config
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -16,35 +16,67 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// Analytics (optional)
-import { getAnalytics } from "firebase/analytics";
-const analytics = getAnalytics(app);
 
-// Initialize Firestore
+// Firestore
 const db = getFirestore(app);
 
-// Reference your events collection
+// Reference collections
 const eventsCol = collection(db, "events");
+const requestsCol = collection(db, "requests");
 
-// Example: Add a new event
-async function addEvent(eventData) {
+// Add an event
+export async function addEvent(eventData) {
   try {
     const docRef = await addDoc(eventsCol, eventData);
-    console.log("Event added with ID: ", docRef.id);
+    console.log("Event added with ID:", docRef.id);
+    return docRef.id;
   } catch (e) {
-    console.error("Error adding event: ", e);
+    console.error("Error adding event:", e);
   }
 }
 
-// Example: Get all events
-async function loadEvents() {
+// Get all events
+export async function loadEvents() {
   const snapshot = await getDocs(eventsCol);
-  const events = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  console.log(events);
-  return events;
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-// Example: Delete an event
-async function deleteEvent(id) {
+// Delete an event
+export async function deleteEvent(id) {
   await deleteDoc(doc(db, "events", id));
+}
+
+// Add a request
+export async function addRequest(requestData) {
+  try {
+    const docRef = await addDoc(requestsCol, requestData);
+    console.log("Request submitted with ID:", docRef.id);
+    return docRef.id;
+  } catch (e) {
+    console.error("Error submitting request:", e);
+  }
+}
+
+// Load requests
+export async function loadRequests() {
+  const snapshot = await getDocs(requestsCol);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+// Mark a request resolved and delete it
+export async function resolveRequest(id) {
+  try {
+    await deleteDoc(doc(db, "requests", id));
+    console.log("Request resolved & deleted:", id);
+  } catch (e) {
+    console.error("Error resolving request:", e);
+  }
+}
+
+// Real-time listeners
+export function onEventsChange(callback) {
+  return onSnapshot(eventsCol, callback);
+}
+export function onRequestsChange(callback) {
+  return onSnapshot(requestsCol, callback);
 }
