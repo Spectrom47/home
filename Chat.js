@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-// Firebase config
+// --- Firebase config ---
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -12,17 +12,18 @@ const firebaseConfig = {
   measurementId: "G-DKSVJKXT00"
 };
 
+// --- Initialize Firebase ---
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const chatRef = ref(db, "globalChat");
 
-// Chat state
+// --- Chat state ---
 let username = null;
 let inactiveTimer = null;
-const LOGOUT_TIME = 600000; // 10 mins
+const LOGOUT_TIME = 600_000; // 10 minutes
 const chatBox = document.getElementById("chatBox");
 
-// --- Inactivity ---
+// --- Inactivity handler ---
 function resetInactivity() {
   if (inactiveTimer) clearTimeout(inactiveTimer);
   inactiveTimer = setTimeout(() => {
@@ -31,7 +32,7 @@ function resetInactivity() {
   }, LOGOUT_TIME);
 }
 
-// --- User init ---
+// --- Prompt user for username and age ---
 function initUser() {
   do {
     username = prompt("Enter a username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
@@ -46,9 +47,8 @@ function initUser() {
   resetInactivity();
 }
 
-// --- Create chat ---
+// --- Create the chat UI ---
 function createChat() {
-  // Create container
   const box = document.createElement("div");
   box.style.cssText = `
     position: fixed;
@@ -86,9 +86,7 @@ function createChat() {
   const button = document.createElement("button");
   button.id = "chatSend";
   button.textContent = "Send";
-  button.style.cssText = `
-    padding: 8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;
-  `;
+  button.style.cssText = `padding: 8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;`;
 
   inputDiv.appendChild(input);
   inputDiv.appendChild(button);
@@ -96,17 +94,20 @@ function createChat() {
   box.appendChild(inputDiv);
   document.body.appendChild(box);
 
-  // --- Send message ---
-  button.addEventListener("click", () => {
+  // --- Send message function ---
+  function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
     push(chatRef, { username, text, timestamp: serverTimestamp() });
     input.value = "";
     resetInactivity();
-  });
-  input.addEventListener("keydown", e => { if(e.key==="Enter") button.click(); resetInactivity(); });
+  }
 
-  // --- Listen messages ---
+  // --- Event listeners ---
+  button.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); resetInactivity(); });
+
+  // --- Listen for new messages (live) ---
   onChildAdded(chatRef, snapshot => {
     const msg = snapshot.val();
     const div = document.createElement("div");
@@ -117,7 +118,7 @@ function createChat() {
   });
 }
 
-// --- Chat bubble click ---
+// --- Show chat on bubble click ---
 chatBox.addEventListener("click", () => {
   if (!username) initUser();
   chatBox.style.display = "none";
