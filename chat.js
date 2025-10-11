@@ -24,7 +24,7 @@ const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 // Reference your events collection
-const eventsCol = collection(db, "events");
+const eventsCol = collection(db, "chat");
 
 // Example: Add a new event
 async function addEvent(eventData) {
@@ -46,5 +46,5 @@ async function loadEvents() {
 
 // Example: Delete an event
 async function deleteEvent(id) {
-  await deleteDoc(doc(db, "events", id));
+  await deleteDoc(doc(db, "chat", id));
 }

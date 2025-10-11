@@ -142,6 +142,115 @@
     }
   </style>
 </head>
+
+<!-- Chat Toggle Button -->
+<button id="chatToggle">Chat</button>
+
+<!-- Chat Box -->
+<div id="chatBox">
+  <div id="chatHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+    <strong>Chat Room</strong>
+    <button id="chatClose" style="cursor:pointer;">✖</button>
+  </div>
+
+  <div id="ageCheck" style="margin-bottom:10px;">
+    <label>Enter your age: <input type="number" id="userAge" min="1" style="width:50px;"></label>
+    <button id="ageSubmit">Join</button>
+  </div>
+
+  <div id="chatContent" style="display:none;">
+    <div id="chatMessages" style="height:150px;overflow-y:auto;border:1px solid #ccc;padding:5px;margin-bottom:5px;background:white;"></div>
+    <input type="text" id="chatInput" placeholder="Type a message..." style="width:100%;margin-bottom:5px;">
+    <button id="chatSend" style="width:100%;">Send</button>
+    
+    <h4>Users Online:</h4>
+    <table id="userTable" border="1" cellpadding="4" style="width:100%;border-collapse:collapse;text-align:left;">
+      <thead><tr><th>Username</th><th>Joined</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // --- Style Chat Box ---
+  const chatToggle = document.getElementById('chatToggle');
+  const chatBox = document.getElementById('chatBox');
+  chatBox.style.position = 'fixed';
+  chatBox.style.bottom = '70px';
+  chatBox.style.right = '20px';
+  chatBox.style.width = '280px';
+  chatBox.style.background = 'rgba(255,255,255,0.95)';
+  chatBox.style.border = '1px solid #ccc';
+  chatBox.style.borderRadius = '8px';
+  chatBox.style.padding = '10px';
+  chatBox.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+  chatBox.style.display = 'none';
+  chatBox.style.zIndex = '9999';
+
+  document.getElementById('chatClose').onclick = () => chatBox.style.display = 'none';
+  chatToggle.onclick = () => chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+
+  // --- Chat Logic ---
+  let users = [];
+  let username = '';
+  const ageSubmit = document.getElementById('ageSubmit');
+  const userAgeInput = document.getElementById('userAge');
+  const chatContent = document.getElementById('chatContent');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+  const userTableBody = document.querySelector('#userTable tbody');
+
+  function updateUserTable() {
+    userTableBody.innerHTML = '';
+    users.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${u.name}</td><td>${new Date(u.joined).toLocaleTimeString()}</td>`;
+      userTableBody.appendChild(tr);
+    });
+  }
+
+  function removeUserAfter10Min(name) {
+    setTimeout(() => {
+      users = users.filter(u => u.name !== name);
+      updateUserTable();
+      appendMessage(`System: ${name} has left the chat (10 min expired).`);
+    }, 10*60*1000); // 10 minutes
+  }
+
+  function appendMessage(msg) {
+    const p = document.createElement('div');
+    p.textContent = msg;
+    chatMessages.appendChild(p);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  ageSubmit.onclick = () => {
+    const age = parseInt(userAgeInput.value);
+    if (isNaN(age) || age < 13) {
+      alert('You must be 13+ to join.');
+      return;
+    }
+    username = 'Guest' + Math.floor(Math.random()*1000);
+    users.push({name: username, joined: Date.now()});
+    updateUserTable();
+    chatContent.style.display = 'block';
+    document.getElementById('ageCheck').style.display = 'none';
+    appendMessage(`System: ${username} joined the chat.`);
+    removeUserAfter10Min(username);
+  }
+
+  chatSend.onclick = () => {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    appendMessage(`${username}: ${msg}`);
+    chatInput.value = '';
+  }
+
+  chatInput.addEventListener('keydown', e => { if(e.key==='Enter'){ chatSend.click(); } });
+</script>
+
+
 <body>
 
   <header>
