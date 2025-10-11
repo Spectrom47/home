@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-// --- Firebase config ---
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -11,33 +11,30 @@ const firebaseConfig = {
   appId: "1:1022687085021:web:bf2caba43d913c23963634",
   measurementId: "G-DKSVJKXT00"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const chatRef = ref(db, "globalChat");
 
-// --- Chat state ---
+// Chat state
 let username = null;
 let inactiveTimer = null;
-const LOGOUT_TIME = 600000; // 10 minutes
-
-// --- Chat bubble ---
+const LOGOUT_TIME = 600000; // 10 mins
 const chatBox = document.getElementById("chatBox");
 
-// --- Inactivity functions ---
-function startInactivityTimer() {
+// --- Inactivity ---
+function resetInactivity() {
   if (inactiveTimer) clearTimeout(inactiveTimer);
   inactiveTimer = setTimeout(() => {
     alert("Logged out due to inactivity.");
     location.reload();
   }, LOGOUT_TIME);
 }
-function resetInactivityTimer() { startInactivityTimer(); }
 
-// --- Initialize user ---
+// --- User init ---
 function initUser() {
   do {
     username = prompt("Enter a username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
-    if (!username || username.length < 3 || username.length > 12) alert("Username must be 3-12 characters.");
   } while (!username || username.length < 3 || username.length > 12);
 
   let isOldEnough = false;
@@ -46,36 +43,36 @@ function initUser() {
     if (!isOldEnough) alert("You must be 13+ to chat.");
   } while (!isOldEnough);
 
-  startInactivityTimer();
+  resetInactivity();
 }
 
-// --- Create expanded chat box ---
-function createChatBox() {
+// --- Create chat ---
+function createChat() {
+  // Create container
   const box = document.createElement("div");
-  box.style.position = "fixed";
-  box.style.bottom = "20px";
-  box.style.right = "20px";
-  box.style.width = "300px";
-  box.style.maxHeight = "400px";
-  box.style.display = "flex";
-  box.style.flexDirection = "column";
-  box.style.background = "rgba(0,0,0,0.75)";
-  box.style.borderRadius = "12px";
-  box.style.overflow = "hidden";
-  box.style.fontFamily = "Arial";
-  box.style.zIndex = 9999;
+  box.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0,0,0,0.75);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: Arial;
+    z-index: 9999;
+  `;
 
   const messages = document.createElement("div");
   messages.id = "chatMessages";
-  messages.style.flex = "1";
-  messages.style.padding = "10px";
-  messages.style.overflowY = "auto";
-  messages.style.color = "#fff";
-  messages.style.fontSize = "13px";
+  messages.style.cssText = `
+    flex:1; padding:10px; overflow-y:auto; color:#fff; font-size:13px;
+  `;
 
   const inputDiv = document.createElement("div");
-  inputDiv.style.display = "flex";
-  inputDiv.style.borderTop = "1px solid rgba(255,255,255,0.2)";
+  inputDiv.style.cssText = `display:flex; border-top:1px solid rgba(255,255,255,0.2);`;
 
   const input = document.createElement("input");
   input.id = "chatInput";
@@ -89,11 +86,9 @@ function createChatBox() {
   const button = document.createElement("button");
   button.id = "chatSend";
   button.textContent = "Send";
-  button.style.padding = "8px";
-  button.style.background = "#60a5fa";
-  button.style.border = "none";
-  button.style.color = "#fff";
-  button.style.cursor = "pointer";
+  button.style.cssText = `
+    padding: 8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;
+  `;
 
   inputDiv.appendChild(input);
   inputDiv.appendChild(button);
@@ -107,15 +102,11 @@ function createChatBox() {
     if (!text) return;
     push(chatRef, { username, text, timestamp: serverTimestamp() });
     input.value = "";
-    resetInactivityTimer();
+    resetInactivity();
   });
+  input.addEventListener("keydown", e => { if(e.key==="Enter") button.click(); resetInactivity(); });
 
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter") button.click();
-    resetInactivityTimer();
-  });
-
-  // --- Listen for new messages ---
+  // --- Listen messages ---
   onChildAdded(chatRef, snapshot => {
     const msg = snapshot.val();
     const div = document.createElement("div");
@@ -129,6 +120,6 @@ function createChatBox() {
 // --- Chat bubble click ---
 chatBox.addEventListener("click", () => {
   if (!username) initUser();
-  chatBox.style.display = "none"; // hide minimal bubble
-  createChatBox();
+  chatBox.style.display = "none";
+  createChat();
 });
