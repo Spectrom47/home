@@ -1,183 +1,386 @@
-<style>
-  /* Global Reset + Base Styles */
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contact - MyWebsite</title>
+  <style>
+    /* Global Reset + Base Styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
 
-  body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    color: #111;
-    /* Subtle HD wallpaper gradient */
-    background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)), 
-                url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-  }
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      color: #111;
+      /* Subtle HD wallpaper gradient */
+      background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
+                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
 
-  header {
-    background: rgba(15,23,36,0.85);
-    color: #fff;
-    padding: 16px 20px;
-    backdrop-filter: blur(6px);
-  }
+    header {
+      background: rgba(15,23,36,0.85);
+      color: #fff;
+      padding: 16px 20px;
+      backdrop-filter: blur(6px);
+    }
 
-  .container { 
-    max-width: 1024px; 
-    margin: 0 auto; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    gap: 12px; 
-  }
+    .container {
+      max-width: 1024px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-  .logo { font-weight: 700; letter-spacing: 0.6px; }
+    .logo { font-weight: 700; letter-spacing: 0.6px; }
 
-  nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
+    nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
 
-  nav a {
-    display: inline-block;
-    padding: 8px 12px;
-    color: #d1d5db;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: all .15s ease;
-  }
+    nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      color: #d1d5db;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all .15s ease;
+    }
 
-  nav a:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.12);
-    transform: translateY(-1px);
-  }
+    nav a:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
 
-  nav li.tab-active > a,
-  nav a.tab-active {
-    color: #0f1724;
-    background: #60a5fa;
-    box-shadow: 0 6px 18px rgba(96,165,250,0.3);
-  }
+    nav li.tab-active > a,
+    nav a.tab-active {
+      color: #0f1724;
+      background: #60a5fa;
+      box-shadow: 0 6px 18px rgba(96,165,250,0.3);
+    }
 
-  main {
-    flex: 1;
-    padding: 40px 20px;
-    max-width: 1024px;
-    margin: 0 auto;
-    width: 100%;
-  }
+    main {
+      flex: 1;
+      padding: 40px 20px;
+      max-width: 1024px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
-  section {
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 28px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    backdrop-filter: blur(10px);
-    color: #e5e7eb;
-  }
+    section {
+      background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      color: #e5e7eb;
+    }
 
-  section h1 { color: #fff; }
+    section h1 { color: #fff; }
 
-  .row {
-    display: flex;
-    gap: 12px;
-    margin-top: 12px;
-    flex-wrap: wrap;
-  }
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
 
-  .card {
-    flex: 1 1 200px;
-    padding: 16px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    text-align: center;
-    color: #f3f4f6;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: all .25s ease;
-  }
+    .card {
+      flex: 1 1 200px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.12);
+      text-align: center;
+      color: #f3f4f6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: all .25s ease;
+    }
 
-  .card:hover {
-    background: rgba(255,255,255,0.18);
-    transform: translateY(-3px);
-  }
+    .card:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-3px);
+    }
 
-  footer {
-    padding: 14px 20px;
-    text-align: center;
-    font-size: 13px;
-    color: #9ca3af;
-    background: rgba(15,23,36,0.8);
-    backdrop-filter: blur(4px);
-  }
+    footer {
+      padding: 14px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      background: rgba(15,23,36,0.8);
+      backdrop-filter: blur(4px);
+    }
 
-  /* Contact form boxes */
-  .form-box {
-    display: grid;
-    gap: 12px;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-    margin-top: 14px;
-  }
+    /* Contact form boxes */
+    .form-box {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+      margin-top: 14px;
+    }
 
-  .form-field {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    padding: 12px;
-    border-radius: 10px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    transition: all 0.2s ease;
-  }
+    .form-field {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      transition: all 0.2s ease;
+    }
 
-  .form-field:hover {
-    background: rgba(255,255,255,0.22);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  }
+    .form-field:hover {
+      background: rgba(255,255,255,0.22);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
 
-  .form-field input,
-  .form-field textarea {
-    width: 100%;
-    border: 0;
-    outline: 0;
-    font-size: 14px;
-    background: transparent;
-    resize: vertical;
-    color: #fff;
-  }
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      font-size: 14px;
+      background: transparent;
+      resize: vertical;
+      color: #fff;
+    }
 
-  .form-field input::placeholder,
-  .form-field textarea::placeholder {
-    color: #cbd5e1;
-  }
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+      color: #cbd5e1;
+    }
 
-  .label {
-    font-size: 12px;
-    color: #cbd5e1;
-    margin-bottom: 6px;
-    display: block;
-  }
+    .label {
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      display: block;
+    }
 
-  .full { grid-column: 1 / -1; }
+    .full { grid-column: 1 / -1; }
 
-  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
 
-  button.btn {
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 0;
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: 0 8px 18px rgba(15,23,36,0.25);
-    transition: all 0.2s ease;
-  }
+    button.btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 8px 18px rgba(15,23,36,0.25);
+      transition: all 0.2s ease;
+    }
 
-  .btn-primary { background: #3b82f6; color: #fff; }
-  .btn-ghost { background: transparent; border: 1px solid #d1d5db; color: #fff; }
-  .btn-neutral { background: #f3f4f6; color: #0f1724; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-ghost { background: transparent; border: 1px solid #d1d5db; color: #fff; }
+    .btn-neutral { background: #f3f4f6; color: #0f1724; }
 
-  .btn:hover { transform: translateY(-1px); opacity: 0.95; }
+    .btn:hover { transform: translateY(-1px); opacity: 0.95; }
 
-  .hint { font-size: 12px; color: #cbd5e1; margin-top: 6px; }
-  .small { font-size: 12px; color: #e5e7eb; }
+    .hint { font-size: 12px; color: #cbd5e1; margin-top: 6px; }
+    .small { font-size: 12px; color: #e5e7eb; }
 
-  @media (max-width: 760px) {
-    .form-box { grid-template-columns: 1fr; }
-  }
-</style>
+    @media (max-width: 760px) {
+      .form-box { grid-template-columns: 1fr; }
+      header { padding: 12px 16px; }
+      main { padding: 24px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <div class="logo">MyWebsite</div>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="tab">Home</a></li>
+          <li><a href="projects.html" class="tab">Projects</a></li>
+          <li><a href="contact.html" class="tab tab-active">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="contact">
+      <h1>Contact</h1>
+      <p style="margin-top:8px;">Get in touch — fill the boxes and use one of the buttons to compose an email. Recipient is prefilled.</p>
+
+      <!-- Contact cards -->
+      <div class="row" style="margin-top:14px; margin-bottom:16px;">
+        <div class="card">
+          <h3>Email</h3>
+          <p class="small">finalstandcommunity2025@gmail.com</p>
+        </div>
+        <div class="card">
+          <h3>Office</h3>
+          <p class="small">—</p>
+        </div>
+        <div class="card">
+          <h3>Social</h3>
+          <p class="small">Email / Discord / GitHub</p>
+        </div>
+      </div>
+
+      <!-- Box form -->
+      <div style="margin-top:8px;">
+        <form id="contactForm" class="form-box" onsubmit="return false;" aria-label="Contact form">
+          <div class="form-field">
+            <label class="label" for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Example" />
+          </div>
+
+          <div class="form-field">
+            <label class="label" for="fromEmail">Your email</label>
+            <input id="fromEmail" name="fromEmail" type="email" placeholder="you@example.com" />
+          </div>
+
+          <div class="form-field full">
+            <label class="label" for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" placeholder="Inquiry about collaboration" />
+          </div>
+
+          <div class="form-field full">
+            <label class="label" for="message">Message</label>
+            <textarea id="message" name="message" rows="7" placeholder="Write a short message..."></textarea>
+          </div>
+
+          <div class="form-field full">
+            <div class="small">Preview (editable):</div>
+            <div id="preview" class="small" style="white-space:pre-wrap; margin-top:8px; padding:10px; border-radius:8px; background:#0b1220; border:1px solid rgba(255,255,255,0.06); color:#e6eef8;"></div>
+
+            <div class="actions" style="margin-top:12px;">
+              <button type="button" class="btn btn-primary" id="gmailBtn" title="Open compose in Gmail">Open in Gmail</button>
+              <button type="button" class="btn btn-ghost" id="outlookBtn" title="Open compose in Outlook web">Open in Outlook (web)</button>
+              <button type="button" class="btn btn-neutral" id="mailAppBtn" title="Open default mail client">Open in Mail App</button>
+              <button type="button" class="btn btn-ghost" id="copyBtn" title="Copy composed message">Copy Message</button>
+            </div>
+
+            <div class="hint">Tip: Fill your email so recipients can reply. Gmail/Outlook open in a new tab; the Mail App button uses your system mail client.</div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2024 MyWebsite — built with slightly too much coffee and curiosity.
+  </footer>
+
+  <script>
+    (function () {
+      // Recipient: fixed per your request
+      const RECIPIENT = 'finalstandcommunity2025@gmail.com';
+
+      // Elements
+      const nameEl = document.getElementById('name');
+      const fromEmailEl = document.getElementById('fromEmail');
+      const subjectEl = document.getElementById('subject');
+      const messageEl = document.getElementById('message');
+      const previewEl = document.getElementById('preview');
+
+      const gmailBtn = document.getElementById('gmailBtn');
+      const outlookBtn = document.getElementById('outlookBtn');
+      const mailAppBtn = document.getElementById('mailAppBtn');
+      const copyBtn = document.getElementById('copyBtn');
+
+      // Build the message body template
+      function buildBody() {
+        const name = nameEl.value.trim();
+        const from = fromEmailEl.value.trim();
+        const subject = subjectEl.value.trim();
+        const message = messageEl.value.trim();
+
+        // Compose a polite header and footer
+        let body = '';
+        if (name) body += `Name: ${name}\n`;
+        if (from) body += `Reply-to: ${from}\n`;
+        if (subject) body += `Subject: ${subject}\n`;
+        if (body) body += '\n';
+        body += (message || '[No message provided]') + '\n\n';
+        body += '--\nSent via Spectrom contact form';
+
+        return { subject: subject || '(no subject)', body };
+      }
+
+      // Update preview in page
+      function refreshPreview() {
+        const built = buildBody();
+        previewEl.textContent = `To: ${RECIPIENT}\nSubject: ${built.subject}\n\n${built.body}`;
+      }
+
+      // URL-encode helper
+      function enc(v) { return encodeURIComponent(v || ''); }
+
+      // Compose links
+      function makeMailTo() {
+        const { subject, body } = buildBody();
+        // mailto: with subject and body (some mail clients ignore long bodies)
+        return `mailto:${RECIPIENT}?subject=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      function makeGmailLink() {
+        const { subject, body } = buildBody();
+        // Gmail compose URL
+        return `https://mail.google.com/mail/?view=cm&fs=1&to=${enc(RECIPIENT)}&su=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      function makeOutlookWebLink() {
+        const { subject, body } = buildBody();
+        // Outlook web deeplink compose
+        return `https://outlook.office.com/mail/deeplink/compose?to=${enc(RECIPIENT)}&subject=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      // Event handlers
+      [nameEl, fromEmailEl, subjectEl, messageEl].forEach(el => {
+        el.addEventListener('input', refreshPreview);
+      });
+
+      gmailBtn.addEventListener('click', () => {
+        // Opens Gmail compose in a new tab
+        const url = makeGmailLink();
+        window.open(url, '_blank');
+      });
+
+      outlookBtn.addEventListener('click', () => {
+        const url = makeOutlookWebLink();
+        window.open(url, '_blank');
+      });
+
+      mailAppBtn.addEventListener('click', () => {
+        // Attempt to open system mail client via mailto:
+        const url = makeMailTo();
+        // Using location.href will attempt to trigger default mail client
+        window.location.href = url;
+      });
+
+      copyBtn.addEventListener('click', async () => {
+        const { subject, body } = buildBody();
+        const full = `To: ${RECIPIENT}\nSubject: ${subject}\n\n${body}`;
+        try {
+          await navigator.clipboard.writeText(full);
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(() => (copyBtn.textContent = 'Copy Message'), 1600);
+        } catch (e) {
+          // fallback: select preview text and instruct user
+          alert('Clipboard copy failed — select the preview text to copy manually.');
+        }
+      });
+
+      // Init preview
+      refreshPreview();
+
+      // Optional: small validation when trying to open mail app (not blocking)
+      document.getElementById('contactForm').addEventListener('click', (e) => {
+        // No-op; kept so form doesn't submit
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
