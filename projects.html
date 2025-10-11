@@ -299,13 +299,9 @@
     const calendarGrid = document.getElementById('calendarGrid');
     const monthLabel = document.getElementById('monthLabel');
     const prevBtn = document.getElementById('prevMonthBtn');
-    const nextBtn = document.getElementById('nextBtn'); // Corrected ID from 'nextMonthBtn' if it was a typo in original JS, else keep original
-
     // If you named your next button 'nextMonthBtn', ensure you use that here
     // For consistency with your HTML, I'm assuming 'nextMonthBtn' is correct.
     const nextMonthBtn = document.getElementById('nextMonthBtn');
-
-
     const timelineList = document.getElementById('timelineList');
 
     const dayModal = document.getElementById('dayModal');
@@ -418,8 +414,8 @@
         const num = document.createElement('div'); num.className='date-num'; num.textContent = d;
         top.appendChild(num);
 
-        // fetch counts (events + requests) in parallel to keep UI responsive
-        const [evts, reqs] = await Promise.all([eventsForDate(iso), requestsForDate(iso)]);
+  // fetch event counts for the date (requests are admin-only and shown in mailbox only)
+  const evts = await eventsForDate(iso);
 
         if(evts.length){
           const b = document.createElement('div'); b.className='badge'; b.textContent = `${evts.length} event${evts.length>1?'s':''}`;
@@ -428,10 +424,7 @@
           const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer);
         }
 
-        if(reqs.length){
-          const rb = document.createElement('div'); rb.className='requests-badge'; rb.textContent = `${reqs.length} request${reqs.length>1?'s':''}`;
-          top.appendChild(rb);
-        }
+        // requests are intentionally not shown on the calendar (admin mailbox only)
 
         cell.appendChild(top);
 
@@ -474,7 +467,6 @@
       saveEvtBtn.dataset.editing = '';
 
       const evts = await eventsForDate(iso);
-      const reqs = await requestsForDate(iso);
 
       dayEventsContainer.innerHTML = '';
       if(evts.length){
@@ -482,17 +474,6 @@
         evts.forEach(e=>{
           const d=document.createElement('div'); d.className='evt'; d.textContent = (e.startHHMM?`[${e.startHHMM}] `:'')+ (e.title||'(untitled)');
           if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click', (event)=> { event.stopPropagation(); deleteEvent(e.id); }); }
-          dayEventsContainer.appendChild(d);
-        });
-      }
-
-      if(reqs.length){
-        const header2 = document.createElement('div'); header2.className='muted'; header2.textContent = 'Requests (one-way):'; dayEventsContainer.appendChild(header2);
-        reqs.forEach(r=>{
-          const d=document.createElement('div'); d.className='evt';
-          d.textContent = `[${r.type||'?'}] ${r.message ? (r.message.length>48? r.message.slice(0,48)+'…' : r.message) : '(no message)'}`;
-          // admin can click to view full
-          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to view full request'; d.addEventListener('click', (event)=> { event.stopPropagation(); openRequestView(r.id); }); }
           dayEventsContainer.appendChild(d);
         });
       }
