@@ -72,11 +72,10 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       backdrop-filter: blur(10px);
       color: #e5e7eb;
+      margin-bottom: 20px;
     }
 
-    section h1, section h2 {
-      color: #fff;
-    }
+    section h1, section h2 { color: #fff; }
 
     .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
     .card {
@@ -216,12 +215,22 @@
     © 2025 MyWebsite — built with slightly too much coffee and curiosity.
   </footer>
 
+  <!-- Global Chat Box -->
+  <div id="chatBox" style="position:fixed; bottom:20px; right:20px; width:300px; max-height:400px; display:flex; flex-direction:column; background:rgba(0,0,0,0.75); border-radius:12px; overflow:hidden; font-family:Arial; z-index:9999;">
+    <div id="chatMessages" style="flex:1; padding:10px; overflow-y:auto; color:#fff; font-size:13px;"></div>
+    <div style="display:flex; border-top:1px solid rgba(255,255,255,0.2);">
+      <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1; padding:8px; border:none; outline:none; border-radius:0;"/>
+      <button id="chatSend" style="padding:8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;">Send</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script>
+    // Highlight active nav tab
     (function () {
       const links = document.querySelectorAll('nav a.tab');
       const path = location.pathname;
       const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
-
       links.forEach(link => {
         const href = link.getAttribute('href') || '';
         const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
@@ -231,5 +240,91 @@
       });
     })();
   </script>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-analytics.js";
+    import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
+      authDomain: "spectrom-9b7ce.firebaseapp.com",
+      projectId: "spectrom-9b7ce",
+      storageBucket: "spectrom-9b7ce.appspot.com",
+      messagingSenderId: "1022687085021",
+      appId: "1:1022687085021:web:bf2caba43d913c23963634",
+      measurementId: "G-DKSVJKXT00"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase();
+    const chatRef = ref(db, "globalChat");
+
+    let username = null;
+    let inactiveTimer = null;
+    const LOGOUT_TIME = 600000; // 600s = 10min
+
+    async function initChat() {
+      do {
+        username = prompt("Enter a username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
+        if (!username || username.length < 3 || username.length > 12) alert("Username must be 3-12 characters.");
+      } while (!username || username.length < 3 || username.length > 12);
+
+      let isOldEnough = false;
+      do {
+        isOldEnough = confirm("Are you 13 years or older?");
+        if (!isOldEnough) alert("You must be 13+ to chat.");
+      } while (!isOldEnough);
+
+      startInactivityTimer();
+    }
+
+    function startInactivityTimer() {
+      if (inactiveTimer) clearTimeout(inactiveTimer);
+      inactiveTimer = setTimeout(() => {
+        alert("Logged out due to inactivity.");
+        location.reload();
+      }, LOGOUT_TIME);
+    }
+
+    function resetInactivityTimer() {
+      startInactivityTimer();
+    }
+
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    const chatSend = document.getElementById("chatSend");
+
+    function addMessageToBox(msgObj) {
+      const div = document.createElement("div");
+      div.style.marginBottom = "6px";
+      div.innerHTML = `<strong>${msgObj.username}</strong>: ${msgObj.text}`;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatSend.addEventListener("click", () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      push(chatRef, { username, text, timestamp: serverTimestamp() });
+      chatInput.value = "";
+      resetInactivityTimer();
+    });
+
+    chatInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") chatSend.click();
+      resetInactivityTimer();
+    });
+
+    onChildAdded(chatRef, snapshot => {
+      const msgObj = snapshot.val();
+      addMessageToBox(msgObj);
+    });
+
+    initChat();
+  </script>
+
 </body>
 </html>
