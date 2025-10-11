@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
-// --- Firebase config ---
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -12,102 +12,40 @@ const firebaseConfig = {
   measurementId: "G-DKSVJKXT00"
 };
 
-// --- Initialize Firebase ---
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
-const chatRef = ref(db, "globalChat");
+const chatRef = ref(db, "chat");
 
-// --- Chat state ---
-let username = null;
-let inactiveTimer = null;
-const LOGOUT_TIME = 600_000; // 10 minutes
+// Chat bubble
 const chatBox = document.getElementById("chatBox");
 
-// --- Inactivity handler ---
-function resetInactivity() {
-  if (inactiveTimer) clearTimeout(inactiveTimer);
-  inactiveTimer = setTimeout(() => {
-    alert("Logged out due to inactivity.");
-    location.reload();
-  }, LOGOUT_TIME);
-}
-
-// --- Prompt user for username and age ---
-function initUser() {
-  do {
-    username = prompt("Enter a username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
-  } while (!username || username.length < 3 || username.length > 12);
-
-  let isOldEnough = false;
-  do {
-    isOldEnough = confirm("Are you 13 years or older?");
-    if (!isOldEnough) alert("You must be 13+ to chat.");
-  } while (!isOldEnough);
-
-  resetInactivity();
-}
-
-// --- Create the chat UI ---
-function createChat() {
+function createReadOnlyChatBox() {
   const box = document.createElement("div");
-  box.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    max-height: 400px;
-    display: flex;
-    flex-direction: column;
-    background: rgba(0,0,0,0.75);
-    border-radius: 12px;
-    overflow: hidden;
-    font-family: Arial;
-    z-index: 9999;
-  `;
+  box.style.position = "fixed";
+  box.style.bottom = "20px";
+  box.style.right = "20px";
+  box.style.width = "300px";
+  box.style.maxHeight = "400px";
+  box.style.display = "flex";
+  box.style.flexDirection = "column";
+  box.style.background = "rgba(0,0,0,0.75)";
+  box.style.borderRadius = "12px";
+  box.style.overflow = "hidden";
+  box.style.fontFamily = "Arial";
+  box.style.zIndex = 9999;
 
   const messages = document.createElement("div");
   messages.id = "chatMessages";
-  messages.style.cssText = `
-    flex:1; padding:10px; overflow-y:auto; color:#fff; font-size:13px;
-  `;
+  messages.style.flex = "1";
+  messages.style.padding = "10px";
+  messages.style.overflowY = "auto";
+  messages.style.color = "#fff";
+  messages.style.fontSize = "13px";
 
-  const inputDiv = document.createElement("div");
-  inputDiv.style.cssText = `display:flex; border-top:1px solid rgba(255,255,255,0.2);`;
-
-  const input = document.createElement("input");
-  input.id = "chatInput";
-  input.type = "text";
-  input.placeholder = "Type a message...";
-  input.style.flex = "1";
-  input.style.padding = "8px";
-  input.style.border = "none";
-  input.style.outline = "none";
-
-  const button = document.createElement("button");
-  button.id = "chatSend";
-  button.textContent = "Send";
-  button.style.cssText = `padding: 8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;`;
-
-  inputDiv.appendChild(input);
-  inputDiv.appendChild(button);
   box.appendChild(messages);
-  box.appendChild(inputDiv);
   document.body.appendChild(box);
 
-  // --- Send message function ---
-  function sendMessage() {
-    const text = input.value.trim();
-    if (!text) return;
-    push(chatRef, { username, text, timestamp: serverTimestamp() });
-    input.value = "";
-    resetInactivity();
-  }
-
-  // --- Event listeners ---
-  button.addEventListener("click", sendMessage);
-  input.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); resetInactivity(); });
-
-  // --- Listen for new messages (live) ---
+  // Listen to chat messages in real-time
   onChildAdded(chatRef, snapshot => {
     const msg = snapshot.val();
     const div = document.createElement("div");
@@ -118,9 +56,7 @@ function createChat() {
   });
 }
 
-// --- Show chat on bubble click ---
 chatBox.addEventListener("click", () => {
-  if (!username) initUser();
   chatBox.style.display = "none";
-  createChat();
+  createReadOnlyChatBox();
 });
