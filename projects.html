@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Projects - MyWebsite</title>
   <style>
-    /* Base Reset & Layout (kept simple & nested where useful) */
+    /* Base Reset & Layout */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-
-    /* Wallpaper background (your chosen Unsplash) */
     body {
       display: flex;
       min-height: 100vh;
@@ -19,7 +17,6 @@
       background-size: cover;
     }
 
-    /* Header / Nav */
     header {
       background: rgba(9,12,20,0.78);
       color: #fff;
@@ -34,7 +31,6 @@
     nav a:hover { color:#fff; background:rgba(255,255,255,0.05); transform:translateY(-1px); }
     nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.28); }
 
-    /* Main wrapper gets a frosted card */
     main {
       flex:1;
       max-width: 1200px;
@@ -46,7 +42,6 @@
       align-items: start;
     }
 
-    /* Calendar panel */
     .panel {
       background: rgba(255,255,255,0.08);
       border-radius: 14px;
@@ -55,30 +50,20 @@
       box-shadow: 0 12px 30px rgba(0,0,0,0.35);
       color: #e6eef8;
     }
-
     .panel h1 { margin-bottom: 8px; font-size: 20px; color: #fff; }
     .panel p { color: #cfe0ff; margin-bottom: 12px; }
 
-    /* Calendar header controls */
     .cal-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
     .cal-nav { display:flex; gap:8px; }
     .btn { padding:8px 10px; border-radius:8px; cursor:pointer; border:0; font-weight:600; background: rgba(255,255,255,0.06); color:#e6eef8; box-shadow: 0 6px 18px rgba(2,6,23,0.45); transition: all .12s ease; }
     .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.09); }
 
-    /* Calendar grid: square date frames like a calendar */
     .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
     }
-
-    .day-name {
-      text-align:center;
-      font-size:12px;
-      color:#bcd7ff;
-      opacity:0.95;
-    }
-
+    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; }
     .date-cell {
       background: rgba(255,255,255,0.04);
       border-radius:8px;
@@ -98,19 +83,8 @@
     .badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(96,165,250,0.18); color:#cfe0ff; }
 
     .events-list { margin-top:8px; display:flex; flex-direction:column; gap:6px; }
-    .evt {
-      font-size:12px;
-      padding:6px 8px;
-      border-radius:8px;
-      background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(59,130,246,0.1));
-      color:#eaf2ff;
-      box-shadow: 0 6px 14px rgba(2,6,23,0.3);
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+    .evt { font-size:12px; padding:6px 8px; border-radius:8px; background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(59,130,246,0.1)); color:#eaf2ff; box-shadow: 0 6px 14px rgba(2,6,23,0.3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* Right-side timeline tree */
     .timeline {
       background: rgba(255,255,255,0.06);
       border-radius: 14px;
@@ -131,42 +105,17 @@
 
     footer { margin: 24px auto 40px; width:94%; max-width:1200px; text-align:center; color:#cfe0ff; }
 
-    /* Modal (centered) */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: rgba(2,6,23,0.6);
-      z-index: 1000;
-    }
-    .modal {
-      width: 92%;
-      max-width: 720px;
-      background: rgba(12,16,28,0.96);
-      border-radius: 12px;
-      padding: 18px;
-      color: #e6eef8;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    }
+    .modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(2,6,23,0.6); z-index: 1000; }
+    .modal { width: 92%; max-width: 720px; background: rgba(12,16,28,0.96); border-radius: 12px; padding: 18px; color: #e6eef8; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
     .modal h2 { margin-bottom:8px; color:#fff; }
     .form-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-    .input, textarea, select {
-      padding:10px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.06);
-      background: rgba(255,255,255,0.02);
-      color:#eaf2ff;
-      min-width: 0;
-    }
+    .input, textarea, select { padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:#eaf2ff; min-width: 0; }
     .input { flex:1; }
     textarea { width:100%; min-height:90px; resize:vertical; }
 
     .muted { color:#bcd7ff; font-size:13px; }
     .hint { color:#9fbff6; font-size:12px; margin-top:8px; }
 
-    /* small screens layout */
     @media (max-width: 960px) {
       main { grid-template-columns: 1fr; margin: 20px auto; }
       .timeline { order: 2; margin-top:10px; }
@@ -189,7 +138,6 @@
   </header>
 
   <main>
-    <!-- Calendar / Timeline panel -->
     <section class="panel" id="calendarPanel">
       <div class="cal-header">
         <div>
@@ -202,19 +150,13 @@
           <button class="btn" id="nextMonthBtn" title="Next month">▶</button>
         </div>
       </div>
-
-      <div class="calendar" id="calendarGrid">
-        <!-- day names -->
-      </div>
+      <div class="calendar" id="calendarGrid"></div>
     </section>
 
-    <!-- Timeline tree -->
     <aside class="timeline panel" id="timelinePanel">
       <h3>Upcoming Events</h3>
-      <div id="timelineList">
-        <!-- events populated here -->
-      </div>
-      <div class="hint">Events persist locally on this browser using <code>localStorage</code>. Admin-only edits unlock with Shift+Q.</div>
+      <div id="timelineList"></div>
+      <div class="hint">Events persist online via Firebase. Admin-only edits unlock with Shift+Q.</div>
     </aside>
   </main>
 
@@ -222,39 +164,34 @@
     © 2025 MyWebsite — built with slightly too much coffee and curiosity.
   </footer>
 
-  <!-- Modal: day details + add/edit -->
+  <!-- Modals -->
   <div class="modal-backdrop" id="dayModal">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle">
       <h2 id="dayModalTitle">Day</h2>
       <div id="dayEventsContainer" style="margin-top:8px;"></div>
-
       <hr style="margin:12px 0; border-color: rgba(255,255,255,0.04)" />
-
       <div id="addEventSection">
         <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
           <div class="muted" id="formDateLabel">Add event for DATE</div>
           <div class="muted" id="adminIndicator">Not admin</div>
         </div>
-
         <div class="form-row" style="margin-top:8px;">
-          <input class="input" id="evtTitle" placeholder="Event title (eg. Build sprint)" />
+          <input class="input" id="evtTitle" placeholder="Event title" />
           <input class="input" id="evtStart" type="time" />
           <input class="input" id="evtEnd" type="time" />
         </div>
         <div style="margin-top:8px;">
           <textarea id="evtDesc" placeholder="Description (optional)"></textarea>
         </div>
-
         <div style="display:flex; gap:8px; margin-top:10px;">
           <button class="btn" id="saveEvtBtn">Save event</button>
           <button class="btn" id="closeDayModal">Close</button>
         </div>
-        <div class="hint" style="margin-top:8px;">If you're not admin the save button is disabled. Admin can add or remove events.</div>
+        <div class="hint" style="margin-top:8px;">Only admin can save or remove events.</div>
       </div>
     </div>
   </div>
 
-  <!-- Modal: admin login -->
   <div class="modal-backdrop" id="adminModal">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
       <h2 id="adminModalTitle">Admin login (hidden)</h2>
@@ -272,26 +209,31 @@
     </div>
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
+      authDomain: "spectrom-9b7ce.firebaseapp.com",
+      projectId: "spectrom-9b7ce",
+      storageBucket: "spectrom-9b7ce.appspot.com",
+      messagingSenderId: "1022687085021",
+      appId: "1:1022687085021:web:bf2caba43d913c23963634"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const eventsCol = db.collection('events');
+  </script>
+
+  <!-- Main Script -->
   <script>
     (function () {
-      /* Simple client-side calendar & event system
-         - Events stored in localStorage under key "project_timeline_events"
-         - Each event: {id, dateISO (YYYY-MM-DD), title, desc, startHHMM, endHHMM, createdAt}
-         - Admin login unlocked via Shift+Q -> opens modal. Demo credentials below.
-         - IMPORTANT: This is client-only demo code. For production, implement server auth & persistent DB.
-      */
-
-      // ---------- Config / state ----------
-      const STORAGE_KEY = 'project_timeline_events_v1';
-      // Demo admin credentials (change to your own). This is client-side only.
-      const ADMIN_USER = 'admin';
-      const ADMIN_PASS = 'admin123';
-
       let isAdmin = false;
-      let currentYear, currentMonth; // month: 0..11
+      let currentYear, currentMonth;
       const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-      // ---------- DOM refs ----------
+      // DOM refs
       const calendarGrid = document.getElementById('calendarGrid');
       const monthLabel = document.getElementById('monthLabel');
       const prevBtn = document.getElementById('prevMonthBtn');
@@ -317,310 +259,156 @@
       const loginBtn = document.getElementById('loginBtn');
       const cancelLoginBtn = document.getElementById('cancelLoginBtn');
 
-      let selectedDateISO = null; // YYYY-MM-DD
+      const ADMIN_USER = 'admin';
+      const ADMIN_PASS = 'admin123';
+      let selectedDateISO = null;
 
-      // ---------- utilities ----------
-      function loadEvents() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch (e) {
-          console.warn('Failed to parse events', e);
-          return [];
-        }
-      }
-      function saveEvents(arr) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-      }
-      function eventsForDate(dateISO) {
-        return loadEvents().filter(e => e.dateISO === dateISO).sort((a,b) => a.startHHMM.localeCompare(b.startHHMM));
-      }
-      function allUpcomingEvents() {
-        const todayISO = toISO(new Date());
-        return loadEvents().filter(e => e.dateISO >= todayISO).sort((a,b) => (a.dateISO + a.startHHMM).localeCompare(b.dateISO + b.startHHMM));
-      }
-      function toISO(d) {
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2,'0');
-        const dd = String(d.getDate()).padStart(2,'0');
-        return `${y}-${m}-${dd}`;
-      }
-      function formatDayLabel(iso) {
-        const d = new Date(iso + 'T00:00:00');
-        return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-      }
+      // --- Utilities ---
+      function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+      function formatDayLabel(iso) { const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString(undefined,{ weekday:'short', month:'short', day:'numeric' }); }
       function uid() { return Math.random().toString(36).slice(2,10); }
-      function timeToHHMM(t) { // expects "HH:MM"
-        return t;
+
+      async function loadEvents() {
+        const snapshot = await eventsCol.get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       }
 
-      // ---------- calendar rendering ----------
-      function renderCalendar(year, month) {
+      async function eventsForDate(dateISO) {
+        const all = await loadEvents();
+        return all.filter(e => e.dateISO===dateISO).sort((a,b)=>a.startHHMM.localeCompare(b.startHHMM));
+      }
+
+      async function allUpcomingEvents() {
+        const todayISO = toISO(new Date());
+        const all = await loadEvents();
+        return all.filter(e=>e.dateISO>=todayISO).sort((a,b)=> (a.dateISO+a.startHHMM).localeCompare(b.dateISO+b.startHHMM));
+      }
+
+      // --- Render Calendar ---
+      async function renderCalendar(year, month) {
         calendarGrid.innerHTML = '';
-        // day names
-        for (let i=0;i<7;i++) {
-          const dn = document.createElement('div');
-          dn.className = 'day-name';
-          dn.textContent = dayNames[i];
-          calendarGrid.appendChild(dn);
-        }
-
-        const first = new Date(year, month, 1);
+        for(let i=0;i<7;i++){ const dn=document.createElement('div'); dn.className='day-name'; dn.textContent=dayNames[i]; calendarGrid.appendChild(dn); }
+        const first=new Date(year, month,1);
         const firstWeekday = first.getDay();
-        const daysInMonth = new Date(year, month+1, 0).getDate();
+        const daysInMonth = new Date(year, month+1,0).getDate();
 
-        // fill blanks before first day
-        for (let i=0;i<firstWeekday;i++) {
-          const blank = document.createElement('div');
-          blank.className = 'date-cell';
-          blank.style.opacity = 0.2;
-          calendarGrid.appendChild(blank);
-        }
+        for(let i=0;i<firstWeekday;i++){ const blank=document.createElement('div'); blank.className='date-cell'; blank.style.opacity=0.2; calendarGrid.appendChild(blank); }
 
-        for (let d=1; d<=daysInMonth; d++) {
+        for(let d=1;d<=daysInMonth;d++){
           const date = new Date(year, month, d);
           const iso = toISO(date);
-          const cell = document.createElement('div');
-          cell.className = 'date-cell';
-          cell.dataset.iso = iso;
+          const cell = document.createElement('div'); cell.className='date-cell'; cell.dataset.iso = iso;
 
-          // top row: date number and badge if events exist
-          const top = document.createElement('div');
-          top.className = 'date-top';
-          const num = document.createElement('div'); num.className='date-num'; num.textContent = d;
-          top.appendChild(num);
+          const top=document.createElement('div'); top.className='date-top';
+          const num=document.createElement('div'); num.className='date-num'; num.textContent=d; top.appendChild(num);
 
-          const evts = eventsForDate(iso);
-          if (evts.length) {
-            const b = document.createElement('div'); b.className='badge'; b.textContent = `${evts.length} event${evts.length>1?'s':''}`;
-            top.appendChild(b);
-          } else {
-            const spacer = document.createElement('div'); spacer.style.minWidth = '34px'; top.appendChild(spacer);
-          }
+          const evts = await eventsForDate(iso);
+          if(evts.length){ const b=document.createElement('div'); b.className='badge'; b.textContent=`${evts.length} event${evts.length>1?'s':''}`; top.appendChild(b); }
+          else{ const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer); }
           cell.appendChild(top);
 
-          // events preview (first 2)
-          const list = document.createElement('div'); list.className='events-list';
-          evts.slice(0,2).forEach(e => {
-            const eEl = document.createElement('div'); eEl.className='evt';
-            eEl.textContent = `${e.startHHMM} • ${e.title}`;
-            list.appendChild(eEl);
-          });
-          if (evts.length > 2) {
-            const more = document.createElement('div'); more.className='muted'; more.textContent = `+${evts.length - 2} more...`; more.style.fontSize='12px'; list.appendChild(more);
-          }
+          const list=document.createElement('div'); list.className='events-list';
+          evts.forEach(e=>{ const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent=e.title; list.appendChild(eDiv); });
           cell.appendChild(list);
 
-          // click opens modal
-          cell.addEventListener('click', () => { openDayModal(iso); });
-
+          cell.addEventListener('click',()=>openDayModal(iso));
           calendarGrid.appendChild(cell);
         }
 
-        // update month label
-        const monthName = first.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
-        monthLabel.textContent = monthName;
-
-        // refresh timeline list
-        renderTimeline();
+        monthLabel.textContent = new Date(year, month).toLocaleDateString(undefined,{month:'long', year:'numeric'});
       }
 
-      // ---------- timeline rendering ----------
-      function renderTimeline() {
-        timelineList.innerHTML = '';
-        const upcoming = allUpcomingEvents();
-        if (!upcoming.length) {
-          timelineList.innerHTML = '<div class="muted">No upcoming events. Admins can add events to the calendar.</div>';
-          return;
-        }
-        upcoming.forEach(e => {
-          const item = document.createElement('div');
-          item.className = 'item';
-          const left = document.createElement('div'); left.innerHTML = `<strong style="color:#fff">${e.title}</strong><div style="font-size:12px;color:#bcd7ff">${formatDayLabel(e.dateISO)}</div>`;
-          const right = document.createElement('div'); right.style.textAlign='right';
-          const time = document.createElement('div'); time.className='time'; time.textContent = `${e.startHHMM} → ${e.endHHMM || '—'}`;
-          right.appendChild(time);
-          if (isAdmin) {
-            const del = document.createElement('button'); del.className='btn'; del.textContent='Delete'; del.style.marginTop='8px'; del.style.background='rgba(255,80,80,0.12)';
-            del.addEventListener('click', (ev) => { ev.stopPropagation(); deleteEvent(e.id); });
-            right.appendChild(del);
-          }
-          item.appendChild(left);
-          item.appendChild(right);
-          item.addEventListener('click', () => { openDayModal(e.dateISO); });
-          timelineList.appendChild(item);
+      async function renderTimeline() {
+        const evts = await allUpcomingEvents();
+        timelineList.innerHTML='';
+        evts.forEach(e=>{
+          const div=document.createElement('div'); div.className='item';
+          div.innerHTML=`<div>${e.title}</div><div class="time">${e.dateISO}${e.startHHMM? ' '+e.startHHMM : ''}</div>`;
+          timelineList.appendChild(div);
         });
       }
 
-      // ---------- modal handling ----------
-      function openDayModal(dateISO) {
-        selectedDateISO = dateISO;
-        dayModalTitle.textContent = `Events for ${formatDayLabel(dateISO)}`;
-        formDateLabel.textContent = `Add event for ${dateISO}`;
-        adminIndicator.textContent = isAdmin ? 'Admin: editing enabled' : 'Viewer mode';
-        // show existing events
-        refreshDayEvents();
-        // admin toggle save button
-        saveEvtBtn.disabled = !isAdmin;
-        dayModal.style.display = 'flex';
-      }
-      function closeDayModalFn() {
-        dayModal.style.display = 'none';
-        // clear form
-        evtTitle.value=''; evtStart.value=''; evtEnd.value=''; evtDesc.value='';
-      }
+      // --- Day Modal ---
+      async function openDayModal(iso) {
+        selectedDateISO = iso;
+        dayModalTitle.textContent = formatDayLabel(iso);
+        formDateLabel.textContent = 'Add event for '+formatDayLabel(iso);
+        adminIndicator.textContent = isAdmin? 'Admin':'Not admin';
+        evtTitle.value=evtStart.value=evtEnd.value=evtDesc.value='';
+        saveEvtBtn.dataset.editing='';
 
-      function refreshDayEvents() {
-        dayEventsContainer.innerHTML = '';
-        const evts = eventsForDate(selectedDateISO);
-        if (!evts.length) {
-          dayEventsContainer.innerHTML = '<div class="muted">No events on this day.</div>';
-          return;
-        }
-        evts.forEach(e => {
-          const wrap = document.createElement('div'); wrap.style.marginBottom='8px';
-          const title = document.createElement('div'); title.style.fontWeight='700'; title.textContent = `${e.startHHMM} • ${e.title}`;
-          const desc = document.createElement('div'); desc.style.fontSize='13px'; desc.style.color='#cfe0ff'; desc.textContent = e.desc || '';
-          wrap.appendChild(title); wrap.appendChild(desc);
-          if (isAdmin) {
-            const row = document.createElement('div'); row.style.marginTop='6px'; row.style.display='flex'; row.style.gap='8px';
-            const edit = document.createElement('button'); edit.className='btn'; edit.textContent='Edit';
-            const del = document.createElement('button'); del.className='btn'; del.textContent='Delete'; del.style.background='rgba(255,80,80,0.12)';
-            edit.addEventListener('click', () => { populateFormForEdit(e); });
-            del.addEventListener('click', () => { if(confirm('Delete event?')) deleteEvent(e.id); });
-            row.appendChild(edit); row.appendChild(del);
-            wrap.appendChild(row);
-          }
-          dayEventsContainer.appendChild(wrap);
+        const evts = await eventsForDate(iso);
+        dayEventsContainer.innerHTML='';
+        evts.forEach(e=>{
+          const d=document.createElement('div'); d.className='evt';
+          d.textContent=e.startHHMM? `[${e.startHHMM}] ${e.title}`: e.title;
+          if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click',()=>deleteEvent(e.id)); }
+          dayEventsContainer.appendChild(d);
         });
+        dayModal.style.display='flex';
       }
 
-      function populateFormForEdit(evt) {
-        selectedDateISO = evt.dateISO;
-        evtTitle.value = evt.title;
-        evtStart.value = evt.startHHMM;
-        evtEnd.value = evt.endHHMM || '';
-        evtDesc.value = evt.desc || '';
-        // when saving, we'll replace by id
-        saveEvtBtn.dataset.editing = evt.id;
-      }
+      closeDayModal.addEventListener('click',()=>{dayModal.style.display='none';});
 
-      // ---------- save / delete ----------
-      function saveEvent() {
-        if (!isAdmin) { alert('You must be admin to save events.'); return; }
+      async function saveEvent() {
+        if(!isAdmin){ alert('You must be admin'); return; }
         const title = evtTitle.value.trim();
         const start = evtStart.value;
         const end = evtEnd.value;
-        if (!title) { alert('Event needs a title.'); return; }
-        if (!start) { alert('Please set a start time.'); return; }
-        if (end && end <= start) { alert('End time must be after start time.'); return; }
+        if(!title || !start){ alert('Title & start required'); return; }
+        if(end && end<=start){ alert('End must be after start'); return; }
 
-        const all = loadEvents();
         const editingId = saveEvtBtn.dataset.editing;
-        if (editingId) {
-          // replace existing
-          const idx = all.findIndex(x => x.id === editingId);
-          if (idx !== -1) {
-            all[idx].title = title; all[idx].startHHMM = timeToHHMM(start); all[idx].endHHMM = timeToHHMM(end); all[idx].desc = evtDesc.value.trim();
-          }
-          delete saveEvtBtn.dataset.editing;
-        } else {
-          const newEvt = { id: uid(), dateISO: selectedDateISO, title, desc: evtDesc.value.trim(), startHHMM: timeToHHMM(start), endHHMM: end ? timeToHHMM(end) : '', createdAt: new Date().toISOString() };
-          all.push(newEvt);
-        }
-        saveEvents(all);
-        refreshDayEvents();
-        renderCalendar(currentYear, currentMonth);
-        renderTimeline();
-        // clear form
-        evtTitle.value=''; evtStart.value=''; evtEnd.value=''; evtDesc.value='';
-        alert('Saved.');
-      }
-      function deleteEvent(id) {
-        const all = loadEvents().filter(e => e.id !== id);
-        saveEvents(all);
-        refreshDayEvents();
-        renderCalendar(currentYear, currentMonth);
-        renderTimeline();
+        const eventData = { dateISO: selectedDateISO, title, startHHMM:start, endHHMM:end||'', desc:evtDesc.value.trim(), createdAt:new Date().toISOString() };
+        if(editingId) eventData.id=editingId;
+
+        if(editingId) await eventsCol.doc(editingId).set(eventData);
+        else await eventsCol.add(eventData);
+
+        evtTitle.value=evtStart.value=evtEnd.value=evtDesc.value='';
+        delete saveEvtBtn.dataset.editing;
+        await renderCalendar(currentYear,currentMonth);
+        await renderTimeline();
+        openDayModal(selectedDateISO);
       }
 
-      // ---------- admin login flow ----------
-      function openAdminModal() {
-        adminUser.value = ''; adminPass.value = '';
-        adminModal.style.display = 'flex';
-      }
-      function closeAdminModal() {
-        adminModal.style.display = 'none';
-      }
-      function attemptLogin() {
-        const u = adminUser.value.trim();
-        const p = adminPass.value;
-        if (u === ADMIN_USER && p === ADMIN_PASS) {
-          isAdmin = true;
-          closeAdminModal();
-          renderTimeline(); // update delete buttons
-          alert('Admin unlocked.');
-        } else {
-          alert('Bad credentials.');
-        }
+      async function deleteEvent(id){
+        if(!isAdmin) return alert('Only admin can delete events');
+        if(!confirm('Delete this event?')) return;
+        await eventsCol.doc(id).delete();
+        await renderCalendar(currentYear,currentMonth);
+        await renderTimeline();
+        if(selectedDateISO) openDayModal(selectedDateISO);
       }
 
-      // ---------- navigation controls ----------
-      prevBtn.addEventListener('click', () => {
-        currentMonth--;
-        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-        renderCalendar(currentYear, currentMonth);
-      });
-      nextBtn.addEventListener('click', () => {
-        currentMonth++;
-        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-        renderCalendar(currentYear, currentMonth);
-      });
-
-      // modal buttons
-      closeDayModal.addEventListener('click', closeDayModalFn);
       saveEvtBtn.addEventListener('click', saveEvent);
 
-      // admin modal buttons
-      loginBtn.addEventListener('click', attemptLogin);
-      cancelLoginBtn.addEventListener('click', closeAdminModal);
-
-      // close modals when clicking backdrop
-      document.querySelectorAll('.modal-backdrop').forEach(mb => {
-        mb.addEventListener('click', (e) => {
-          if (e.target === mb) mb.style.display = 'none';
-        });
+      // --- Admin login ---
+      document.addEventListener('keydown', e=>{
+        if(e.shiftKey && e.key.toLowerCase()==='q'){ adminModal.style.display='flex'; }
       });
-
-      // Shift+Q opens admin login (hidden)
-      window.addEventListener('keydown', (e) => {
-        if (e.shiftKey && e.code === 'KeyQ') {
-          openAdminModal();
-        }
+      loginBtn.addEventListener('click', ()=>{
+        if(adminUser.value===ADMIN_USER && adminPass.value===ADMIN_PASS){ isAdmin=true; alert('Admin login success'); adminModal.style.display='none'; renderCalendar(currentYear,currentMonth); renderTimeline(); }
+        else{ alert('Wrong credentials'); }
       });
+      cancelLoginBtn.addEventListener('click',()=>adminModal.style.display='none');
 
-      // small helper: clicking outside the modal or pressing Escape closes modals
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          dayModal.style.display = 'none'; adminModal.style.display = 'none';
-        }
-      });
+      // --- Month navigation ---
+      prevBtn.addEventListener('click',()=>{ const d=new Date(currentYear,currentMonth-1,1); currentYear=d.getFullYear(); currentMonth=d.getMonth(); renderCalendar(currentYear,currentMonth); });
+      nextBtn.addEventListener('click',()=>{ const d=new Date(currentYear,currentMonth+1,1); currentYear=d.getFullYear(); currentMonth=d.getMonth(); renderCalendar(currentYear,currentMonth); });
 
-      // initialize to current month
-      (function init() {
-        const today = new Date();
-        currentYear = today.getFullYear(); currentMonth = today.getMonth();
-        // render day names / calendar
-        // render calendar
-        renderCalendar(currentYear, currentMonth);
-
-        // tip: show stored events count in console
-        console.log('Loaded events:', loadEvents().length);
+      // --- Init ---
+      (function init(){
+        const today=new Date();
+        currentYear=today.getFullYear();
+        currentMonth=today.getMonth();
+        renderCalendar(currentYear,currentMonth);
+        renderTimeline();
       })();
 
-      // If user logs out (for demo), reload page or flip flag (we don't implement logout UI here)
-      // You can call isAdmin=false in console to drop admin.
-      // For production: replace this client-only auth with server-side authentication.
+      // --- Realtime updates ---
+      eventsCol.onSnapshot(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); if(selectedDateISO) openDayModal(selectedDateISO); });
+
     })();
   </script>
 </body>
