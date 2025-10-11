@@ -1,7 +1,7 @@
 // Firebase App
 import { initializeApp } from "firebase/app";
 // Firestore functions
-import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 
 // Firebase config
 const firebaseConfig = {
@@ -24,7 +24,7 @@ const db = getFirestore(app);
 const eventsCol = collection(db, "events");
 const requestsCol = collection(db, "requests");
 
-// Add an event
+// --- Events ---
 export async function addEvent(eventData) {
   try {
     const docRef = await addDoc(eventsCol, eventData);
@@ -35,18 +35,20 @@ export async function addEvent(eventData) {
   }
 }
 
-// Get all events
 export async function loadEvents() {
   const snapshot = await getDocs(eventsCol);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-// Delete an event
 export async function deleteEvent(id) {
   await deleteDoc(doc(db, "events", id));
 }
 
-// Add a request
+export function onEventsChange(callback) {
+  return onSnapshot(eventsCol, callback);
+}
+
+// --- Requests ---
 export async function addRequest(requestData) {
   try {
     const docRef = await addDoc(requestsCol, requestData);
@@ -57,13 +59,12 @@ export async function addRequest(requestData) {
   }
 }
 
-// Load requests
 export async function loadRequests() {
   const snapshot = await getDocs(requestsCol);
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-// Mark a request resolved and delete it
+// ** Admin resolves a request → delete it from Firestore **
 export async function resolveRequest(id) {
   try {
     await deleteDoc(doc(db, "requests", id));
@@ -73,10 +74,6 @@ export async function resolveRequest(id) {
   }
 }
 
-// Real-time listeners
-export function onEventsChange(callback) {
-  return onSnapshot(eventsCol, callback);
-}
 export function onRequestsChange(callback) {
   return onSnapshot(requestsCol, callback);
 }
