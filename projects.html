@@ -63,7 +63,7 @@
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
     }
-    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; padding:6px 0; }
+    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; }
     .date-cell {
       background: rgba(255,255,255,0.04);
       border-radius:8px;
@@ -116,16 +116,9 @@
     .muted { color:#bcd7ff; font-size:13px; }
     .hint { color:#9fbff6; font-size:12px; margin-top:8px; }
 
-    /* chat small helpers */
-    #chatBox { font-family: Inter, system-ui, Arial; box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-    .chat-msg { padding:6px 8px; margin-bottom:6px; border-radius:8px; max-width:82%; word-break:break-word; font-size:13px; }
-    .chat-me { margin-left:auto; background: linear-gradient(90deg, rgba(96,165,250,0.14), rgba(59,130,246,0.12)); color: #eaf2ff; }
-    .chat-other { margin-right:auto; background: rgba(255,255,255,0.03); color:#dbeeff; border:1px solid rgba(255,255,255,0.02); }
-
     @media (max-width: 960px) {
       main { grid-template-columns: 1fr; margin: 20px auto; }
       .timeline { order: 2; margin-top:10px; }
-      #chatBox { right: 12px; width: 86%; }
     }
   </style>
 </head>
@@ -168,16 +161,6 @@
   </main>
 
   <footer>
-
-<div id="chatBox" style="position:fixed; bottom:20px; right:20px; width:300px; max-height:400px; display:flex; flex-direction:column; background:rgba(0,0,0,0.75); border-radius:12px; overflow:hidden;">
-  <div id="chatMessages" style="flex:1; padding:10px; overflow-y:auto; color:#fff; font-size:13px;"></div>
-  <div style="display:flex; border-top:1px solid rgba(255,255,255,0.12);">
-    <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1; padding:8px; border:none; outline:none; background:transparent; color:#eaf2ff;" />
-    <button id="chatSend" style="padding:8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;">Send</button>
-  </div>
-</div>
-
-    
     © 2025 MyWebsite — built with slightly too much coffee and curiosity.
   </footer>
 
@@ -280,13 +263,6 @@
       const ADMIN_PASS = 'sdkinteractive2023';
       let selectedDateISO = null;
 
-      // --- Chat refs ---
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const chatSend = document.getElementById('chatSend');
-      const chatCol = db.collection('chat');
-      const clientIdLocal = uid();
-
       // --- Utilities ---
       function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
       function formatDayLabel(iso) { const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString(undefined,{ weekday:'short', month:'short', day:'numeric' }); }
@@ -299,36 +275,24 @@
 
       async function eventsForDate(dateISO) {
         const all = await loadEvents();
-        return all.filter(e => e.dateISO===dateISO).sort((a,b)=> (a.startHHMM||'').localeCompare(b.startHHMM||''));
+        return all.filter(e => e.dateISO===dateISO).sort((a,b)=>a.startHHMM.localeCompare(b.startHHMM));
       }
 
       async function allUpcomingEvents() {
         const todayISO = toISO(new Date());
         const all = await loadEvents();
-        return all.filter(e=>e.dateISO>=todayISO).sort((a,b)=> (a.dateISO+(a.startHHMM||'')).localeCompare(b.dateISO+(b.startHHMM||'')));
+        return all.filter(e=>e.dateISO>=todayISO).sort((a,b)=> (a.dateISO+a.startHHMM).localeCompare(b.dateISO+b.startHHMM));
       }
 
       // --- Render Calendar ---
       async function renderCalendar(year, month) {
         calendarGrid.innerHTML = '';
-        // day headers
-        for(let i=0;i<7;i++){
-          const dn=document.createElement('div');
-          dn.className='day-name';
-          dn.textContent=dayNames[i];
-          calendarGrid.appendChild(dn);
-        }
-
+        for(let i=0;i<7;i++){ const dn=document.createElement('div'); dn.className='day-name'; dn.textContent=dayNames[i]; calendarGrid.appendChild(dn); }
         const first=new Date(year, month,1);
         const firstWeekday = first.getDay();
         const daysInMonth = new Date(year, month+1,0).getDate();
 
-        for(let i=0;i<firstWeekday;i++){
-          const blank=document.createElement('div');
-          blank.className='date-cell';
-          blank.style.opacity=0.2;
-          calendarGrid.appendChild(blank);
-        }
+        for(let i=0;i<firstWeekday;i++){ const blank=document.createElement('div'); blank.className='date-cell'; blank.style.opacity=0.2; calendarGrid.appendChild(blank); }
 
         for(let d=1;d<=daysInMonth;d++){
           const date = new Date(year, month, d);
@@ -339,17 +303,12 @@
           const num=document.createElement('div'); num.className='date-num'; num.textContent=d; top.appendChild(num);
 
           const evts = await eventsForDate(iso);
-          if(evts.length){
-            const b=document.createElement('div'); b.className='badge'; b.textContent=`${evts.length} event${evts.length>1?'s':''}`; top.appendChild(b);
-          } else {
-            const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer);
-          }
+          if(evts.length){ const b=document.createElement('div'); b.className='badge'; b.textContent=`${evts.length} event${evts.length>1?'s':''}`; top.appendChild(b); }
+          else{ const spacer=document.createElement('div'); spacer.style.minWidth='34px'; top.appendChild(spacer); }
           cell.appendChild(top);
 
           const list=document.createElement('div'); list.className='events-list';
-          evts.forEach(e=>{
-            const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent=e.title; list.appendChild(eDiv);
-          });
+          evts.forEach(e=>{ const eDiv=document.createElement('div'); eDiv.className='evt'; eDiv.textContent=e.title; list.appendChild(eDiv); });
           cell.appendChild(list);
 
           cell.addEventListener('click',()=>openDayModal(iso));
@@ -364,7 +323,7 @@
         timelineList.innerHTML='';
         evts.forEach(e=>{
           const div=document.createElement('div'); div.className='item';
-          div.innerHTML=`<div>${escapeHtml(e.title)}</div><div class="time">${e.dateISO}${e.startHHMM? ' '+e.startHHMM : ''}</div>`;
+          div.innerHTML=`<div>${e.title}</div><div class="time">${e.dateISO}${e.startHHMM? ' '+e.startHHMM : ''}</div>`;
           timelineList.appendChild(div);
         });
       }
@@ -382,7 +341,7 @@
         dayEventsContainer.innerHTML='';
         evts.forEach(e=>{
           const d=document.createElement('div'); d.className='evt';
-          d.textContent = (e.startHHMM? `[${e.startHHMM}] ${e.title}`: e.title);
+          d.textContent=e.startHHMM? `[${e.startHHMM}] ${e.title}`: e.title;
           if(isAdmin){ d.style.cursor='pointer'; d.title='Click to delete'; d.addEventListener('click',()=>deleteEvent(e.id)); }
           dayEventsContainer.appendChild(d);
         });
@@ -429,15 +388,8 @@
         if(e.shiftKey && e.key.toLowerCase()==='q'){ adminModal.style.display='flex'; }
       });
       loginBtn.addEventListener('click', ()=>{
-        if(adminUser.value===ADMIN_USER && adminPass.value===ADMIN_PASS){
-          isAdmin=true;
-          alert('Admin login success');
-          adminModal.style.display='none';
-          renderCalendar(currentYear,currentMonth);
-          renderTimeline();
-        } else {
-          alert('Wrong credentials');
-        }
+        if(adminUser.value===ADMIN_USER && adminPass.value===ADMIN_PASS){ isAdmin=true; alert('Admin login success'); adminModal.style.display='none'; renderCalendar(currentYear,currentMonth); renderTimeline(); }
+        else{ alert('Wrong credentials'); }
       });
       cancelLoginBtn.addEventListener('click',()=>adminModal.style.display='none');
 
@@ -454,84 +406,8 @@
         renderTimeline();
       })();
 
-      // --- Realtime updates for events ---
+      // --- Realtime updates ---
       eventsCol.onSnapshot(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); if(selectedDateISO) openDayModal(selectedDateISO); });
-
-      // --- Chat functionality (realtime) ---
-      // helper to escape text for safe insertion
-      function escapeHtml(s){
-        const d = document.createElement('div');
-        d.textContent = s;
-        return d.innerHTML;
-      }
-
-      // render a single chat message (doc data)
-      function renderChatMessages(docs){
-        chatMessages.innerHTML = '';
-        docs.forEach(doc => {
-          const data = doc.data ? doc.data() : doc; // support both doc snapshot and plain object
-          const wrapper = document.createElement('div');
-          wrapper.className = 'chat-msg ' + (data.clientId === clientIdLocal ? 'chat-me' : 'chat-other');
-
-          // message text
-          const txt = document.createElement('div');
-          txt.textContent = data.text || '';
-          wrapper.appendChild(txt);
-
-          // small timestamp if available
-          const ts = data.createdAt && data.createdAt.toDate ? data.createdAt.toDate() : (data.createdAt instanceof Date ? data.createdAt : null);
-          if(ts){
-            const time = document.createElement('div');
-            time.style.fontSize='11px';
-            time.style.opacity='0.7';
-            time.style.marginTop='6px';
-            time.textContent = ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            wrapper.appendChild(time);
-          }
-          chatMessages.appendChild(wrapper);
-        });
-
-        // scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      // send message
-      async function sendChat(){
-        const raw = chatInput.value.trim();
-        if(!raw) return;
-        // disable UI until push complete (small UX nicety)
-        chatInput.value = '';
-        chatInput.disabled = true;
-        chatSend.disabled = true;
-        try {
-          await chatCol.add({
-            text: raw,
-            clientId: clientIdLocal,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        } catch (err) {
-          console.error('Chat send failed', err);
-          // fallback: show locally
-          const fallbackDoc = { text: raw, clientId: clientIdLocal, createdAt: new Date() };
-          renderChatMessages([fallbackDoc]);
-        } finally {
-          chatInput.disabled = false;
-          chatSend.disabled = false;
-          chatInput.focus();
-        }
-      }
-
-      // wire send button + enter key
-      chatSend.addEventListener('click', sendChat);
-      chatInput.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); sendChat(); } });
-
-      // realtime listener (order by createdAt; handle nulls gracefully)
-      chatCol.orderBy('createdAt').limit(200).onSnapshot(snapshot => {
-        // sometimes serverTimestamp is null for new docs; keep stable rendering
-        renderChatMessages(snapshot.docs);
-      }, err => {
-        console.error('Chat realtime error', err);
-      });
 
     })();
   </script>
