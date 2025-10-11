@@ -1,50 +1,43 @@
-// Firebase App (already imported)
-import { initializeApp } from "firebase/app";
-// Firestore functions
-import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot, query, where, orderBy } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, serverTimestamp, deleteDoc, doc } from "firebase/firestore";
 
-// Your Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
-  authDomain: "spectrom-9b7ce.firebaseapp.com",
-  projectId: "spectrom-9b7ce",
-  storageBucket: "spectrom-9b7ce.appspot.com",
-  messagingSenderId: "1022687085021",
-  appId: "1:1022687085021:web:bf2caba43d913c23963634",
-  measurementId: "G-DKSVJKXT00"
-};
+// Firestore refs
+const messagesCol = collection(db, "chat_messages");
+const usersCol = collection(db, "chat_users");
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Analytics (optional)
-import { getAnalytics } from "firebase/analytics";
-const analytics = getAnalytics(app);
-
-// Initialize Firestore
-const db = getFirestore(app);
-
-// Reference your events collection
-const eventsCol = collection(db, "chat");
-
-// Example: Add a new event
-async function addEvent(eventData) {
-  try {
-    const docRef = await addDoc(eventsCol, eventData);
-    console.log("Event added with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding event: ", e);
-  }
+// Append a new message
+async function sendMessage(msg, username) {
+  await addDoc(messagesCol, { username, message: msg, timestamp: serverTimestamp() });
 }
 
-// Example: Get all events
-async function loadEvents() {
-  const snapshot = await getDocs(eventsCol);
-  const events = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  console.log(events);
-  return events;
+// Add user
+async function addUser(username) {
+  const docRef = await addDoc(usersCol, { username, joinedAt: serverTimestamp() });
+
+  // Auto remove after 10 min
+  setTimeout(() => {
+    deleteDoc(doc(db, "chat_users", docRef.id));
+  }, 10*60*1000);
 }
 
-// Example: Delete an event
-async function deleteEvent(id) {
-  await deleteDoc(doc(db, "chat", id));
-}
+// Listen for messages in real-time
+onSnapshot(messagesCol, (snapshot) => {
+  chatMessages.innerHTML = ''; // clear
+  snapshot.docs.sort((a,b)=> a.data().timestamp?.toMillis() - b.data().timestamp?.toMillis())
+    .forEach(doc => {
+      const data = doc.data();
+      const div = document.createElement('div');
+      div.textContent = `${data.username}: ${data.message}`;
+      chatMessages.appendChild(div);
+    });
+});
+
+// Listen for users in real-time
+onSnapshot(usersCol, (snapshot) => {
+  userTableBody.innerHTML = '';
+  snapshot.docs.forEach(doc => {
+    const data = doc.data();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${data.username}</td><td>${data.joinedAt?.toDate().toLocaleTimeString()}</td>`;
+    userTableBody.appendChild(tr);
+  });
+});
