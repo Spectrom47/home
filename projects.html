@@ -83,6 +83,21 @@
     .input { flex:1; }
     textarea { width:100%; min-height:90px; resize:vertical; }
 
+    /* Improve select dropdown readability on dark theme */
+    select, select.input {
+      background: rgba(255,255,255,0.02);
+      color: #eaf2ff;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    /* Try to style options where the browser allows it */
+    select option {
+      background: rgba(12,16,28,0.98);
+      color: #eaf2ff;
+    }
+    /* For Windows/Edge/IE expand icon visibility */
+    select::-ms-expand { filter: invert(1) brightness(1.2); }
+
     .muted { color:#bcd7ff; font-size:13px; }
     .hint { color:#9fbff6; font-size:12px; margin-top:8px; }
 
