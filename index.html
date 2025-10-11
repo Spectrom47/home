@@ -1,210 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Home - MyWebsite</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-
-    body {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
-      color: #111;
-      background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
-                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80')
-                  no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    header {
-      background: rgba(15,23,36,0.85);
-      color: #fff;
-      padding: 16px 20px;
-      backdrop-filter: blur(6px);
-    }
-
-    .container {
-      max-width: 1024px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .logo { font-weight: 700; letter-spacing: 0.6px; }
-
-    nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
-    nav a {
-      display: inline-block;
-      padding: 8px 12px;
-      color: #d1d5db;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all .15s ease;
-    }
-    nav a:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.12);
-      transform: translateY(-1px);
-    }
-    nav li.tab-active > a,
-    nav a.tab-active {
-      color: #0f1724;
-      background: #60a5fa;
-      box-shadow: 0 6px 18px rgba(96,165,250,0.3);
-    }
-
-    main {
-      flex: 1;
-      padding: 28px 20px;
-      max-width: 1024px;
-      margin: 40px auto;
-      width: 100%;
-    }
-
-    section {
-      background: rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      backdrop-filter: blur(10px);
-      color: #e5e7eb;
-    }
-
-    section h1, section h2 {
-      color: #fff;
-    }
-
-    .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-    .card {
-      flex: 1 1 200px;
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.12);
-      text-align: center;
-      color: #f3f4f6;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      transition: all .25s ease;
-    }
-    .card:hover {
-      background: rgba(255,255,255,0.18);
-      transform: translateY(-3px);
-    }
-
-    .img-card { overflow: hidden; padding: 0; background: rgba(255,255,255,0.15); border-radius: 10px; }
-    .img-card a { display: block; text-decoration: none; color: inherit; }
-    .img-card img {
-      display: block;
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 10px 10px 0 0;
-    }
-    .img-card .caption {
-      padding: 10px 12px;
-      font-size: 14px;
-      color: #e5e7eb;
-      background: rgba(15,23,36,0.6);
-    }
-
-    .feature-btn {
-      display: block;
-      padding: 14px 10px;
-      border-radius: 10px;
-      background: rgba(96,165,250,0.9);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: 0 5px 18px rgba(96,165,250,0.4);
-      transition: all 0.2s ease;
-    }
-    .feature-btn:hover {
-      background: rgba(59,130,246,0.9);
-      transform: translateY(-2px);
-    }
-
-    footer {
-      padding: 14px 20px;
-      text-align: center;
-      font-size: 13px;
-      color: #9ca3af;
-      background: rgba(15,23,36,0.8);
-      backdrop-filter: blur(4px);
-    }
-
-    @media (max-width: 560px) {
-      .container { flex-direction: column; align-items: flex-start; gap: 12px; }
-      nav ul { width: 100%; justify-content: space-between; }
-      .img-card img { height: 120px; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Home - MyWebsite</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    color: #111;
+    background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
+                url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+    background-size: cover;
+  }
+  header {
+    background: rgba(15,23,36,0.85);
+    color: #fff;
+    padding: 16px 20px;
+    backdrop-filter: blur(6px);
+  }
+  .container {
+    max-width: 1024px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .logo { font-weight: 700; letter-spacing: 0.6px; }
+  nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
+  nav a {
+    display: inline-block;
+    padding: 8px 12px;
+    color: #d1d5db;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all .15s ease;
+  }
+  nav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-1px);
+  }
+  nav li.tab-active > a,
+  nav a.tab-active {
+    color: #0f1724;
+    background: #60a5fa;
+    box-shadow: 0 6px 18px rgba(96,165,250,0.3);
+  }
+  main { flex: 1; padding: 28px 20px; max-width: 1024px; margin: 40px auto; width: 100%; }
+  section {
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    color: #e5e7eb;
+  }
+  section h1, section h2 { color: #fff; }
+  .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+  .card {
+    flex: 1 1 200px;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    text-align: center;
+    color: #f3f4f6;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all .25s ease;
+  }
+  .card:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateY(-3px);
+  }
+  .img-card { overflow: hidden; padding: 0; background: rgba(255,255,255,0.15); border-radius: 10px; }
+  .img-card a { display: block; text-decoration: none; color: inherit; }
+  .img-card img {
+    display: block;
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+  }
+  .img-card .caption {
+    padding: 10px 12px;
+    font-size: 14px;
+    color: #e5e7eb;
+    background: rgba(15,23,36,0.6);
+  }
+  .feature-btn {
+    display: block;
+    padding: 14px 10px;
+    border-radius: 10px;
+    background: rgba(96,165,250,0.9);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 5px 18px rgba(96,165,250,0.4);
+    transition: all 0.2s ease;
+  }
+  .feature-btn:hover {
+    background: rgba(59,130,246,0.9);
+    transform: translateY(-2px);
+  }
+  footer {
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    background: rgba(15,23,36,0.8);
+    backdrop-filter: blur(4px);
+  }
+  @media (max-width: 560px) {
+    .container { flex-direction: column; align-items: flex-start; gap: 12px; }
+    nav ul { width: 100%; justify-content: space-between; }
+    .img-card img { height: 120px; }
+  }
+</style>
 </head>
 
-<!-- Chat Toggle Bubble -->
+<body>
+
+<header>
+  <div class="container">
+    <div class="logo">Spectroms Kingdom</div>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="index.html" class="tab">Home</a></li>
+        <li><a href="projects.html" class="tab">Projects</a></li>
+        <li><a href="contact.html" class="tab">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="home">
+    <h1>Home Page</h1>
+    <p style="margin-top:8px;">My Virtual Resume Of My Best Creations!</p>
+    <div class="row" style="margin-top:14px;">
+      <div class="card">
+        <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
+          Unhearted Evil (Roblox)
+        </a>
+      </div>
+      <div class="card">
+        <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer" title="Fiverr gig">
+          Fiverr Seller Page
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="recent">
+    <h2>Recent Work</h2>
+    <p style="margin-top:6px; color: #cbd5e1;">A quick showcase of recent images (image_one → image_four).</p>
+    <div class="row" style="margin-top:12px;">
+      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+        <a href="images/image_one.png" target="_blank" rel="noopener noreferrer">
+          <img src="images/image_one.png" alt="Recent work — image one">
+          <div class="caption">image_one</div>
+        </a>
+      </div>
+      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+        <a href="images/image_two.png" target="_blank" rel="noopener noreferrer">
+          <img src="images/image_two.png" alt="Recent work — image two">
+          <div class="caption">image_two</div>
+        </a>
+      </div>
+      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+        <a href="images/image_three.png" target="_blank" rel="noopener noreferrer">
+          <img src="images/image_three.png" alt="Recent work — image three">
+          <div class="caption">image_three</div>
+        </a>
+      </div>
+      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+        <a href="images/image_four.png" target="_blank" rel="noopener noreferrer">
+          <img src="images/image_four.png" alt="Recent work — image four">
+          <div class="caption">image_four</div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2025 MyWebsite — built with slightly too much coffee and curiosity.
+</footer>
+
+<!-- Chat Toggle Button -->
 <div id="chatToggle" style="position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3);">
   <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
 </div>
 
-<!-- Chat Box -->
-<div id="chatBox" style="position:fixed; bottom:80px; right:20px; width:350px; max-height:500px; display:none; flex-direction:column; background:rgba(0,0,0,0.85); border-radius:16px; overflow:hidden; font-family:Arial; z-index:9999; box-shadow:0 6px 25px rgba(0,0,0,0.4);">
-  <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:rgba(30,30,30,0.9); color:#fff; font-weight:600;">
-    Chat <span id="chatClose" style="cursor:pointer;">✖</span>
-  </div>
-  <div id="chatMessages" style="flex:1; padding:10px; overflow-y:auto; color:#fff; font-size:13px; background:rgba(0,0,0,0.6);"></div>
-  <div style="padding:8px; display:flex;">
-    <input id="chatInput" type="text" placeholder="Type a message..." style="flex:1; padding:8px; border:none; outline:none; background:rgba(255,255,255,0.05); color:#fff;">
-    <button id="chatSend" style="padding:8px; background:#60a5fa; border:none; color:#fff; cursor:pointer;">Send</button>
-  </div>
-</div>
-
-<script>
-const chatToggle = document.getElementById('chatToggle');
-const chatBox = document.getElementById('chatBox');
-const chatClose = document.getElementById('chatClose');
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const chatSend = document.getElementById('chatSend');
-
-chatToggle.addEventListener('click', () => {
-  chatBox.style.display = 'flex';
-  chatToggle.style.display = 'none';
-});
-
-chatClose.addEventListener('click', () => {
-  chatBox.style.display = 'none';
-  chatToggle.style.display = 'flex';
-});
-
-// Simple local chat array (HTML only)
-chatSend.addEventListener('click', () => {
-  const text = chatInput.value.trim();
-  if(!text) return;
-
-  const msgDiv = document.createElement('div');
-  const time = new Date().toLocaleTimeString();
-  msgDiv.textContent = `[${time}] ${text}`;
-  chatMessages.appendChild(msgDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  chatInput.value = '';
-
-  // Auto-remove message after 120s
-  setTimeout(() => {
-    if(chatMessages.contains(msgDiv)) chatMessages.removeChild(msgDiv);
-  }, 120 * 1000);
-});
-
-chatInput.addEventListener('keydown', e => {
-  if(e.key === 'Enter') chatSend.click();
-});
-</script>
-
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, doc, deleteDoc, limit } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy, limit, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -220,29 +213,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Firestore collections
 const messagesCol = collection(db, "chat_messages");
-const usersCol = collection(db, "chat_users");
 
 let username = null;
 let userDocRef = null;
 
-// Initialize chat user
+// Initialize user
 async function initChatUser() {
   do {
     username = prompt("Enter username (3-12 chars):", "Guest" + Math.floor(Math.random()*1000));
   } while(!username || username.length < 3 || username.length > 12);
-
-  // Add user to online list
-  userDocRef = await addDoc(usersCol, { username, joinedAt: serverTimestamp() });
-
-  // Auto-remove after 10 minutes
-  setTimeout(async () => {
-    if(userDocRef) await deleteDoc(doc(db, "chat_users", userDocRef.id));
-  }, 10 * 60 * 1000);
 }
 
-// Create chat UI
+// Create Chat UI
 function createChatUI() {
   const box = document.createElement("div");
   box.id = "chatBox";
@@ -260,7 +243,29 @@ function createChatUI() {
   box.style.zIndex = 9999;
   box.style.boxShadow = "0 6px 25px rgba(0,0,0,0.4)";
 
-  // Messages container
+  // Header with Close
+  const header = document.createElement("div");
+  header.style.background = "#1e1e1e";
+  header.style.color = "#fff";
+  header.style.padding = "6px 10px";
+  header.style.display = "flex";
+  header.style.justifyContent = "space-between";
+  header.style.alignItems = "center";
+  header.innerHTML = `<span>Chat</span>`;
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "✖";
+  closeBtn.style.background = "none";
+  closeBtn.style.border = "none";
+  closeBtn.style.color = "#fff";
+  closeBtn.style.cursor = "pointer";
+  closeBtn.addEventListener("click", () => {
+    box.remove();
+    document.getElementById("chatToggle").style.display = "flex";
+  });
+  header.appendChild(closeBtn);
+  box.appendChild(header);
+
+  // Messages
   const messages = document.createElement("div");
   messages.id = "chatMessages";
   messages.style.flex = "1";
@@ -269,23 +274,11 @@ function createChatUI() {
   messages.style.color = "#fff";
   messages.style.fontSize = "13px";
   messages.style.background = "rgba(0,0,0,0.6)";
-  messages.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
+  box.appendChild(messages);
 
-  // Users container
-  const users = document.createElement("div");
-  users.id = "userList";
-  users.style.padding = "6px 10px";
-  users.style.background = "rgba(30,30,30,0.6)";
-  users.style.fontSize = "12px";
-  users.style.color = "#fff";
-  users.style.overflowY = "auto";
-  users.style.maxHeight = "80px";
-  users.style.borderBottom = "1px solid rgba(255,255,255,0.2)";
-
-  // Input container
+  // Input
   const inputDiv = document.createElement("div");
   inputDiv.style.display = "flex";
-
   const input = document.createElement("input");
   input.id = "chatInput";
   input.type = "text";
@@ -308,154 +301,56 @@ function createChatUI() {
 
   inputDiv.appendChild(input);
   inputDiv.appendChild(sendBtn);
-
-  box.appendChild(messages);
-  box.appendChild(users);
   box.appendChild(inputDiv);
 
   document.body.appendChild(box);
 
-  // Send message
   sendBtn.addEventListener("click", async () => {
     const text = input.value.trim();
     if(!text) return;
     try {
       await addDoc(messagesCol, { username, message: text, timestamp: serverTimestamp() });
       input.value = "";
-    } catch(e) {
-      console.error("Send failed:", e);
-    }
+    } catch(e) { console.error("Send failed:", e); }
   });
 
-  input.addEventListener("keydown", e => {
-    if(e.key === "Enter") sendBtn.click();
-  });
+  input.addEventListener("keydown", e => { if(e.key==="Enter") sendBtn.click(); });
 
-  // Listen for messages
-  const msgQuery = query(messagesCol, orderBy("timestamp", "asc"), limit(100));
+  // Listen messages
+  const msgQuery = query(messagesCol, orderBy("timestamp","asc"), limit(100));
   onSnapshot(msgQuery, snapshot => {
     messages.innerHTML = '';
     snapshot.forEach(doc => {
       const data = doc.data();
-      const div = document.createElement("div");
       const time = data.timestamp?.toDate().toLocaleTimeString() || "";
+      const div = document.createElement("div");
       div.innerHTML = `<strong>${data.username}</strong> [${time}]: ${data.message}`;
       messages.appendChild(div);
     });
     messages.scrollTop = messages.scrollHeight;
   });
-
-  // Listen for users
-  onSnapshot(usersCol, snapshot => {
-    users.innerHTML = '';
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      const joined = data.joinedAt?.toDate().toLocaleTimeString() || "-";
-      const div = document.createElement("div");
-      div.textContent = `${data.username} (joined: ${joined})`;
-      users.appendChild(div);
-    });
-  });
 }
 
-// Toggle chat bubble
-const toggleBtn = document.getElementById("chatToggle");
-toggleBtn.addEventListener("click", async () => {
+// Toggle chat button
+document.getElementById("chatToggle").addEventListener("click", async () => {
   if(!username) await initChatUser();
-  toggleBtn.style.display = "none";
+  document.getElementById("chatToggle").style.display = "none";
   createChatUI();
 });
+
+// Active tab logic
+(function () {
+  const links = document.querySelectorAll('nav a.tab');
+  const path = location.pathname;
+  const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
+  links.forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
+    const active = linkFile === currentFile;
+    link.classList.toggle('tab-active', active);
+    if (link.parentElement) link.parentElement.classList.toggle('tab-active', active);
+  });
+})();
 </script>
-
-
-<body>
-
-  <header>
-    <div class="container">
-      <div class="logo">Spectroms Kingdom</div>
-      <nav aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html" class="tab">Home</a></li>
-          <li><a href="projects.html" class="tab">Projects</a></li>
-          <li><a href="contact.html" class="tab">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <section id="home">
-      <h1>Home Page</h1>
-      <p style="margin-top:8px;">My Virtual Resume Of My Best Creations!</p>
-
-      <div class="row" style="margin-top:14px;">
-        <div class="card">
-          <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
-            Unhearted Evil (Roblox)
-          </a>
-        </div>
-        <div class="card">
-          <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer" title="Fiverr gig">
-            Fiverr Seller Page
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="recent">
-      <h2>Recent Work</h2>
-      <p style="margin-top:6px; color: #cbd5e1;">A quick showcase of recent images (image_one → image_four).</p>
-
-      <div class="row" style="margin-top:12px;">
-        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-          <a href="images/image_one.png" target="_blank" rel="noopener noreferrer">
-            <img src="images/image_one.png" alt="Recent work — image one">
-            <div class="caption">image_one</div>
-          </a>
-        </div>
-
-        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-          <a href="images/image_two.png" target="_blank" rel="noopener noreferrer">
-            <img src="images/image_two.png" alt="Recent work — image two">
-            <div class="caption">image_two</div>
-          </a>
-        </div>
-
-        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-          <a href="images/image_three.png" target="_blank" rel="noopener noreferrer">
-            <img src="images/image_three.png" alt="Recent work — image three">
-            <div class="caption">image_three</div>
-          </a>
-        </div>
-
-        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-          <a href="images/image_four.png" target="_blank" rel="noopener noreferrer">
-            <img src="images/image_four.png" alt="Recent work — image four">
-            <div class="caption">image_four</div>
-          </a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    © 2025 MyWebsite — built with slightly too much coffee and curiosity.
-  </footer>
-
-  <script>
-    (function () {
-      const links = document.querySelectorAll('nav a.tab');
-      const path = location.pathname;
-      const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
-
-      links.forEach(link => {
-        const href = link.getAttribute('href') || '';
-        const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
-        const active = linkFile === currentFile;
-        link.classList.toggle('tab-active', active);
-        if (link.parentElement) link.parentElement.classList.toggle('tab-active', active);
-      });
-    })();
-  </script>
 </body>
 </html>
