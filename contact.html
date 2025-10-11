@@ -21,7 +21,25 @@
     .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
     .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
     footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
-    @media (max-width:560px){ .container { flex-direction:column; align-items:flex-start; gap:12px; } nav ul { width:100%; justify-content:space-between; } }
+
+    /* Contact form boxes */
+    .form-box { display:grid; gap:12px; grid-template-columns: 1fr 1fr; align-items:start; }
+    .form-field { background:#ffffff; border:1px solid #e6eef9; padding:12px; border-radius:10px; box-shadow:0 4px 10px rgba(15,23,36,0.03); }
+    .form-field input,
+    .form-field textarea { width:100%; border:0; outline:0; font-size:14px; background:transparent; resize:vertical; }
+    .label { font-size:12px; color:#6b7280; margin-bottom:6px; display:block; }
+    .full { grid-column: 1 / -1; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+    button.btn { padding:10px 14px; border-radius:10px; border:0; cursor:pointer; font-weight:600; box-shadow:0 8px 18px rgba(15,23,36,0.06); }
+    .btn-primary { background:#2563eb; color:#fff; }
+    .btn-ghost { background:transparent; border:1px solid #d1d5db; color:#111; }
+    .btn-neutral { background:#f3f4f6; color:#0f1724; }
+    .hint { font-size:12px; color:#6b7280; margin-top:6px; }
+    .small { font-size:12px; color:#475569; }
+
+    @media (max-width:760px) {
+      .form-box { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -33,7 +51,7 @@
         <ul>
           <li><a href="index.html" class="tab">Home</a></li>
           <li><a href="projects.html" class="tab">Projects</a></li>
-          <li><a href="contact.html" class="tab">Contact</a></li>
+          <li><a href="contact.html" class="tab tab-active">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -42,21 +60,61 @@
   <main>
     <section id="contact">
       <h1>Contact</h1>
-      <p style="margin-top:8px;">Get in touch! Fill out the form below or use one of the methods listed.</p>
+      <p style="margin-top:8px;">Get in touch — fill the boxes and use one of the buttons to compose an email. Recipient is prefilled.</p>
 
-      <div class="row" style="margin-top:14px; flex-direction:column;">
+      <!-- Contact cards -->
+      <div class="row" style="margin-top:14px; margin-bottom:16px;">
         <div class="card">
           <h3>Email</h3>
-          <p>hello@mywebsite.com</p>
+          <p class="small">finalstandcommunity2025@gmail.com</p>
         </div>
         <div class="card">
           <h3>Phone</h3>
-          <p>+1 234 567 8900</p>
+          <p class="small">+1 234 567 8900</p>
         </div>
         <div class="card">
           <h3>Social</h3>
-          <p>Twitter / LinkedIn / GitHub</p>
+          <p class="small">Twitter / LinkedIn / GitHub</p>
         </div>
+      </div>
+
+      <!-- Box form -->
+      <div style="margin-top:8px;">
+        <form id="contactForm" class="form-box" onsubmit="return false;" aria-label="Contact form">
+          <div class="form-field">
+            <label class="label" for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Example" />
+          </div>
+
+          <div class="form-field">
+            <label class="label" for="fromEmail">Your email</label>
+            <input id="fromEmail" name="fromEmail" type="email" placeholder="you@example.com" />
+          </div>
+
+          <div class="form-field full">
+            <label class="label" for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" placeholder="Inquiry about collaboration" />
+          </div>
+
+          <div class="form-field full">
+            <label class="label" for="message">Message</label>
+            <textarea id="message" name="message" rows="7" placeholder="Write a short message..."></textarea>
+          </div>
+
+          <div class="form-field full">
+            <div class="small">Preview (editable):</div>
+            <div id="preview" class="small" style="white-space:pre-wrap; margin-top:8px; padding:10px; border-radius:8px; background:#fbfdff; border:1px solid #eef3ff;"></div>
+
+            <div class="actions" style="margin-top:12px;">
+              <button type="button" class="btn btn-primary" id="gmailBtn" title="Open compose in Gmail">Open in Gmail</button>
+              <button type="button" class="btn btn-ghost" id="outlookBtn" title="Open compose in Outlook web">Open in Outlook (web)</button>
+              <button type="button" class="btn btn-neutral" id="mailAppBtn" title="Open default mail client">Open in Mail App</button>
+              <button type="button" class="btn btn-ghost" id="copyBtn" title="Copy composed message">Copy Message</button>
+            </div>
+
+            <div class="hint">Tip: Fill your email so recipients can reply. Gmail/Outlook open in a new tab; the Mail App button uses your system mail client.</div>
+          </div>
+        </form>
       </div>
     </section>
   </main>
@@ -67,21 +125,113 @@
 
   <script>
     (function () {
-      const links = document.querySelectorAll('nav a.tab');
-      const path = location.pathname;
-      const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
-      links.forEach(link => {
-        const href = link.getAttribute('href') || '';
-        const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
-        const active = linkFile === currentFile;
-        if (active) {
-          link.classList.add('tab-active');
-          if (link.parentElement) link.parentElement.classList.add('tab-active');
-        } else {
-          link.classList.remove('tab-active');
-          if (link.parentElement) link.parentElement.classList.remove('tab-active');
+      // Recipient: fixed per your request
+      const RECIPIENT = 'finalstandcommunity2025@gmail.com';
+
+      // Elements
+      const nameEl = document.getElementById('name');
+      const fromEmailEl = document.getElementById('fromEmail');
+      const subjectEl = document.getElementById('subject');
+      const messageEl = document.getElementById('message');
+      const previewEl = document.getElementById('preview');
+
+      const gmailBtn = document.getElementById('gmailBtn');
+      const outlookBtn = document.getElementById('outlookBtn');
+      const mailAppBtn = document.getElementById('mailAppBtn');
+      const copyBtn = document.getElementById('copyBtn');
+
+      // Build the message body template
+      function buildBody() {
+        const name = nameEl.value.trim();
+        const from = fromEmailEl.value.trim();
+        const subject = subjectEl.value.trim();
+        const message = messageEl.value.trim();
+
+        // Compose a polite header and footer
+        let body = '';
+        if (name) body += `Name: ${name}\n`;
+        if (from) body += `Reply-to: ${from}\n`;
+        if (subject) body += `Subject: ${subject}\n`;
+        if (body) body += '\n';
+        body += (message || '[No message provided]') + '\n\n';
+        body += '--\nSent via MyWebsite contact form';
+
+        return { subject: subject || '(no subject)', body };
+      }
+
+      // Update preview in page
+      function refreshPreview() {
+        const built = buildBody();
+        previewEl.textContent = `To: ${RECIPIENT}\nSubject: ${built.subject}\n\n${built.body}`;
+      }
+
+      // URL-encode helper
+      function enc(v) { return encodeURIComponent(v || ''); }
+
+      // Compose links
+      function makeMailTo() {
+        const { subject, body } = buildBody();
+        // mailto: with subject and body (some mail clients ignore long bodies)
+        return `mailto:${RECIPIENT}?subject=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      function makeGmailLink() {
+        const { subject, body } = buildBody();
+        // Gmail compose URL
+        // fs=1 opens compose in a new window / dialog
+        return `https://mail.google.com/mail/?view=cm&fs=1&to=${enc(RECIPIENT)}&su=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      function makeOutlookWebLink() {
+        const { subject, body } = buildBody();
+        // Outlook web deeplink compose
+        return `https://outlook.office.com/mail/deeplink/compose?to=${enc(RECIPIENT)}&subject=${enc(subject)}&body=${enc(body)}`;
+      }
+
+      // Event handlers
+      [nameEl, fromEmailEl, subjectEl, messageEl].forEach(el => {
+        el.addEventListener('input', refreshPreview);
+      });
+
+      gmailBtn.addEventListener('click', () => {
+        // Opens Gmail compose in a new tab
+        const url = makeGmailLink();
+        window.open(url, '_blank');
+      });
+
+      outlookBtn.addEventListener('click', () => {
+        const url = makeOutlookWebLink();
+        window.open(url, '_blank');
+      });
+
+      mailAppBtn.addEventListener('click', () => {
+        // Attempt to open system mail client via mailto:
+        const url = makeMailTo();
+        // Using location.href will attempt to trigger default mail client
+        window.location.href = url;
+      });
+
+      copyBtn.addEventListener('click', async () => {
+        const { subject, body } = buildBody();
+        const full = `To: ${RECIPIENT}\nSubject: ${subject}\n\n${body}`;
+        try {
+          await navigator.clipboard.writeText(full);
+          copyBtn.textContent = 'Copied ✓';
+          setTimeout(() => (copyBtn.textContent = 'Copy Message'), 1600);
+        } catch (e) {
+          // fallback: select preview text and instruct user
+          alert('Clipboard copy failed — select the preview text to copy manually.');
         }
       });
+
+      // Init preview
+      refreshPreview();
+
+      // Optional: small validation when trying to open mail app (not blocking)
+      document.getElementById('contactForm').addEventListener('click', (e) => {
+        // No-op; kept so form doesn't submit
+      });
+
     })();
   </script>
 
