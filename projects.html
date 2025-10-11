@@ -233,7 +233,19 @@
   <!-- Admin mailbox panel -->
   <div id="mailboxPanel" class="panel" aria-hidden="true">
     <h3>Admin Mailbox</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <div style="font-weight:700;">Open Requests</div>
+      <div>
+        <button class="btn" id="toggleArchivedBtn" title="Show archived">Show archived</button>
+      </div>
+    </div>
     <div id="mailList"></div>
+    <hr style="border-color: rgba(255,255,255,0.03); margin:8px 0;" />
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+      <div style="font-weight:700;">Archived Requests</div>
+      <div style="font-size:12px; color:#bcd7ff;">(resolved, moved for filing)</div>
+    </div>
+    <div id="archivedList" style="display:none; margin-top:6px;"></div>
     <div class="hint" style="margin:8px 12px 12px 12px;">Click an item to view the request message. This is a read-only mailbox for admins.</div>
     <button class="btn" id="clearAllRequestsAdminBtn" style="display: none;">Clear ALL Requests (Server-Side)</button>
   </div>
