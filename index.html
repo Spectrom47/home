@@ -308,21 +308,16 @@ document.getElementById("chatToggle").addEventListener("click", async () => {
   createChatUI();
 });
 </script>
-
-
-// Active tab logic
-(function () {
-  const links = document.querySelectorAll('nav a.tab');
-  const path = location.pathname;
-  const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
-  links.forEach(link => {
-    const href = link.getAttribute('href') || '';
-    const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
-    const active = linkFile === currentFile;
-    link.classList.toggle('tab-active', active);
-    if (link.parentElement) link.parentElement.classList.toggle('tab-active', active);
+<script>
+  // Highlight active tab
+  const tabs = document.querySelectorAll('nav a.tab');
+  const currentPath = window.location.pathname.split('/').pop();
+  tabs.forEach(tab => {
+    if(tab.getAttribute('href') === currentPath) {
+      tab.classList.add('tab-active');
+      if(tab.parentElement) tab.parentElement.classList.add('tab-active');
+    }
   });
-})();
 </script>
 </body>
 </html>
