@@ -69,15 +69,18 @@ export async function loadRequests() {
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-// ** Admin resolves a request → delete it from Firestore **
 export async function resolveRequest(id) {
+  if (!id) return console.error("No ID provided to resolveRequest");
+  
   try {
+    console.log("Deleting request ID:", id);
     await deleteDoc(doc(db, "requests", id));
     console.log("Request resolved & deleted:", id);
   } catch (e) {
     console.error("Error resolving request:", e);
   }
 }
+
 
 // NEW: Function to call the server-side Cloud Function for collection deletion
 export async function deleteRequestsCollection() {
