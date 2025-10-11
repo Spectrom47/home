@@ -5,49 +5,142 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Home - MyWebsite</title>
   <style>
-    /* Basic reset + layout */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    body { display: flex; min-height: 100vh; flex-direction: column; background:#f6f7fb; color:#111; }
+
+    /* HD Background wallpaper */
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      background: url('https://images.unsplash.com/photo-1527443224154-9f3512bd864a?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      color: #111;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Semi-transparent overlay for readability */
+    main, header, footer {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(8px);
+    }
 
     /* Header / nav */
-    header { background:#0f1724; color:#fff; padding:16px 20px; }
-    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .logo { font-weight:700; letter-spacing:0.6px; }
-    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
-    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
-    nav a:hover { color:#fff; background:rgba(255,255,255,0.03); transform:translateY(-1px); }
+    header {
+      background: rgba(15, 23, 36, 0.9);
+      color: #fff;
+      padding: 16px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .container {
+      max-width: 1024px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo { font-weight: 700; letter-spacing: 0.6px; }
+    nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
+    nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      color: #d1d5db;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all .15s ease;
+    }
+    nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.05); transform: translateY(-1px); }
     nav li.tab-active > a,
-    nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.18); }
+    nav a.tab-active {
+      color: #0f1724;
+      background: #60a5fa;
+      box-shadow: 0 6px 18px rgba(96, 165, 250, 0.4);
+    }
 
-    /* Main */
-    main { flex:1; padding:28px 20px; max-width:1024px; margin:0 auto; width:100%; }
-    section { background:#fff; border-radius:12px; padding:20px; box-shadow:0 6px 20px rgba(15,23,36,0.06); margin-bottom:16px; }
-    .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
-    .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
+    /* Main content container */
+    main {
+      flex: 1;
+      padding: 28px 20px;
+      max-width: 1024px;
+      margin: 40px auto;
+      width: 100%;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
 
-    /* Image card specifics */
-    .img-card { overflow:hidden; padding:0; background:#fff; box-shadow:none; border-radius:10px; }
-    .img-card a { display:block; text-decoration:none; color:inherit; }
-    .img-card img { display:block; width:100%; height:160px; object-fit:cover; border-radius:10px 10px 0 0; }
-    .img-card .caption { padding:10px 12px; font-size:14px; color:#111827; }
+    section {
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(15, 23, 36, 0.1);
+      margin-bottom: 16px;
+    }
 
-    /* Feature buttons */
-    .feature-btn { display:block; padding:14px 10px; border-radius:10px; background:#eef2ff; color:#1e293b; text-decoration:none; font-weight:600; }
-    .feature-grid { display:flex; gap:12px; flex-wrap:wrap; }
+    .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .card {
+      flex: 1 1 200px;
+      padding: 16px;
+      border-radius: 10px;
+      background: rgba(248, 250, 252, 0.9);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-    /* Footer */
-    footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
 
-    /* Mobile nav collapse (very basic) */
-    @media (max-width:560px){
-      .container { flex-direction:column; align-items:flex-start; gap:12px; }
-      nav ul { width:100%; justify-content:space-between; }
-      .img-card img { height:120px; }
+    /* Image cards */
+    .img-card { overflow: hidden; padding: 0; background: #fff; box-shadow: none; border-radius: 10px; }
+    .img-card a { display: block; text-decoration: none; color: inherit; }
+    .img-card img {
+      display: block;
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+    .img-card .caption { padding: 10px 12px; font-size: 14px; color: #111827; }
+
+    .feature-btn {
+      display: block;
+      padding: 14px 10px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #93c5fd, #60a5fa);
+      color: #1e293b;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 3px 12px rgba(96, 165, 250, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .feature-btn:hover {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    footer {
+      padding: 14px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #e5e7eb;
+      background: rgba(15, 23, 36, 0.92);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Mobile */
+    @media (max-width:560px) {
+      .container { flex-direction: column; align-items: flex-start; gap: 12px; }
+      nav ul { width: 100%; justify-content: space-between; }
+      .img-card img { height: 120px; }
     }
   </style>
 </head>
 <body>
-
   <header>
     <div class="container">
       <div class="logo">Spectroms Kingdom</div>
@@ -66,7 +159,6 @@
       <h1>Home Page</h1>
       <p style="margin-top:8px;">My Virtual Resume Of My Best Creations!</p>
 
-      <!-- Features -->
       <div class="row" style="margin-top:14px;">
         <div class="card">
           <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
@@ -79,8 +171,6 @@
             Fiverr Seller Page
           </a>
         </div>
-
-        <!-- Feature 3 intentionally removed -->
       </div>
     </section>
 
@@ -89,7 +179,6 @@
       <p style="margin-top:6px; color:#6b7280;">A quick showcase of recent images (image_one → image_four).</p>
 
       <div class="row" style="margin-top:12px;">
-        <!-- Image 1 -->
         <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
           <a href="images/image_one.png" target="_blank" rel="noopener noreferrer">
             <img src="images/image_one.png" alt="Recent work — image one">
@@ -97,7 +186,6 @@
           </a>
         </div>
 
-        <!-- Image 2 -->
         <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
           <a href="images/image_two.png" target="_blank" rel="noopener noreferrer">
             <img src="images/image_two.png" alt="Recent work — image two">
@@ -105,7 +193,6 @@
           </a>
         </div>
 
-        <!-- Image 3 -->
         <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
           <a href="images/image_three.png" target="_blank" rel="noopener noreferrer">
             <img src="images/image_three.png" alt="Recent work — image three">
@@ -113,7 +200,6 @@
           </a>
         </div>
 
-        <!-- Image 4 -->
         <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
           <a href="images/image_four.png" target="_blank" rel="noopener noreferrer">
             <img src="images/image_four.png" alt="Recent work — image four">
@@ -130,29 +216,18 @@
 
   <script>
     (function () {
-      // Select nav links that act as tabs
       const links = document.querySelectorAll('nav a.tab');
-
-      // Determine current file name (treat root as index.html)
       const path = location.pathname;
       const currentFile = (path.substring(path.lastIndexOf('/') + 1) || 'index.html').toLowerCase();
 
       links.forEach(link => {
-        // Resolve link href relative to current origin and extract filename
         const href = link.getAttribute('href') || '';
         const linkFile = (new URL(href, location.origin)).pathname.split('/').pop().toLowerCase() || 'index.html';
-
         const active = linkFile === currentFile;
-        if (active) {
-          link.classList.add('tab-active');
-          if (link.parentElement) link.parentElement.classList.add('tab-active');
-        } else {
-          link.classList.remove('tab-active');
-          if (link.parentElement) link.parentElement.classList.remove('tab-active');
-        }
+        link.classList.toggle('tab-active', active);
+        if (link.parentElement) link.parentElement.classList.toggle('tab-active', active);
       });
     })();
   </script>
-
 </body>
 </html>
