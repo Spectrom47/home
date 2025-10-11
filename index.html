@@ -196,13 +196,14 @@
 </div>
 
 <script type="module">
+/* Chat: recent realtime + on-demand older pages
+   Keep your Firebase config below. */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
   query, orderBy, limit, where, Timestamp, getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-// Firebase config (keep yours)
 const firebaseConfig = {
   apiKey: "AIzaSyChe0_K6bjkP_RkakgSf06o0BLGofX4stQ",
   authDomain: "spectrom-9b7ce.firebaseapp.com",
@@ -227,7 +228,6 @@ const OLDER_PAGE_SIZE = 50;              // how many older messages to load per 
 // state
 let recentUnsub = null;
 let oldestTimestamp = null; // Timestamp of the oldest loaded message (for pagination)
-let viewingLatest = true;   // if user is at bottom / viewing latest; controls autoscroll
 let pendingNewCount = 0;
 
 // UTIL: format time
@@ -294,11 +294,11 @@ function createChatUI() {
   const newMsgIndicator = document.createElement("button");
   newMsgIndicator.textContent = "";
   Object.assign(newMsgIndicator.style, {
-    display:"none", position:"absolute", right:"40px", bottom:"84px", zIndex:10000,
+    display:"none", position:"fixed", right:"80px", bottom:"84px", zIndex:10000,
     padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer",
     background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)"
   });
-  box.appendChild(newMsgIndicator);
+  document.body.appendChild(newMsgIndicator);
 
   // Input area
   const inputDiv = document.createElement("div"); inputDiv.style.display="flex";
@@ -310,7 +310,6 @@ function createChatUI() {
   box.appendChild(inputDiv);
 
   document.body.appendChild(box);
-  document.body.appendChild(newMsgIndicator); // overlay button
 
   // helper to create message node
   function createMessageNode(data) {
@@ -356,11 +355,12 @@ function createChatUI() {
     const scrolled = messages.scrollTop;
     const total = messages.scrollHeight;
     // if within 50px of bottom, consider viewingLatest
-    viewingLatest = (total - (scrolled + visibleHeight) <= 50);
+    const viewingLatest = (total - (scrolled + visibleHeight) <= 50);
     if (viewingLatest) {
       newMsgIndicator.style.display = "none";
       pendingNewCount = 0;
     }
+    return viewingLatest;
   }
 
   messages.addEventListener("scroll", () => {
@@ -376,12 +376,10 @@ function createChatUI() {
   // when clicking new message indicator, jump to bottom / show latest
   newMsgIndicator.addEventListener("click", () => {
     scrollToBottom();
-    // re-attach listeningRecent if necessary - handled by realtime listener
   });
 
   function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight;
-    viewingLatest = true;
     newMsgIndicator.style.display = "none";
     pendingNewCount = 0;
   }
@@ -454,9 +452,7 @@ function startListeningRecent() {
       nodes.push(ui.createMessageNode(data));
     });
 
-    // Replace the recent region (we keep ONLY recent messages in this realtime list)
-    // But we must merge with older messages already loaded: since older messages are prepended
-    // we simply append recent nodes after existing older messages if any (we re-render whole list for simplicity).
+    // Replace recent region
     ui.replaceRecentMessages(nodes);
 
     // update info
@@ -465,12 +461,10 @@ function startListeningRecent() {
 
     // autoscroll behavior
     if (ui.messagesEl) {
-      // if user is at bottom -> auto scroll to bottom
       const atBottom = (ui.messagesEl.scrollHeight - (ui.messagesEl.scrollTop + ui.messagesEl.clientHeight) <= 50);
       if (atBottom) {
         ui.scrollToBottom();
       } else {
-        // not at bottom, increment pending indicator
         const newCount = snapshot.size - lastSnapshotSize;
         if (newCount > 0) {
           ui.setNewIndicator((pendingNewCount || 0) + newCount);
@@ -482,7 +476,6 @@ function startListeningRecent() {
     if (snapshot.size > 0) {
       const firstDoc = snapshot.docs[0];
       if (firstDoc && firstDoc.data().timestamp) {
-        // this is the oldest in the *recent* window; if we don't have any older messages loaded yet, set oldestTimestamp
         if (!oldestTimestamp) oldestTimestamp = firstDoc.data().timestamp;
       }
     }
@@ -494,27 +487,19 @@ function startListeningRecent() {
 // Load older messages (one page) and prepend them. Pagination uses timestamp < oldestTimestamp
 async function loadOlderMessages() {
   try {
-    // if we don't have any oldestTimestamp (no recent messages) use now
     let tsForQuery = oldestTimestamp || Timestamp.fromDate(new Date());
-    // query older messages than tsForQuery
     const olderQuery = query(messagesCol, where("timestamp", "<", tsForQuery), orderBy("timestamp", "desc"), limit(OLDER_PAGE_SIZE));
     const snap = await getDocs(olderQuery);
     if (snap.empty) {
-      // nothing older
       return;
     }
     const loaded = [];
     snap.forEach(d => {
-      const data = d.data();
-      loaded.push(data);
+      loaded.push(d.data());
     });
-    // reverse because we fetched desc; we want chronological asc for prepend
-    loaded.reverse();
-
+    loaded.reverse(); // make chronological asc
     const nodes = loaded.map(data => ui.createMessageNode(data));
     ui.prependMessages(nodes);
-
-    // update oldestTimestamp to timestamp of the first item we now have
     const firstTs = loaded[0].timestamp;
     if (firstTs) oldestTimestamp = firstTs;
   } catch (e) {
@@ -527,26 +512,11 @@ document.getElementById("chatToggle").addEventListener("click", async () => {
   if (!username) await initChatUser();
   document.getElementById("chatToggle").style.display = "none";
   ui = createChatUI();
-
-  // start realtime listener for recent messages
   startListeningRecent();
-
-  // attach a click handler to the "Load older messages" button (the UI returned handles it)
-  // but we also want to load a first older page only when the user asks; so nothing auto-loaded.
-
-  // small nicety: when opening, scroll to bottom (shows latest)
   setTimeout(() => ui.scrollToBottom(), 200);
 });
 </script>
 
-
-// Toggle chat button
-document.getElementById("chatToggle").addEventListener("click", async () => {
-  if(!username) await initChatUser();
-  document.getElementById("chatToggle").style.display = "none";
-  createChatUI();
-});
-</script>
 <script>
   // Highlight active tab
   const tabs = document.querySelectorAll('nav a.tab');
