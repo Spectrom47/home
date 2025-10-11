@@ -127,9 +127,8 @@
   <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
 </div>
 
-<!-- Firebase and ChatApp script -->
+<!-- Replace your previous module script with this updated one -->
 <script type="module">
-// Top-level module imports (must be at top-level of the module script)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
@@ -250,6 +249,7 @@ import {
         let recentUnsub = null;
         let oldestTimestamp = null;
         let pendingNewCount = 0;
+        let newMsgIndicatorEl = null;
 
         // create DOM structure (nested builder functions)
         function buildBox() {
@@ -267,7 +267,6 @@ import {
           header.innerHTML = `<span>Chat</span>`;
           const closeBtn = document.createElement("button"); closeBtn.textContent = "✖";
           Object.assign(closeBtn.style, { background:"none", border:"none", color:"#fff", cursor:"pointer" });
-          closeBtn.addEventListener("click", () => { box.remove(); document.getElementById("chatToggle").style.display = "flex"; if (recentUnsub) recentUnsub(); });
           header.appendChild(closeBtn);
           box.appendChild(header);
 
@@ -291,9 +290,9 @@ import {
           box.appendChild(messages);
 
           // newMsgIndicator
-          const newMsgIndicator = document.createElement("button");
-          Object.assign(newMsgIndicator.style, { display:"none", position:"fixed", right:"80px", bottom:"84px", zIndex:10000, padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer", background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)" });
-          document.body.appendChild(newMsgIndicator);
+          newMsgIndicatorEl = document.createElement("button");
+          Object.assign(newMsgIndicatorEl.style, { display:"none", position:"fixed", right:"80px", bottom:"84px", zIndex:10000, padding:"6px 10px", borderRadius:"8px", border:"none", cursor:"pointer", background:"#60a5fa", color:"#fff", boxShadow:"0 6px 18px rgba(96,165,250,0.3)" });
+          document.body.appendChild(newMsgIndicatorEl);
 
           // input area
           const inputDiv = document.createElement("div"); inputDiv.style.display="flex";
@@ -313,10 +312,10 @@ import {
 
           messages.addEventListener("scroll", () => {
             if (messages.scrollTop <= 6) loadOlderBtn.style.display = "block"; else loadOlderBtn.style.display = "none";
-            checkViewingLatest(messages, newMsgIndicator);
+            checkViewingLatest(messages, newMsgIndicatorEl);
           });
 
-          newMsgIndicator.addEventListener("click", () => { scrollToBottom(messages, newMsgIndicator); });
+          newMsgIndicatorEl.addEventListener("click", () => { scrollToBottom(messages, newMsgIndicatorEl); });
 
           function checkViewingLatest(messagesEl, indicatorEl) {
             const viewingLatest = (messagesEl.scrollHeight - (messagesEl.scrollTop + messagesEl.clientHeight) <= 50);
@@ -355,12 +354,18 @@ import {
           sendBtn.addEventListener("click", sendMessage);
           input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
 
+          // make close button use a custom event so outer code can destroy properly
+          closeBtn.addEventListener("click", () => {
+            // dispatch a destroy request that the outer controller will listen for
+            box.dispatchEvent(new CustomEvent("requestDestroy"));
+          });
+
           // public API for UI controller
           return {
             nodes: { box, messages, playerCountDiv, activeUsersDiv: null },
-            elements: { messages, newMsgIndicator, loadOlderBtn },
+            elements: { messages, newMsgIndicator: newMsgIndicatorEl, loadOlderBtn },
             createMessageNode,
-            scrollToBottom: () => scrollToBottom(messages, newMsgIndicator),
+            scrollToBottom: () => scrollToBottom(messages, newMsgIndicatorEl),
             prependMessages: (nodes) => {
               if (!nodes.length) return;
               const priorHeight = messages.scrollHeight;
@@ -373,8 +378,8 @@ import {
               nodes.forEach(n => messages.appendChild(n));
             },
             setNewIndicator: (count) => {
-              if (count <= 0) { newMsgIndicator.style.display = "none"; pendingNewCount = 0; }
-              else { pendingNewCount = count; newMsgIndicator.textContent = `${count} new message${count>1?"s":""} — show`; newMsgIndicator.style.display = "block"; }
+              if (count <= 0) { newMsgIndicatorEl.style.display = "none"; pendingNewCount = 0; }
+              else { pendingNewCount = count; newMsgIndicatorEl.textContent = `${count} new message${count>1?"s":""} — show`; newMsgIndicatorEl.style.display = "block"; }
             }
           };
         } // buildBox
@@ -438,24 +443,51 @@ import {
         // UI controller instance
         const uiController = buildBox();
 
+        // wire a destroy handler so UI close and outer close both call same cleanup
+        function destroy() {
+          try {
+            if (recentUnsub) { recentUnsub(); recentUnsub = null; }
+          } catch (e) { console.error("Error during unsubscribe:", e); }
+          try {
+            if (uiController.elements.newMsgIndicator && uiController.elements.newMsgIndicator.remove) uiController.elements.newMsgIndicator.remove();
+          } catch (e) { /* ignore */ }
+          try {
+            if (uiController.nodes.box && uiController.nodes.box.remove) uiController.nodes.box.remove();
+          } catch (e) { /* ignore */ }
+        }
+
+        // allow external callers to listen for destroy requests (emitted by close button)
+        uiController.nodes.box.addEventListener("requestDestroy", () => {
+          destroy();
+          // outer-level ChatApp will set chatInstance = null and restore toggle
+          if (typeof onRequestDestroy === "function") onRequestDestroy();
+        });
+
+        // We'll expose a handler registration for outer context
+        let onRequestDestroy = null;
+        function onDestroyRequested(fn) { onRequestDestroy = fn; }
+
         return {
           uiController,
           startListeningRecent: () => startListeningRecent(uiController),
-          loadOlderMessages: () => loadOlderMessages(uiController.elements.messages)
+          loadOlderMessages: () => loadOlderMessages(uiController.elements.messages),
+          destroy,
+          onDestroyRequested
         };
       }
 
       return { createChatUIFactory, constants: { RECENT_WINDOW_MS, RECENT_LIMIT, OLDER_PAGE_SIZE } };
     })();
 
-    // ---------- Public API of ChatApp (init, openChat) ----------
+    // ---------- Public API of ChatApp (init, openChat, closeChat) ----------
     function init() {
       // attach keyboard listener for Shift+Q to open admin modal
       (function attachAdminHotkey() {
         document.addEventListener("keydown", e => {
-          if (e.key === "Q" && (e.shiftKey || e.key === "q" && e.shiftKey)) {
+          if ((e.key === "Q" || e.key === "q") && e.shiftKey) {
             Auth.showLoginModal(() => {
               document.getElementById("chatToggle").classList.remove("locked");
+              // after login open
               openChatAsAdmin();
             });
           }
@@ -473,7 +505,9 @@ import {
           setTimeout(() => { chatToggle.classList.remove("locked"); chatToggle.title = prevTitle; }, 1500);
           return;
         }
-        openChatAsAdmin();
+        // if already open, close; otherwise open
+        if (chatInstance) closeChat();
+        else openChatAsAdmin();
       });
 
       // initial locked look
@@ -489,12 +523,45 @@ import {
       const usernameRef = () => username || "Admin";
 
       const factory = UI.createChatUIFactory(usernameRef);
+      // register destroy callback so we can restore toggle and clear chatInstance
+      factory.onDestroyRequested(() => {
+        chatInstance?.destroy?.();
+        chatInstance = null;
+        const t = document.getElementById("chatToggle");
+        if (t) t.style.display = "flex";
+      });
+
+      // show UI
       document.getElementById("chatToggle").style.display = "none";
       document.body.appendChild(factory.uiController.nodes.box);
       factory.startListeningRecent();
       // small initial scroll
       setTimeout(() => factory.uiController.scrollToBottom(), 200);
-      chatInstance = factory;
+
+      // expose a close method as part of chatInstance
+      chatInstance = {
+        factory,
+        destroy: () => {
+          try { factory.destroy(); } catch(e) { console.error(e); }
+          chatInstance = null;
+          const t = document.getElementById("chatToggle");
+          if (t) t.style.display = "flex";
+        }
+      };
+    }
+
+    // close chat externally (used by toggle and other controls)
+    function closeChat() {
+      if (!chatInstance) return;
+      try {
+        chatInstance.destroy();
+      } catch (e) {
+        console.error("Error closing chat:", e);
+      } finally {
+        chatInstance = null;
+        const t = document.getElementById("chatToggle");
+        if (t) t.style.display = "flex";
+      }
     }
 
     return { init };
@@ -508,6 +575,7 @@ import {
   }
 })();
 </script>
+
 
 <script>
   // Highlight active tab (keeps your existing small script)
