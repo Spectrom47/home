@@ -25,6 +25,16 @@
     .row { display:flex; gap:12px; margin-top:12px; flex-wrap:wrap; }
     .card { flex:1 1 200px; padding:16px; border-radius:8px; background:#f8fafc; text-align:center; }
 
+    /* Image card specifics */
+    .img-card { overflow:hidden; padding:0; background:#fff; box-shadow:none; border-radius:10px; }
+    .img-card a { display:block; text-decoration:none; color:inherit; }
+    .img-card img { display:block; width:100%; height:160px; object-fit:cover; border-radius:10px 10px 0 0; }
+    .img-card .caption { padding:10px 12px; font-size:14px; color:#111827; }
+
+    /* Feature buttons */
+    .feature-btn { display:block; padding:14px 10px; border-radius:10px; background:#eef2ff; color:#1e293b; text-decoration:none; font-weight:600; }
+    .feature-grid { display:flex; gap:12px; flex-wrap:wrap; }
+
     /* Footer */
     footer { padding:14px 20px; text-align:center; font-size:13px; color:#6b7280; }
 
@@ -32,6 +42,7 @@
     @media (max-width:560px){
       .container { flex-direction:column; align-items:flex-start; gap:12px; }
       nav ul { width:100%; justify-content:space-between; }
+      .img-card img { height:120px; }
     }
   </style>
 </head>
@@ -55,18 +66,60 @@
       <h1>Welcome — Home</h1>
       <p style="margin-top:8px;">This is the homepage. Keep this short and make the links obvious so visitors can jump to Projects or Contact.</p>
 
+      <!-- Features -->
       <div class="row" style="margin-top:14px;">
-        <div class="card">Feature A</div>
-        <div class="card">Feature B</div>
-        <div class="card">Feature C</div>
+        <div class="card">
+          <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
+            Feature 1 — Unhearted Evil (Roblox)
+          </a>
+        </div>
+
+        <div class="card">
+          <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer" title="Fiverr gig">
+            Feature 2 — Fiverr link
+          </a>
+        </div>
+
+        <!-- Feature 3 intentionally removed -->
       </div>
     </section>
 
     <section id="recent">
       <h2>Recent Work</h2>
+      <p style="margin-top:6px; color:#6b7280;">A quick showcase of recent images (image_one → image_four).</p>
+
       <div class="row" style="margin-top:12px;">
-        <div class="card">Project preview 1</div>
-        <div class="card">Project preview 2</div>
+        <!-- Image 1 -->
+        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+          <a href="images/image_one.jpg" target="_blank" rel="noopener noreferrer">
+            <img src="images/image_one.jpg" alt="Recent work — image one">
+            <div class="caption">image_one</div>
+          </a>
+        </div>
+
+        <!-- Image 2 -->
+        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+          <a href="images/image_two.jpg" target="_blank" rel="noopener noreferrer">
+            <img src="images/image_two.jpg" alt="Recent work — image two">
+            <div class="caption">image_two</div>
+          </a>
+        </div>
+
+        <!-- Image 3 -->
+        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+          <a href="images/image_three.jpg" target="_blank" rel="noopener noreferrer">
+            <img src="images/image_three.jpg" alt="Recent work — image three">
+            <div class="caption">image_three</div>
+          </a>
+        </div>
+
+        <!-- Image 4 -->
+        <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
+          <a href="images/image_four.jpg" target="_blank" rel="noopener noreferrer">
+            <img src="images/image_four.jpg" alt="Recent work — image four">
+            <div class="caption">image_four</div>
+          </a>
+        </div>
       </div>
     </section>
   </main>
