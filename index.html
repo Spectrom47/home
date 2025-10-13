@@ -3,132 +3,262 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Home - MyWebsite</title>
+<title>Home - Spectroms Kingdom</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;1,700&family=Inter:wght@300;400;600&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+  /* Reset + base */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html,body { height: 100%; }
   body {
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background:
+      linear-gradient(180deg, #f7f6f3 0%, #efece6 100%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0 1px, transparent 1px 24px);
+    color: #222;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding: 28px;
+  }
+
+  /* Jekyll-like site container */
+  .site {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* Header / masthead */
+  header.site-header {
+    grid-column: 1 / -1;
+    background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+    border: 1px solid rgba(30,30,30,0.06);
+    padding: 18px 22px;
+    border-radius: 8px;
     display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    color: #111;
-    background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
-                url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-    background-size: cover;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 6px 18px rgba(30,30,30,0.04);
+    backdrop-filter: blur(2px);
   }
-  header { background: rgba(15,23,36,0.85); color: #fff; padding: 16px 20px; backdrop-filter: blur(6px); }
-  .container { max-width: 1024px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .logo { font-weight: 700; letter-spacing: 0.6px; }
-  nav ul { list-style: none; display: flex; gap: 8px; align-items: center; }
-  nav a { display: inline-block; padding: 8px 12px; color: #d1d5db; text-decoration: none; border-radius: 8px; transition: all .15s ease; }
-  nav a:hover { color: #fff; background: rgba(255,255,255,0.12); transform: translateY(-1px); }
-  nav li.tab-active > a, nav a.tab-active { color: #0f1724; background: #60a5fa; box-shadow: 0 6px 18px rgba(96,165,250,0.3); }
-  main { flex: 1; padding: 28px 20px; max-width: 1024px; margin: 40px auto; width: 100%; }
-  section { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); backdrop-filter: blur(10px); color: #e5e7eb; }
-  section h1, section h2 { color: #fff; }
-  .row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-  .card { flex: 1 1 200px; padding: 16px; border-radius: 12px; background: rgba(255,255,255,0.12); text-align: center; color: #f3f4f6; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all .25s ease; }
-  .card:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); }
-  .img-card { overflow: hidden; padding: 0; background: rgba(255,255,255,0.15); border-radius: 10px; }
-  .img-card a { display: block; text-decoration: none; color: inherit; }
-  .img-card img { display: block; width: 100%; height: 160px; object-fit: cover; border-radius: 10px 10px 0 0; }
-  .img-card .caption { padding: 10px 12px; font-size: 14px; color: #e5e7eb; background: rgba(15,23,36,0.6); }
-  .feature-btn { display: block; padding: 14px 10px; border-radius: 10px; background: rgba(96,165,250,0.9); color: #fff; text-decoration: none; font-weight: 600; box-shadow: 0 5px 18px rgba(96,165,250,0.4); transition: all 0.2s ease; }
-  .feature-btn:hover { background: rgba(59,130,246,0.9); transform: translateY(-2px); }
-  footer { padding: 14px 20px; text-align: center; font-size: 13px; color: #9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); }
-  @media (max-width: 560px) {
-    .container { flex-direction: column; align-items: flex-start; gap: 12px; }
-    nav ul { width: 100%; justify-content: space-between; }
-    .img-card img { height: 120px; }
+  .site-title {
+    font-family: "Merriweather", Georgia, serif;
+    font-size: 22px;
+    color: #0b1220;
+    letter-spacing: 0.2px;
+    font-weight: 700;
+  }
+  .site-tagline {
+    font-size: 13px;
+    color: #475569;
+    margin-left: 12px;
+    font-weight: 400;
+  }
+  .header-right { display:flex; gap:12px; align-items:center; }
+
+  nav.site-nav ul { list-style:none; display:flex; gap:8px; }
+  nav.site-nav a {
+    text-decoration:none;
+    padding:8px 12px;
+    border-radius:6px;
+    color:#334155;
+    font-weight:600;
+    font-size:14px;
+    background:transparent;
+    border:1px dashed transparent;
+  }
+  nav.site-nav a.tab-active {
+    background:#111827;
+    color:#fff;
+    border:1px solid rgba(0,0,0,0.08);
   }
 
-  /* Chat toggle styling (kept simple) */
-  #chatToggle { position:fixed; bottom:20px; right:20px; width:50px; height:50px; background:#60a5fa; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 4px 12px rgba(0,0,0,0.3); }
-  #chatToggle.locked { background: #94a3b8; cursor: default; opacity: 0.9; }
+  /* Sidebar (Jekyll-ish widgets) */
+  aside.sidebar {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid rgba(20,20,20,0.04);
+    box-shadow: 0 8px 30px rgba(23,23,23,0.03);
+    min-height: 160px;
+  }
+  .about-title { font-family:"Merriweather", serif; font-weight:700; font-size:16px; color:#0b1220; margin-bottom:6px; }
+  .about-body { color:#334155; font-size:14px; line-height:1.4; margin-bottom:12px; }
+  .widget { margin-top:12px; }
+  .recent-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .recent-list a { text-decoration:none; color:#0b1220; font-weight:600; background:transparent; padding:6px 8px; border-radius:6px; }
+  .meta-small { font-family: "Source Code Pro", monospace; font-size:12px; color:#64748b; background: #f1f5f9; padding:6px 8px; border-radius:6px; display:inline-block; margin-bottom:8px; }
 
-  /* Admin login modal (simple) */
+  /* Content / posts */
+  .content {
+    min-height: 360px;
+  }
+
+  .hero {
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+    border-radius:10px;
+    padding:18px;
+    border: 1px solid rgba(20,20,20,0.04);
+    margin-bottom:18px;
+    box-shadow: 0 10px 30px rgba(20,20,20,0.04);
+  }
+  .hero .yaml {
+    font-family: "Source Code Pro", monospace;
+    background:#f8fafc;
+    color:#334155;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid rgba(10,10,10,0.03);
+    margin-bottom:12px;
+    font-size:13px;
+  }
+  .hero h1 { font-family:"Merriweather", serif; font-size:26px; color:#0b1220; margin-bottom:8px; }
+  .hero p { color:#334155; font-size:15px; line-height:1.5; }
+
+  .posts {
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .post {
+    background: #fff;
+    border-radius:8px;
+    padding:14px;
+    border:1px solid rgba(20,20,20,0.04);
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .post .thumb { width:140px; min-height:88px; background:#e6eefc; border-radius:6px; overflow:hidden; }
+  .post img { width:100%; height:100%; object-fit:cover; display:block; }
+  .post .post-body { flex:1; }
+  .post h2 { font-family:"Merriweather", serif; font-size:18px; color:#0b1220; margin-bottom:6px; }
+  .post .meta { font-family:"Source Code Pro", monospace; font-size:12px; color:#64748b; margin-bottom:8px; display:block; }
+  .post p { color:#334155; font-size:14px; line-height:1.45; }
+
+  .feature-btn { display:inline-block; margin-top:8px; padding:8px 10px; border-radius:6px; background:#0f1724; color:#fff; text-decoration:none; font-weight:600; }
+  .feature-btn:hover { background:#111827; }
+
+  /* Footer */
+  footer.site-footer {
+    grid-column: 1 / -1;
+    margin-top:18px;
+    text-align:center;
+    font-size:13px;
+    color:#475569;
+  }
+
+  /* Chat toggle + admin modal keep existing identifiers for scripts */
+  #chatToggle { position:fixed; bottom:20px; right:20px; width:56px; height:56px; background:#0b1220; border-radius:50%; display:flex; justify-content:center; align-items:center; cursor:pointer; z-index:9999; box-shadow:0 10px 30px rgba(2,6,23,0.25); color:#fff; font-size:20px; }
+  #chatToggle.locked { background:#94a3b8; cursor:default; opacity:0.95; }
   .admin-modal { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index:10000; background: rgba(0,0,0,0.45); }
-  .admin-card { background:#0f1724; color:#fff; border-radius:10px; padding:18px; min-width:320px; box-shadow:0 8px 30px rgba(0,0,0,0.5); }
-  .admin-card input { width:100%; padding:8px; margin-top:8px; border-radius:6px; border:none; outline:none; background:rgba(255,255,255,0.06); color:#fff; }
-  .admin-card button { margin-top:10px; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:#60a5fa; color:#fff; }
-  .admin-card .hint { font-size:12px; color:#cbd5e1; margin-top:8px; }
+  .admin-card { background:#ffffff; color:#0b1220; border-radius:10px; padding:18px; width:360px; box-shadow:0 8px 30px rgba(0,0,0,0.2); }
+  .admin-card input { width:100%; padding:8px; margin-top:8px; border-radius:6px; border:1px solid #e6eef3; outline:none; background:#fff; color:#0b1220; }
+  .admin-card button { margin-top:10px; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:#0b1220; color:#fff; }
+  .admin-card .hint { font-size:13px; color:#64748b; margin-top:8px; }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .site { grid-template-columns: 1fr; padding:0 10px; }
+    aside.sidebar { order: 2; }
+    .site-header { flex-direction:column; align-items:flex-start; gap:8px; }
+  }
 </style>
 </head>
-
 <body>
-<header>
-  <div class="container">
-    <div class="logo">Spectroms Kingdom</div>
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="index.html" class="tab">Home</a></li>
-        <li><a href="projects.html" class="tab">Projects</a></li>
-        <li><a href="contact.html" class="tab">Contact</a></li>
-      </ul>
-    </nav>
+  <div class="site">
+    <header class="site-header">
+      <div style="display:flex; align-items:center;">
+        <div class="site-title">Spectroms Kingdom</div>
+        <div class="site-tagline">— my virtual resume & tinkering lab</div>
+      </div>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="Main navigation">
+          <ul>
+            <li><a href="index.html" class="tab">Home</a></li>
+            <li><a href="projects.html" class="tab">Projects</a></li>
+            <li><a href="contact.html" class="tab">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <aside class="sidebar" aria-label="Sidebar">
+      <div class="about-title">About</div>
+      <div class="about-body">A compact portfolio and lab for experiments — code, art, and small games. Built with a love for odd ideas and too much coffee.</div>
+
+      <div class="widget">
+        <div class="meta-small">layout: page • author: Spectrom</div>
+        <div style="font-weight:700; color:#0b1220; margin-top:8px; margin-bottom:6px;">Recent</div>
+        <ul class="recent-list">
+          <li><a href="projects.html">Unhearted Evil (Roblox)</a></li>
+          <li><a href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer">Fiverr Seller Page</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="content" role="main">
+      <article class="hero" aria-labelledby="hero-title">
+        <div class="yaml">---
+title: "Home"
+date: 2025-10-13
+tags: [portfolio, experiment]
+---</div>
+        <h1 id="hero-title">Home Page</h1>
+        <p>My Virtual Resume Of My Best Creations! Below: highlights and a recent work gallery styled with a classic Jekyll-ish look.</p>
+      </article>
+
+      <section class="posts" aria-label="Highlights">
+        <div class="post">
+          <div class="thumb">
+            <img src="images/image_one.png" alt="Unhearted Evil thumbnail" onerror="this.style.background='#e6eefc'; this.src='';">
+          </div>
+          <div class="post-body">
+            <span class="meta">project • 2024 • game</span>
+            <h2>Unhearted Evil (Roblox)</h2>
+            <p>A playable world built on Roblox — mechanics, atmosphere and progress systems. Click below to explore the game landing.</p>
+            <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer">Open game</a>
+          </div>
+        </div>
+
+        <div class="post">
+          <div class="thumb">
+            <img src="images/image_two.png" alt="Fiverr thumbnail" onerror="this.style.background='#fef3c7'; this.src='';">
+          </div>
+          <div class="post-body">
+            <span class="meta">services • ongoing</span>
+            <h2>Fiverr Seller Page</h2>
+            <p>Design and small dev gigs offered. Portfolio examples and client work are shown on the seller page.</p>
+            <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer">View gig</a>
+          </div>
+        </div>
+
+        <div class="post">
+          <div class="thumb">
+            <img src="images/image_three.png" alt="Recent work 3" onerror="this.style.background='#eaeef6'; this.src='';">
+          </div>
+          <div class="post-body">
+            <span class="meta">art • showcase</span>
+            <h2>Recent work gallery</h2>
+            <p>Selected visuals and mockups. Click the images in the recent work section to open full-size versions.</p>
+            <a class="feature-btn" href="projects.html">See gallery</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">© 2025 Spectroms Kingdom — built with slightly too much coffee and curiosity.</footer>
   </div>
-</header>
 
-<main>
-  <section id="home">
-    <h1>Home Page</h1>
-    <p style="margin-top:8px;">My Virtual Resume Of My Best Creations!</p>
-    <div class="row" style="margin-top:14px;">
-      <div class="card">
-        <a class="feature-btn" href="https://www.roblox.com/games/100059343815383/Unhearted-Evil-New" target="_blank" rel="noopener noreferrer" title="Unhearted Evil (Roblox)">
-          Unhearted Evil (Roblox)
-        </a>
-      </div>
-      <div class="card">
-        <a class="feature-btn" href="https://www.fiverr.com/s/NN10LGN" target="_blank" rel="noopener noreferrer" title="Fiverr gig">
-          Fiverr Seller Page
-        </a>
-      </div>
-    </div>
-  </section>
+  <!-- Chat Toggle Button (keeps id used by scripts) -->
+  <div id="chatToggle" title="Admin-only chat (Shift+Q to open admin login)">💬</div>
 
-  <section id="recent">
-    <h2>Recent Work</h2>
-    <p style="margin-top:6px; color: #cbd5e1;">A quick showcase of recent images (image_one → image_four).</p>
-    <div class="row" style="margin-top:12px;">
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_one.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_one.png" alt="Recent work — image one">
-          <div class="caption">image_one</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_two.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_two.png" alt="Recent work — image two">
-          <div class="caption">image_two</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_three.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_three.png" alt="Recent work — image three">
-          <div class="caption">image_three</div>
-        </a>
-      </div>
-      <div class="card img-card" style="flex:1 1 220px; max-width:240px;">
-        <a href="images/image_four.png" target="_blank" rel="noopener noreferrer">
-          <img src="images/image_four.png" alt="Recent work — image four">
-          <div class="caption">image_four</div>
-        </a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  © 2025 MyWebsite — built with slightly too much coffee and curiosity.
-</footer>
-
-<!-- Chat Toggle Button -->
-<div id="chatToggle" title="Admin-only chat (Shift+Q to open admin login)">
-  <span style="color:#fff; font-size:20px; font-weight:bold;">💬</span>
-</div>
-
-<!-- Replace your previous module script with this updated one -->
-<script type="module">
+  <!-- Firebase + Chat module (unchanged logic; preserves admin flow and chat UI) -->
+  <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
   getFirestore, collection, addDoc, onSnapshot, serverTimestamp,
@@ -179,7 +309,7 @@ import {
             <input id="adminPass" placeholder="Password" type="password" autocomplete="current-password"/>
             <div style="display:flex; gap:8px;">
               <button id="adminSubmit">Sign in</button>
-              <button id="adminCancel" style="background:#374151;">Cancel</button>
+              <button id="adminCancel" style="background:#94a3b8; color:#0b1220;">Cancel</button>
             </div>
             <div id="adminMsg" class="hint" style="margin-top:8px;"></div>
           </div>
@@ -575,7 +705,6 @@ import {
   }
 })();
 </script>
-
 
 <script>
   // Highlight active tab (keeps your existing small script)
