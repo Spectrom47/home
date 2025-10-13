@@ -42,6 +42,9 @@
     .cal-nav { display:flex; gap:8px; align-items:center; }
     .btn { padding:8px 10px; border-radius:8px; cursor:pointer; border:0; font-weight:600; background: rgba(255,255,255,0.06); color:#e6eef8; box-shadow: 0 6px 18px rgba(2,6,23,0.45); transition: all .12s ease; }
     .btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.09); }
+  /* Primary button for important actions (e.g., Send Request) */
+  .btn-primary{ background: linear-gradient(90deg,#2563eb,#60a5fa); color: white; box-shadow: 0 10px 26px rgba(37,99,235,0.18); }
+  .btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.03); }
 
     .calendar {
       display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; user-select:none;
@@ -219,7 +222,7 @@
           <textarea id="reqMessage" placeholder="Describe your request..." ></textarea>
         </div>
         <div style="display:flex; gap:8px; margin-top:12px;">
-          <button class="btn" id="sendRequestBtn">Send Request</button>
+          <button class="btn btn-primary" id="sendRequestBtn" aria-live="polite">Send Request</button>
           <button class="btn" id="closeRequestModal">Cancel</button>
         </div>
         <div class="hint" style="margin-top:8px;">This is a one-way mailbox — admins will see it in their mailbox.</div>
@@ -562,10 +565,22 @@
       const dateISO = reqDate.value;
       const message = reqMessage.value.trim();
       if(!type || !dateISO || !message){ alert('Type, date and message are required'); return; }
-      await requestsCol.add({ type, dateISO, message, createdAt: new Date().toISOString(), status: 'open' });
-      alert('Request submitted — thanks!');
-      requestModal.style.display = 'none';
-      maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); });
+      // disable button and show sending state
+      sendRequestBtn.disabled = true;
+      const prevLabel = sendRequestBtn.textContent;
+      sendRequestBtn.textContent = 'Sending…';
+      try {
+        await requestsCol.add({ type, dateISO, message, createdAt: new Date().toISOString(), status: 'open' });
+        alert('Request submitted — thanks!');
+        requestModal.style.display = 'none';
+        maybeRender(()=>{ renderCalendar(currentYear,currentMonth); renderTimeline(); });
+      } catch (e) {
+        console.error('Send request failed', e);
+        alert('Failed to submit request. Please try again.');
+      } finally {
+        sendRequestBtn.disabled = false;
+        sendRequestBtn.textContent = prevLabel;
+      }
     });
 
     // ---------- Admin login ----------
