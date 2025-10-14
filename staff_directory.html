@@ -1,363 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Staff Directory - Spectroms Kingdom</title>
-<style>
-  /* Base layout + typography (keeps look consistent with your site) */
-  * { box-sizing: border-box; margin:0; padding:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
-  body {
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    color:#e6eef8;
-    background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
-                url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-    background-size:cover;
-  }
-  header { background: rgba(15,23,36,0.85); color:#fff; padding:16px 20px; backdrop-filter: blur(6px); }
-  .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .logo { font-weight:700; letter-spacing:0.6px; }
-  nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
-  nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
-  nav a:hover { color:#fff; background: rgba(255,255,255,0.08); transform: translateY(-1px); }
-  nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow: 0 6px 18px rgba(96,165,250,0.3); }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Staff Directory - Spectroms Kingdom</title>
+  <style>
+    /* Base layout + typography (keeps look consistent with your site) */
+    * { box-sizing: border-box; margin:0; padding:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+    body {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      color:#e6eef8;
+      background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
+                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size:cover;
+    }
+    header { background: rgba(15,23,36,0.85); color:#fff; padding:16px 20px; backdrop-filter: blur(6px); }
+    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .logo { font-weight:700; letter-spacing:0.6px; }
+    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
+    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
+    nav a:hover { color:#fff; background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+    nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow: 0 6px 18px rgba(96,165,250,0.3); }
 
-  main { flex:1; padding:28px 20px; max-width:1024px; margin:40px auto; width:100%; }
-  .panel { background: rgba(255,255,255,0.06); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.25); backdrop-filter: blur(8px); color:#e5e7eb; }
-  h1 { color:#fff; margin-bottom:8px; }
+    main { flex:1; padding:28px 20px; max-width:1024px; margin:40px auto; width:100%; }
+    .panel { background: rgba(255,255,255,0.06); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.25); backdrop-filter: blur(8px); color:#e5e7eb; }
+    h1 { color:#fff; margin-bottom:8px; }
 
-  /* Directory controls */
-  .controls { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 18px 0; align-items:center; }
-  .search { flex:1 1 260px; display:flex; gap:8px; }
-  .search input { flex:1; padding:10px 12px; border-radius:10px; border:none; outline:none; background:rgba(255,255,255,0.03); color:#e5e7eb; }
-  .select { padding:10px 12px; border-radius:10px; background: rgba(255,255,255,0.03); color:#e5e7eb; border:none; }
+    /* Directory controls */
+    .controls { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 18px 0; align-items:center; }
+    .search { flex:1 1 260px; display:flex; gap:8px; }
+    .search input { flex:1; padding:10px 12px; border-radius:10px; border:none; outline:none; background:rgba(255,255,255,0.03); color:#e5e7eb; }
+    .select {
+      padding:10px 12px;
+      border-radius:10px;
+      background: rgba(15,23,36,0.85);
+      color: #fff;
+      border:none;
+      /* Remove native styling */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
 
-  /* Grid */
-  .grid { display:grid; gap:12px; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); margin-top:12px; }
-  .card { background: rgba(255,255,255,0.06); padding:12px; border-radius:12px; text-align:center; box-shadow:0 6px 20px rgba(0,0,0,0.35); transition: transform .18s ease, background .18s ease; }
-  .card:hover { transform:translateY(-6px); background: rgba(255,255,255,0.09); }
-  .avatar { width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
-  .name { font-weight:700; color:#fff; margin-bottom:6px; }
-  .role { font-size:13px; opacity:0.9; margin-bottom:8px; }
-  .bio { font-size:13px; color:#cbd5e1; min-height:40px; margin-bottom:10px; }
-  .contact { display:flex; gap:8px; justify-content:center; flex-wrap: wrap; }
-  .pill { padding:8px 10px; border-radius:999px; background: rgba(96,165,250,0.12); font-weight:600; color:#dbeafe; font-size:13px; border:1px solid rgba(96,165,250,0.2); }
+    /* Grid – display exactly three columns */
+    .grid {
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top:12px;
+    }
+    .card { background: rgba(255,255,255,0.06); padding:12px; border-radius:12px; text-align:center; box-shadow:0 6px 20px rgba(0,0,0,0.35); transition: transform .18s ease, background .18s ease; }
+    .card:hover { transform:translateY(-6px); background: rgba(255,255,255,0.09); }
+    .avatar { width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+    .name { font-weight:700; color:#fff; margin-bottom:6px; }
+    .role { font-size:13px; opacity:0.9; margin-bottom:8px; }
+    .bio { font-size:13px; color:#cbd5e1; min-height:40px; margin-bottom:10px; }
+    .contact { display:flex; gap:8px; justify-content:center; flex-wrap: wrap; }
+    .pill { padding:8px 10px; border-radius:999px; background: rgba(96,165,250,0.12); font-weight:600; color:#dbeafe; font-size:13px; border:1px solid rgba(96,165,250,0.2); }
 
-  /* small details */
-  .count { font-size:13px; color:#cbd5e1; }
-  footer { padding:14px 20px; text-align:center; font-size:13px; color:#9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); margin-top:20px; }
+    /* small details */
+    .count { font-size:13px; color:#cbd5e1; }
+    footer { padding:14px 20px; text-align:center; font-size:13px; color:#9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); margin-top:20px; }
 
-  /* Modal styles */
-  .admin-modal {
-    position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.6);
-    display:flex; align-items:center; justify-content:center;
-    padding:20px;
-    z-index:1000;
-    backdrop-filter: blur(5px);
-  }
+    /* Modal styles */
+    .admin-modal {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.6);
+      display:flex; align-items:center; justify-content:center;
+      padding:20px;
+      z-index:1000;
+      backdrop-filter: blur(5px);
+    }
 
-  @media (max-width:560px) {
-    .avatar { height:120px; }
-    .controls { flex-direction:column; align-items:stretch; }
-  }
-</style>
+    @media (max-width:560px) {
+      .avatar { height:120px; }
+      .controls { flex-direction:column; align-items:stretch; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
+    }
+  </style>
 </head>
 <body>
-<header>
-  <div class="container">
-    <div class="logo">Spectroms Kingdom</div>
-    <nav aria-label="Main navigation">
-      <ul>
-        <li><a href="index.html" class="tab">Home</a></li>
-        <li><a href="projects.html" class="tab">Projects</a></li>
-        <li><a href="contact.html" class="tab">Contact</a></li>
-        <li class="tab-active"><a href="staff_directory.html" class="tab tab-active">Staff Directory</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<main>
-  <section class="panel" aria-labelledby="staff-heading">
-    <h1 id="staff-heading">Staff Directory</h1>
-    <p style="margin-top:6px; color:#cbd5e1;">Browse and search your server staff. Click a card for more details. Replace sample entries below with your real staff list (see notes).</p>
-
-    <div class="controls">
-      <div class="search">
-        <input id="searchBox" type="search" placeholder="Search name, role, tag...">
-        <button id="clearBtn" title="Clear search" style="padding:10px 12px; border-radius:10px; border:none; cursor:pointer; background:rgba(255,255,255,0.04); color:#e5e7eb;">✖</button>
+  <header>
+    <div class="container">
+      <div class="logo">Spectroms Kingdom</div>
+      <nav aria-label="Main navigation">
+        <ul>
+          <li><a href="index.html" class="tab">Home</a></li>
+          <li><a href="projects.html" class="tab">Projects</a></li>
+          <li><a href="contact.html" class="tab">Contact</a></li>
+          <li class="tab-active"><a href="staff_directory.html" class="tab tab-active">Staff Directory</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="panel" aria-labelledby="staff-heading">
+      <h1 id="staff-heading">Staff Directory</h1>
+      <p style="margin-top:6px; color:#cbd5e1;">Browse and search your server staff. Click a card for more details. Replace sample entries below with your real staff list (see notes).</p>
+      <div class="controls">
+        <div class="search">
+          <input id="searchBox" type="search" placeholder="Search name, role, tag...">
+          <button id="clearBtn" title="Clear search" style="padding:10px 12px; border-radius:10px; border:none; cursor:pointer; background:rgba(255,255,255,0.04); color:#e5e7eb;">✖</button>
+        </div>
+        <select id="roleFilter" class="select" aria-label="Filter by role">
+          <option value="">All roles</option>
+          <option value="Server Manager">Server Manager</option>
+          <option value="Vice Manager">Vice Manager</option>
+          <option value="Vetted Manager">Vetted Manager</option>
+          <option value="Spectre | TCM | VCM | WA">Spectre | TCM | VCM | WA</option>
+          <option value="Captain">Captain</option>
+          <option value="Mod Text CM">Mod Text CM</option>
+          <option value="Mod Voice CM">Mod Voice CM</option>
+        </select>
+        <div class="count" id="resultCount">0 staff</div>
       </div>
-
-      <select id="roleFilter" class="select" aria-label="Filter by role">
-        <option value="">All roles</option>
-        <option value="Server Manager">Server Manager</option>
-        <option value="Vice Manager">Vice Manager</option>
-        <option value="Vetted Manager">Vetted Manager</option>
-        <option value="Spectre | TCM | VCM | WA">Spectre | TCM | VCM | WA</option>
-        <option value="Captain">Captain</option>
-        <option value="Mod Text CM">Mod Text CM</option>
-        <option value="Mod Voice CM">Mod Voice CM</option>
-      </select>
-
-      <div class="count" id="resultCount">0 staff</div>
-    </div>
-
-    <div id="grid" class="grid" role="list">
-      <!-- Cards will be rendered here by JS -->
-    </div>
-  </section>
-</main>
-
-<footer>&copy; 2025 Spectroms Kingdom — staff directory</footer>
-
-<script>
-/*
-  Staff Directory script
-  - Data: edit the `STAFF_DATA` array below (or fetch from a JSON endpoint)
-  - Rendering is simple and nested: renderGrid -> renderCard -> attachEvents
-*/
-
-(function () {
-  // --- Data: replace these sample entries with your real staff members ---
-  const STAFF_DATA = [
-    {
-      id: "s1",
-      name: "Spectrom",
-      role: "Server Manager",
-      avatar: "https://i.pravatar.cc/400?img=1",
-      bio: "Server Manager for the community.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s2",
-      name: "Oynx",
-      role: "Vice Manager",
-      avatar: "https://i.pravatar.cc/400?img=2",
-      bio: "Vice Manager for the community.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s3",
-      name: "TopDilf",
-      role: "Vetted Manager",
-      avatar: "https://i.pravatar.cc/400?img=3",
-      bio: "Vetted Manager for the community.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s4",
-      name: "FAN",
-      role: "Spectre | TCM | VCM | WA",
-      avatar: "https://i.pravatar.cc/400?img=4",
-      bio: "A key member of the staff team.",
-      tags: ["Mod Text CM"],
-      contact: {}
-    },
-    {
-      id: "s5",
-      name: "Gunslinger5484",
-      role: "Spectre | TCM | VCM | WA",
-      avatar: "https://i.pravatar.cc/400?img=5",
-      bio: "A key member of the staff team.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s6",
-      name: "nzshooter88",
-      role: "Spectre | TCM | VCM | WA",
-      avatar: "https://i.pravatar.cc/400?img=6",
-      bio: "A key member of the staff team.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s7",
-      name: "Dwarfninja",
-      role: "Captain",
-      avatar: "https://i.pravatar.cc/400?img=7",
-      bio: "Team Captain and Voice Mod.",
-      tags: ["Mod Voice CM"],
-      contact: {}
-    },
-    {
-      id: "s8",
-      name: "LucJamez",
-      role: "Captain",
-      avatar: "https://i.pravatar.cc/400?img=8",
-      bio: "Team Captain for the community.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s9",
-      name: "miss.the_rage",
-      role: "Captain",
-      avatar: "https://i.pravatar.cc/400?img=9",
-      bio: "Team Captain for the community.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s10",
-      name: "whiteboycarter",
-      role: "Captain",
-      avatar: "https://i.pravatar.cc/400?img=10",
-      bio: "Team Captain and Community Moderator.",
-      tags: ["Mod Text CM", "Mod Voice CM"],
-      contact: {}
-    },
-    {
-      id: "s11",
-      name: "Ethangames2012",
-      role: "Mod Voice CM",
-      avatar: "https://i.pravatar.cc/400?img=11",
-      bio: "Voice channel Community Moderator.",
-      tags: [],
-      contact: {}
-    },
-    {
-      id: "s12",
-      name: "Trippy",
-      role: "Mod Voice CM",
-      avatar: "https://i.pravatar.cc/400?img=12",
-      bio: "Voice channel Community Moderator.",
-      tags: [],
-      contact: {}
-    }
-  ];
-
-  // Utility (nested helpers)
-  const Utils = (function () {
-    function el(tag, attrs = {}, children = []) {
-      const node = document.createElement(tag);
-      for (const k in attrs) {
-        if (k === "class") node.className = attrs[k];
-        else if (k === "text") node.textContent = attrs[k];
-        else node.setAttribute(k, attrs[k]);
-      }
-      (Array.isArray(children) ? children : [children]).forEach(c => {
-        if (!c) return;
-        if (typeof c === "string") node.appendChild(document.createTextNode(c));
-        else node.appendChild(c);
-      });
-      return node;
-    }
-    function matchesFilter(item, q, role) {
-      const qLower = q.trim().toLowerCase();
-      if (role && item.role !== role) return false;
-      if (!qLower) return true;
-      return (item.name + " " + item.role + " " + (item.tags || []).join(" ") + " " + (item.bio || "")).toLowerCase().includes(qLower);
-    }
-    return { el, matchesFilter };
-  })();
-
-  // DOM refs
-  const grid = document.getElementById("grid");
-  const searchBox = document.getElementById("searchBox");
-  const roleFilter = document.getElementById("roleFilter");
-  const clearBtn = document.getElementById("clearBtn");
-  const resultCount = document.getElementById("resultCount");
-
-  // Render a single staff card (nested creation)
-  function renderCard(staff) {
-    const img = Utils.el("img", { class: "avatar", src: staff.avatar || "https://i.pravatar.cc/400", alt: staff.name });
-    const name = Utils.el("div", { class: "name", text: staff.name });
-    const role = Utils.el("div", { class: "role", text: staff.role });
-    const bio = Utils.el("div", { class: "bio", text: staff.bio || "" });
-    const tagsWrap = Utils.el("div", { class: "contact" }, (staff.tags || []).map(t => Utils.el("span", { class: "pill", text: t })));
-
-    const card = Utils.el("article", { class: "card", role: "listitem", "data-id": staff.id }, [
-      img, name, role, bio, tagsWrap
-    ]);
-
-    // click to open detail overlay (simple)
-    card.addEventListener("click", () => showDetails(staff));
-
-    return card;
-  }
-
-  // Render grid based on filters
-  function renderGrid(data, q = "", role = "") {
-    grid.innerHTML = "";
-    const filtered = data.filter(item => Utils.matchesFilter(item, q, role));
-    resultCount.textContent = `${filtered.length} staff`;
-    if (!filtered.length) {
-      grid.appendChild(Utils.el("div", { class: "card", text: "No staff found. Edit STAFF_DATA in the script to add members." }));
-      return;
-    }
-    filtered.forEach(staff => grid.appendChild(renderCard(staff)));
-  }
-
-  // Simple modal for details
-  function showDetails(staff) {
-    const modal = Utils.el("div", { class: "admin-modal", role: "dialog", "aria-modal": "true" }, [
-      Utils.el("div", { class: "admin-card", style: "min-width:300px; background:#0f1724; color:#fff; border-radius:10px; padding:16px;" }, [
-        Utils.el("div", { class: "name", text: staff.name }),
-        Utils.el("div", { class: "role", text: staff.role }),
-        Utils.el("img", { src: staff.avatar, class: "avatar", style: "height:160px; margin:10px 0;" }),
-        Utils.el("div", { class: "bio", text: staff.bio || "" }),
-        Utils.el("div", { style: "margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;" }, (staff.contact ? Object.keys(staff.contact).map(k => {
-          const v = staff.contact[k];
-          const node = Utils.el("a", { href: v && v.startsWith("http") ? v : "javascript:void(0)", class: "pill", target: "_blank", rel: "noopener noreferrer", text: `${k}: ${v}` });
+      <div id="grid" class="grid" role="list">
+        <!-- Cards will be rendered here by JS -->
+      </div>
+    </section>
+  </main>
+  <footer>&copy; 2025 Spectroms Kingdom — staff directory</footer>
+  <script>
+    /*
+      Staff Directory script
+      - Data: edit the STAFF_DATA array below (or fetch from a JSON endpoint)
+      - Rendering is simple and nested: renderGrid -> renderCard -> attachEvents
+    */
+    (function () {
+      const STAFF_DATA = [
+        {
+          id: "s1",
+          name: "Spectrom",
+          role: "Server Manager",
+          avatar: "https://i.pravatar.cc/400?img=1",
+          bio: "Server Manager for the community.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s2",
+          name: "Oynx",
+          role: "Vice Manager",
+          avatar: "https://i.pravatar.cc/400?img=2",
+          bio: "Vice Manager for the community.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s3",
+          name: "TopDilf",
+          role: "Vetted Manager",
+          avatar: "https://i.pravatar.cc/400?img=3",
+          bio: "Vetted Manager for the community.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s4",
+          name: "FAN",
+          role: "Spectre | TCM | VCM | WA",
+          avatar: "https://i.pravatar.cc/400?img=4",
+          bio: "A key member of the staff team.",
+          tags: ["Mod Text CM"],
+          contact: {}
+        },
+        {
+          id: "s5",
+          name: "Gunslinger5484",
+          role: "Spectre | TCM | VCM | WA",
+          avatar: "https://i.pravatar.cc/400?img=5",
+          bio: "A key member of the staff team.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s6",
+          name: "nzshooter88",
+          role: "Spectre | TCM | VCM | WA",
+          avatar: "https://i.pravatar.cc/400?img=6",
+          bio: "A key member of the staff team.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s7",
+          name: "Dwarfninja",
+          role: "Captain",
+          avatar: "https://i.pravatar.cc/400?img=7",
+          bio: "Team Captain and Voice Mod.",
+          tags: ["Mod Voice CM"],
+          contact: {}
+        },
+        {
+          id: "s8",
+          name: "LucJamez",
+          role: "Captain",
+          avatar: "https://i.pravatar.cc/400?img=8",
+          bio: "Team Captain for the community.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s9",
+          name: "miss.the_rage",
+          role: "Captain",
+          avatar: "https://i.pravatar.cc/400?img=9",
+          bio: "Team Captain for the community.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s10",
+          name: "whiteboycarter",
+          role: "Captain",
+          avatar: "https://i.pravatar.cc/400?img=10",
+          bio: "Team Captain and Community Moderator.",
+          tags: ["Mod Text CM", "Mod Voice CM"],
+          contact: {}
+        },
+        {
+          id: "s11",
+          name: "Ethangames2012",
+          role: "Mod Voice CM",
+          avatar: "https://i.pravatar.cc/400?img=11",
+          bio: "Voice channel Community Moderator.",
+          tags: [],
+          contact: {}
+        },
+        {
+          id: "s12",
+          name: "Trippy",
+          role: "Mod Voice CM",
+          avatar: "https://i.pravatar.cc/400?img=12",
+          bio: "Voice channel Community Moderator.",
+          tags: [],
+          contact: {}
+        }
+      ];
+      
+      const Utils = (function () {
+        function el(tag, attrs = {}, children = []) {
+          const node = document.createElement(tag);
+          for (const k in attrs) {
+            if (k === "class") node.className = attrs[k];
+            else if (k === "text") node.textContent = attrs[k];
+            else node.setAttribute(k, attrs[k]);
+          }
+          (Array.isArray(children) ? children : [children]).forEach(c => {
+            if (!c) return;
+            if (typeof c === "string") node.appendChild(document.createTextNode(c));
+            else node.appendChild(c);
+          });
           return node;
-        }) : [] )),
-        Utils.el("div", { style: "margin-top:12px; text-align:right;" }, [
-          Utils.el("button", { style: "padding:8px 10px; border-radius:8px; border:none; background:#60a5fa; color:#0f1724; cursor:pointer;", text: "Close" })
-        ])
-      ])
-    ]);
-    document.body.appendChild(modal);
-    // close handler
-    modal.querySelector("button").addEventListener("click", () => modal.remove());
-    modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
-  }
-
-  // Optional: function to load staff from /data/staff.json (forward-thinking)
-  async function loadFromJson(url) {
-    try {
-      const res = await fetch(url, {cache:"no-cache"});
-      if (!res.ok) throw new Error("Failed to fetch staff JSON");
-      const json = await res.json();
-      return json;
-    } catch (e) {
-      console.warn("Staff JSON load failed:", e);
-      return null;
-    }
-  }
-
-  
-
-  // Wire events
-  searchBox.addEventListener("input", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
-  roleFilter.addEventListener("change", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
-  clearBtn.addEventListener("click", () => { searchBox.value = ""; roleFilter.value = ""; renderGrid(STAFF_DATA, "", ""); });
-
-  // initial render
-  (async function init() {
-    // If you want to use an external JSON, uncomment below and set the URL
-    // const external = await loadFromJson("/data/staff.json");
-    // if (external && Array.isArray(external)) { renderGrid(external); return; }
-
-    renderGrid(STAFF_DATA);
-    // highlight nav (mimic existing script behavior)
-    (function highlight() {
-      const tabs = document.querySelectorAll('nav a.tab');
-      const current = window.location.pathname.split('/').pop() || 'index.html';
-      tabs.forEach(tab => { if (tab.getAttribute('href') === current || tab.classList.contains('tab-active')) { tab.classList.add('tab-active'); if (tab.parentElement) tab.parentElement.classList.add('tab-active'); } });
+        }
+        function matchesFilter(item, q, role) {
+          const qLower = q.trim().toLowerCase();
+          if (role && item.role !== role) return false;
+          if (!qLower) return true;
+          return (item.name + " " + item.role + " " + (item.tags || []).join(" ") + " " + (item.bio || "")).toLowerCase().includes(qLower);
+        }
+        return { el, matchesFilter };
+      })();
+      
+      const grid = document.getElementById("grid");
+      const searchBox = document.getElementById("searchBox");
+      const roleFilter = document.getElementById("roleFilter");
+      const clearBtn = document.getElementById("clearBtn");
+      const resultCount = document.getElementById("resultCount");
+      
+      function renderCard(staff) {
+        const img = Utils.el("img", { class: "avatar", src: staff.avatar || "https://i.pravatar.cc/400", alt: staff.name });
+        const name = Utils.el("div", { class: "name", text: staff.name });
+        const role = Utils.el("div", { class: "role", text: staff.role });
+        const bio = Utils.el("div", { class: "bio", text: staff.bio || "" });
+        const tagsWrap = Utils.el("div", { class: "contact" }, (staff.tags || []).map(t => Utils.el("span", { class: "pill", text: t })));
+        const card = Utils.el("article", { class: "card", role: "listitem", "data-id": staff.id }, [
+          img, name, role, bio, tagsWrap
+        ]);
+      
+        card.addEventListener("click", () => showDetails(staff));
+        return card;
+      }
+      
+      function renderGrid(data, q = "", role = "") {
+        grid.innerHTML = "";
+        const filtered = data.filter(item => Utils.matchesFilter(item, q, role));
+        resultCount.textContent = `${filtered.length} staff`;
+        if (!filtered.length) {
+          grid.appendChild(Utils.el("div", { class: "card", text: "No staff found. Edit STAFF_DATA in the script to add members." }));
+          return;
+        }
+        filtered.forEach(staff => grid.appendChild(renderCard(staff)));
+      }
+      
+      function showDetails(staff) {
+        const modal = Utils.el("div", { class: "admin-modal", role: "dialog", "aria-modal": "true" }, [
+          Utils.el("div", { class: "admin-card", style: "min-width:300px; background:#0f1724; color:#fff; border-radius:10px; padding:16px;" }, [
+            Utils.el("div", { class: "name", text: staff.name }),
+            Utils.el("div", { class: "role", text: staff.role }),
+            Utils.el("img", { src: staff.avatar, class: "avatar", style: "height:160px; margin:10px 0;" }),
+            Utils.el("div", { class: "bio", text: staff.bio || "" }),
+            Utils.el("div", { style: "margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;" }, (staff.contact ? Object.keys(staff.contact).map(k => {
+              const v = staff.contact[k];
+              const node = Utils.el("a", { href: v && v.startsWith("http") ? v : "javascript:void(0)", class: "pill", target: "_blank", rel: "noopener noreferrer", text: `${k}: ${v}` });
+              return node;
+            }) : [] )),
+            Utils.el("div", { style: "margin-top:12px; text-align:right;" }, [
+              Utils.el("button", { style: "padding:8px 10px; border-radius:8px; border:none; background:#60a5fa; color:#0f1724; cursor:pointer;", text: "Close" })
+            ])
+          ])
+        ]);
+        document.body.appendChild(modal);
+        modal.querySelector("button").addEventListener("click", () => modal.remove());
+        modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+      }
+      
+      searchBox.addEventListener("input", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
+      roleFilter.addEventListener("change", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
+      clearBtn.addEventListener("click", () => { searchBox.value = ""; roleFilter.value = ""; renderGrid(STAFF_DATA, "", ""); });
+      
+      (async function init() {
+        renderGrid(STAFF_DATA);
+        (function highlight() {
+          const tabs = document.querySelectorAll('nav a.tab');
+          const current = window.location.pathname.split('/').pop() || 'index.html';
+          tabs.forEach(tab => { if (tab.getAttribute('href') === current || tab.classList.contains('tab-active')) { tab.classList.add('tab-active'); if (tab.parentElement) tab.parentElement.classList.add('tab-active'); } });
+        })();
+      })();
+      
     })();
-  })();
-
-  
-
-  
-})();
-</script>
+  </script>
 </body>
 </html>
