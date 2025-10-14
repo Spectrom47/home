@@ -42,12 +42,22 @@
   .name { font-weight:700; color:#fff; margin-bottom:6px; }
   .role { font-size:13px; opacity:0.9; margin-bottom:8px; }
   .bio { font-size:13px; color:#cbd5e1; min-height:40px; margin-bottom:10px; }
-  .contact { display:flex; gap:8px; justify-content:center; }
+  .contact { display:flex; gap:8px; justify-content:center; flex-wrap: wrap; }
   .pill { padding:8px 10px; border-radius:999px; background: rgba(96,165,250,0.12); font-weight:600; color:#dbeafe; font-size:13px; border:1px solid rgba(96,165,250,0.2); }
 
   /* small details */
   .count { font-size:13px; color:#cbd5e1; }
   footer { padding:14px 20px; text-align:center; font-size:13px; color:#9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); margin-top:20px; }
+
+  /* Modal styles */
+  .admin-modal {
+    position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.6);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    z-index:1000;
+    backdrop-filter: blur(5px);
+  }
 
   @media (max-width:560px) {
     .avatar { height:120px; }
@@ -64,7 +74,7 @@
         <li><a href="index.html" class="tab">Home</a></li>
         <li><a href="projects.html" class="tab">Projects</a></li>
         <li><a href="contact.html" class="tab">Contact</a></li>
-        <li class="tab-active"><a href="staff.html" class="tab tab-active">Staff Directory</a></li>
+        <li class="tab-active"><a href="staff_directory.html" class="tab tab-active">Staff Directory</a></li>
       </ul>
     </nav>
   </div>
@@ -84,9 +94,12 @@
       <select id="roleFilter" class="select" aria-label="Filter by role">
         <option value="">All roles</option>
         <option value="Server Manager">Server Manager</option>
-        <option value="Moderator">Moderator</option>
-        <option value="Community Manager">Community Manager</option>
-        <option value="Developer">Developer</option>
+        <option value="Vice Manager">Vice Manager</option>
+        <option value="Vetted Manager">Vetted Manager</option>
+        <option value="Spectre | TCM | VCM | WA">Spectre | TCM | VCM | WA</option>
+        <option value="Captain">Captain</option>
+        <option value="Mod Text CM">Mod Text CM</option>
+        <option value="Mod Voice CM">Mod Voice CM</option>
       </select>
 
       <div class="count" id="resultCount">0 staff</div>
@@ -114,28 +127,109 @@
       id: "s1",
       name: "Spectrom",
       role: "Server Manager",
-      avatar: "https://i.pravatar.cc/400?img=12",
-      bio: "Founder and head honcho. Loves Roblox and code nesting.",
-      tags: ["owner","lead","roblox"],
-      contact: { discord: "Spectrom#0001", link: "https://discord.gg/hxhmuDTNc4" }
+      avatar: "https://i.pravatar.cc/400?img=1",
+      bio: "Server Manager for the community.",
+      tags: [],
+      contact: {}
     },
     {
       id: "s2",
-      name: "Luna",
-      role: "Moderator",
-      avatar: "https://i.pravatar.cc/400?img=45",
-      bio: "Keeps the peace and the memes in balance.",
-      tags: ["mod","community"],
-      contact: { discord: "Luna#4321" }
+      name: "Oynx",
+      role: "Vice Manager",
+      avatar: "https://i.pravatar.cc/400?img=2",
+      bio: "Vice Manager for the community.",
+      tags: [],
+      contact: {}
     },
     {
       id: "s3",
-      name: "DevByte",
-      role: "Developer",
-      avatar: "https://i.pravatar.cc/400?img=32",
-      bio: "Back-end wizard; loves optimization and Lua one-liners.",
-      tags: ["dev","lua","roblox"],
-      contact: { discord: "DevByte#2025", portfolio: "https://example.dev" }
+      name: "TopDilf",
+      role: "Vetted Manager",
+      avatar: "https://i.pravatar.cc/400?img=3",
+      bio: "Vetted Manager for the community.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s4",
+      name: "FAN",
+      role: "Spectre | TCM | VCM | WA",
+      avatar: "https://i.pravatar.cc/400?img=4",
+      bio: "A key member of the staff team.",
+      tags: ["Mod Text CM"],
+      contact: {}
+    },
+    {
+      id: "s5",
+      name: "Gunslinger5484",
+      role: "Spectre | TCM | VCM | WA",
+      avatar: "https://i.pravatar.cc/400?img=5",
+      bio: "A key member of the staff team.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s6",
+      name: "nzshooter88",
+      role: "Spectre | TCM | VCM | WA",
+      avatar: "https://i.pravatar.cc/400?img=6",
+      bio: "A key member of the staff team.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s7",
+      name: "Dwarfninja",
+      role: "Captain",
+      avatar: "https://i.pravatar.cc/400?img=7",
+      bio: "Team Captain and Voice Mod.",
+      tags: ["Mod Voice CM"],
+      contact: {}
+    },
+    {
+      id: "s8",
+      name: "LucJamez",
+      role: "Captain",
+      avatar: "https://i.pravatar.cc/400?img=8",
+      bio: "Team Captain for the community.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s9",
+      name: "miss.the_rage",
+      role: "Captain",
+      avatar: "https://i.pravatar.cc/400?img=9",
+      bio: "Team Captain for the community.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s10",
+      name: "whiteboycarter",
+      role: "Captain",
+      avatar: "https://i.pravatar.cc/400?img=10",
+      bio: "Team Captain and Community Moderator.",
+      tags: ["Mod Text CM", "Mod Voice CM"],
+      contact: {}
+    },
+    {
+      id: "s11",
+      name: "Ethangames2012",
+      role: "Mod Voice CM",
+      avatar: "https://i.pravatar.cc/400?img=11",
+      bio: "Voice channel Community Moderator.",
+      tags: [],
+      contact: {}
+    },
+    {
+      id: "s12",
+      name: "Trippy",
+      role: "Mod Voice CM",
+      avatar: "https://i.pravatar.cc/400?img=12",
+      bio: "Voice channel Community Moderator.",
+      tags: [],
+      contact: {}
     }
   ];
 
