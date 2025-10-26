@@ -3,47 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Projects</title>
+  <title>Projects - MyWebsite</title>
   <style>
     /* Base Reset & Layout */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    @keyframes floatEffect {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
-
     body {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
+      display: flex; min-height: 100vh; flex-direction: column;
       color: #e6eef8;
-      background: linear-gradient(120deg, 
-                  rgba(15,23,42,0.82), 
-                  rgba(30,58,138,0.78),
-                  rgba(37,99,235,0.75)),
+      background: linear-gradient(120deg, rgba(15,23,42,0.88), rgba(30,58,138,0.84)),
                   url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-      background-size: 400% 400%, cover;
-      animation: gradientShift 15s ease infinite;
-    }
-
-    /* Add a subtle floating animation to panels */
-    .panel {
-      animation: floatEffect 6s ease-in-out infinite;
-    }
-
-    /* Stagger the animations for each panel */
-    .panel:nth-child(2) {
-      animation-delay: -2s;
-    }
-    .panel:nth-child(3) {
-      animation-delay: -4s;
+      background-size: cover;
     }
 
     header {
@@ -58,65 +27,13 @@
     nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.28); }
 
     main {
-      flex: 1;
-      max-width: 1400px;
-      margin: 36px auto;
-      width: 94%;
-      display: grid;
-      grid-template-columns: 280px 1fr 320px;
-      gap: 24px;
-      align-items: start;
+      flex:1; max-width: 1200px; margin: 36px auto; width: 94%;
+      display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start;
     }
 
     .panel {
-      background: rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 22px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.35),
-                  0 0 0 1px rgba(255,255,255,0.1);
-      color: #e6eef8;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.05),
-        transparent
-      );
-      transition: 0.5s;
-    }
-
-    .panel:hover::before {
-      left: 100%;
-    }
-
-    .panel:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
-    }
-
-    .featured-panel {
-      grid-column: 2;
-      min-height: 400px;
-      background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(96,165,250,0.05));
-      border: 1px solid rgba(96,165,250,0.1);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px;
+      background: rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35); color: #e6eef8;
     }
     .panel h1 { margin-bottom: 8px; font-size: 20px; color: #fff; }
     .panel p { color: #cfe0ff; margin-bottom: 12px; }
@@ -130,69 +47,13 @@
   .btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.03); }
 
     .calendar {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      user-select: none;
-      font-size: 12px;
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; user-select:none;
     }
-    .day-name {
-      text-align: center;
-      font-size: 11px;
-      color: #bcd7ff;
-      opacity: 0.95;
-      padding: 4px;
-    }
+    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; }
     .date-cell {
-      background: rgba(255,255,255,0.04);
-      border-radius: 6px;
-      padding: 6px;
-      min-height: 45px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(255,255,255,0.03);
-      font-size: 11px;
-    }
-
-    .mega-button {
-      position: fixed;
-      bottom: 40px;
-      right: 40px;
-      padding: 20px 32px;
-      font-size: 18px;
-      font-weight: bold;
-      background: linear-gradient(135deg, #2563eb, #60a5fa);
-      color: white;
-      border: none;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(37,99,235,0.3),
-                  0 0 0 2px rgba(255,255,255,0.1);
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .mega-button:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 15px 40px rgba(37,99,235,0.4),
-                  0 0 0 4px rgba(255,255,255,0.2);
-    }
-
-    .mega-button .icon {
-      font-size: 24px;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+      background: rgba(255,255,255,0.04); border-radius:8px; padding:10px; min-height:92px;
+      display:flex; flex-direction:column; justify-content:space-between; cursor:pointer;
+      transition: transform .14s ease, box-shadow .14s ease, background .12s ease; border: 1px solid rgba(255,255,255,0.03);
     }
     .date-cell:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(2,6,23,0.6); background: rgba(255,255,255,0.06); }
 
@@ -289,22 +150,18 @@
       <div class="cal-header">
         <div>
           <h1>Project Timeline</h1>
-          <p class="muted">Need assistance? Click the glowing button to submit a request! <br>Scroll calendar to move by <strong>year</strong>.</p>
+          <p class="muted">If need assistance, submit a request! <strong>-</strong>. Scroll the calendar to move by <strong>year</strong>.</p>
         </div>
         <div class="cal-nav">
           <button class="btn" id="prevMonthBtn" title="Previous month">◀</button>
-          <div style="min-width:170px; text-align:center; color:#dbeeff; font-weight:600;" id="monthLabel">Month</div>
+          <div style="min-width:170px; text-align:center; color:#dbeeff;" id="monthLabel">Month</div>
           <button class="btn" id="nextMonthBtn" title="Next month">▶</button>
+          <button class="btn" id="openRequestBtn" title="Submit request">✉ Submit Request</button>
         </div>
       </div>
 
       <!-- calendar grid (day names + cells appended in JS) -->
-      <div class="calendar" id="calendarGrid" tabindex="0" aria-label="Calendar grid" style="opacity: 0.85; transform: scale(0.95);"></div>
-      
-      <button class="mega-button" onclick="document.getElementById('requestModal').style.display='flex'">
-        <i class='bx bx-plus-circle icon'></i>
-        Start New Request
-      </button>
+      <div class="calendar" id="calendarGrid" tabindex="0" aria-label="Calendar grid"></div>
     </section>
 
     <aside class="timeline panel" id="timelinePanel">
