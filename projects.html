@@ -213,30 +213,73 @@
   </header>
 
   <main>
-    <section class="panel" id="requestPanel">
+    <section class="panel glass-effect" id="requestPanel">
       <div class="header">
         <div>
-          <h1>Project Requests</h1>
-          <p class="muted">Submit your project requests and our team will review them promptly.</p>
+          <h1 class="portal-title">Project Portal</h1>
+          <p class="muted">Enter the gateway to project possibilities</p>
         </div>
         <div class="nav-actions">
-          <button class="btn btn-primary" id="openRequestBtn" title="Submit request">✉ Submit New Request</button>
+          <button class="btn btn-primary portal-glow" id="openRequestBtn" title="Submit request">
+            <span class="btn-icon">✧</span> Create New Quest
+          </button>
         </div>
       </div>
 
-      <div class="current-date">
-        <div style="text-align:center; color:#dbeeff; margin: 20px 0;" id="currentDateLabel">Current Date</div>
-      </div>
+      <div class="portal-grid">
+        <div class="portal-section glass-effect floating">
+          <div class="mini-calendar">
+            <div class="mini-cal-header">
+              <button class="cal-nav-btn" id="prevMonth">◀</button>
+              <div id="currentDateLabel">Current Date</div>
+              <button class="cal-nav-btn" id="nextMonth">▶</button>
+            </div>
+            <div class="mini-cal-grid" id="miniCalendar"></div>
+          </div>
+        </div>
 
-      <div class="request-info">
-        <h3>How to Submit a Request:</h3>
-        <ul style="list-style: none; margin-top: 10px;">
-          <li>1. Click "Submit New Request" button</li>
-          <li>2. Select the type of request (Discord, Website, or Admin)</li>
-          <li>3. Choose a target date for your request</li>
-          <li>4. Describe your request in detail</li>
-          <li>5. Submit and wait for admin review</li>
-        </ul>
+        <div class="portal-section glass-effect">
+          <h3 class="section-title">Active Quests</h3>
+          <div class="quest-list" id="activeQuests">
+            <!-- Dynamic content -->
+          </div>
+        </div>
+
+        <div class="portal-section glass-effect">
+          <h3 class="section-title">Quest Categories</h3>
+          <div class="category-grid">
+            <div class="category-card portal-glow" data-type="Discord">
+              <span class="category-icon">🎮</span>
+              <span class="category-name">Discord</span>
+            </div>
+            <div class="category-card portal-glow" data-type="Website">
+              <span class="category-icon">🌐</span>
+              <span class="category-name">Website</span>
+            </div>
+            <div class="category-card portal-glow" data-type="Admin">
+              <span class="category-icon">⚡</span>
+              <span class="category-name">Admin</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portal-section glass-effect">
+          <h3 class="section-title">Quest Stats</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="totalQuests">0</span>
+              <span class="stat-label">Total Quests</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="activeQuestsCount">0</span>
+              <span class="stat-label">Active</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="completedQuests">0</span>
+              <span class="stat-label">Completed</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
