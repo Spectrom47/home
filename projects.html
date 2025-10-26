@@ -46,24 +46,51 @@
   .btn-primary{ background: linear-gradient(90deg,#2563eb,#60a5fa); color: white; box-shadow: 0 10px 26px rgba(37,99,235,0.18); }
   .btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.03); }
 
-    .calendar {
-      display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; user-select:none;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
     }
-    .day-name { text-align:center; font-size:12px; color:#bcd7ff; opacity:0.95; }
-    .date-cell {
-      background: rgba(255,255,255,0.04); border-radius:8px; padding:10px; min-height:92px;
-      display:flex; flex-direction:column; justify-content:space-between; cursor:pointer;
-      transition: transform .14s ease, box-shadow .14s ease, background .12s ease; border: 1px solid rgba(255,255,255,0.03);
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
     }
-    .date-cell:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(2,6,23,0.6); background: rgba(255,255,255,0.06); }
 
-    .date-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .date-num { font-weight:700; color:#fff; font-size:14px; }
-    .badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(96,165,250,0.18); color:#cfe0ff; }
+    .request-info {
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+    }
 
-    .requests-badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(245,158,11,0.14); color:#ffeccf; margin-left:6px; }
+    .request-info ul li {
+      color: #cfe0ff;
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    .events-list { margin-top:8px; display:flex; flex-direction:column; gap:6px; }
+    .current-date {
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    #statusPanel {
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+    }
+
+    .badge { 
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(96,165,250,0.18);
+      color: #cfe0ff;
+    }
     .evt { font-size:12px; padding:6px 8px; border-radius:8px; background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(59,130,246,0.1)); color:#eaf2ff; box-shadow: 0 6px 14px rgba(2,6,23,0.3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
     .timeline {
@@ -146,28 +173,37 @@
   </header>
 
   <main>
-    <section class="panel" id="calendarPanel">
-      <div class="cal-header">
+    <section class="panel" id="requestPanel">
+      <div class="header">
         <div>
-          <h1>Project Timeline</h1>
-          <p class="muted">If need assistance, submit a request! <strong>-</strong>. Scroll the calendar to move by <strong>year</strong>.</p>
+          <h1>Project Requests</h1>
+          <p class="muted">Submit your project requests and our team will review them promptly.</p>
         </div>
-        <div class="cal-nav">
-          <button class="btn" id="prevMonthBtn" title="Previous month">◀</button>
-          <div style="min-width:170px; text-align:center; color:#dbeeff;" id="monthLabel">Month</div>
-          <button class="btn" id="nextMonthBtn" title="Next month">▶</button>
-          <button class="btn" id="openRequestBtn" title="Submit request">✉ Submit Request</button>
+        <div class="nav-actions">
+          <button class="btn btn-primary" id="openRequestBtn" title="Submit request">✉ Submit New Request</button>
         </div>
       </div>
 
-      <!-- calendar grid (day names + cells appended in JS) -->
-      <div class="calendar" id="calendarGrid" tabindex="0" aria-label="Calendar grid"></div>
+      <div class="current-date">
+        <div style="text-align:center; color:#dbeeff; margin: 20px 0;" id="currentDateLabel">Current Date</div>
+      </div>
+
+      <div class="request-info">
+        <h3>How to Submit a Request:</h3>
+        <ul style="list-style: none; margin-top: 10px;">
+          <li>1. Click "Submit New Request" button</li>
+          <li>2. Select the type of request (Discord, Website, or Admin)</li>
+          <li>3. Choose a target date for your request</li>
+          <li>4. Describe your request in detail</li>
+          <li>5. Submit and wait for admin review</li>
+        </ul>
+      </div>
     </section>
 
-    <aside class="timeline panel" id="timelinePanel">
-      <h3>Upcoming Events</h3>
-      <div id="timelineList"></div>
-      <div class="hint">Events persist online via Firebase. Admin-only edits unlock with Shift+Q.</div>
+    <aside class="panel" id="statusPanel">
+      <h3>Request Status</h3>
+      <div id="requestStatusList"></div>
+      <div class="hint">All requests are reviewed by our admin team. Check back here for updates.</div>
     </aside>
   </main>
 
@@ -336,13 +372,8 @@
     }
 
     // ---------- DOM Refs ----------
-    const calendarGrid = document.getElementById('calendarGrid');
-    const monthLabel = document.getElementById('monthLabel');
-    const prevBtn = document.getElementById('prevMonthBtn');
-    // If you named your next button 'nextMonthBtn', ensure you use that here
-    // For consistency with your HTML, I'm assuming 'nextMonthBtn' is correct.
-    const nextMonthBtn = document.getElementById('nextMonthBtn');
-    const timelineList = document.getElementById('timelineList');
+    const currentDateLabel = document.getElementById('currentDateLabel');
+    const requestStatusList = document.getElementById('requestStatusList');
 
     const dayModal = document.getElementById('dayModal');
     const dayModalTitle = document.getElementById('dayModalTitle');
@@ -795,11 +826,12 @@
     // ---------- Init ----------
     (function init(){
       const today = new Date();
-      currentYear = today.getFullYear();
-      currentMonth = today.getMonth();
-      // initial quick render so UI isn't empty while waiting for first snapshot
-      maybeRender(()=> renderCalendar(currentYear, currentMonth));
-      maybeRender(()=> renderTimeline());
+      currentDateLabel.textContent = today.toLocaleDateString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
       refreshMailbox(); // Initial check for admin status and mailbox content
     })();
 
