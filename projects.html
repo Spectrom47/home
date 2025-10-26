@@ -3,56 +3,47 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Projects - MyWebsite</title>
+  <title>Projects</title>
   <style>
     /* Base Reset & Layout */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
-    body {
-      display: flex; min-height: 100vh; flex-direction: column;
-      color: #e6eef8;
-      background: linear-gradient(120deg, rgba(15,23,42,0.85), rgba(30,58,138,0.82)),
-                  url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=3840&q=100') no-repeat center center fixed;
-      background-size: cover;
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     
-    /* Enhanced visual effects */
-    .glass-effect {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 
-        0 8px 32px rgba(2,4,24,0.8),
-        inset 0 0 0 1px rgba(255,255,255,0.07);
-    }
-    
-    .portal-glow {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .portal-glow::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 50% 0%, 
-        rgba(96,165,250,0.15),
-        rgba(37,99,235,0.1) 40%,
-        transparent 70%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    .portal-glow:hover::before {
-      opacity: 1;
-    }
-    
-    .floating {
-      animation: float 6s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
+    @keyframes floatEffect {
+      0% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+      color: #e6eef8;
+      background: linear-gradient(120deg, 
+                  rgba(15,23,42,0.82), 
+                  rgba(30,58,138,0.78),
+                  rgba(37,99,235,0.75)),
+                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: 400% 400%, cover;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    /* Add a subtle floating animation to panels */
+    .panel {
+      animation: floatEffect 6s ease-in-out infinite;
+    }
+
+    /* Stagger the animations for each panel */
+    .panel:nth-child(2) {
+      animation-delay: -2s;
+    }
+    .panel:nth-child(3) {
+      animation-delay: -4s;
     }
 
     header {
@@ -67,13 +58,65 @@
     nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow:0 6px 18px rgba(96,165,250,0.28); }
 
     main {
-      flex:1; max-width: 1200px; margin: 36px auto; width: 94%;
-      display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start;
+      flex: 1;
+      max-width: 1400px;
+      margin: 36px auto;
+      width: 94%;
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      gap: 24px;
+      align-items: start;
     }
 
     .panel {
-      background: rgba(255,255,255,0.08); border-radius: 14px; padding: 18px; backdrop-filter: blur(8px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35); color: #e6eef8;
+      background: rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.35),
+                  0 0 0 1px rgba(255,255,255,0.1);
+      color: #e6eef8;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    .panel:hover::before {
+      left: 100%;
+    }
+
+    .panel:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+    }
+
+    .featured-panel {
+      grid-column: 2;
+      min-height: 400px;
+      background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(96,165,250,0.05));
+      border: 1px solid rgba(96,165,250,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
     }
     .panel h1 { margin-bottom: 8px; font-size: 20px; color: #fff; }
     .panel p { color: #cfe0ff; margin-bottom: 12px; }
@@ -86,206 +129,80 @@
   .btn-primary{ background: linear-gradient(90deg,#2563eb,#60a5fa); color: white; box-shadow: 0 10px 26px rgba(37,99,235,0.18); }
   .btn-primary:hover{ transform: translateY(-2px); filter: brightness(1.03); }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      padding: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .portal-title {
-      font-size: 32px;
-      background: linear-gradient(90deg, #fff, #8bb8ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 8px;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-icon {
-      display: inline-block;
-      margin-right: 8px;
-      animation: rotate 4s linear infinite;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .portal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      padding: 20px;
-    }
-
-    .portal-section {
-      border-radius: 16px;
-      padding: 24px;
-      min-height: 200px;
-    }
-
-    .mini-calendar {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-    }
-
-    .mini-cal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .cal-nav-btn {
-      background: none;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      padding: 4px 8px;
-      transition: transform 0.2s;
-    }
-
-    .cal-nav-btn:hover {
-      transform: scale(1.2);
-    }
-
-    .mini-cal-grid {
+    .calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 4px;
+      user-select: none;
       font-size: 12px;
+    }
+    .day-name {
       text-align: center;
+      font-size: 11px;
+      color: #bcd7ff;
+      opacity: 0.95;
+      padding: 4px;
     }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .category-card {
+    .date-cell {
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 6px;
+      min-height: 45px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
+      justify-content: space-between;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.03);
+      font-size: 11px;
     }
 
-    .category-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .category-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .stat-card {
-      text-align: center;
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-    }
-
-    .stat-value {
-      display: block;
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 4px;
-      color: #60a5fa;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: #bcd7ff;
-    }
-
-    .section-title {
+    .mega-button {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      padding: 20px 32px;
       font-size: 18px;
-      margin-bottom: 16px;
-      color: #fff;
-      position: relative;
-      padding-left: 16px;
-    }
-
-    .section-title::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 16px;
-      background: #60a5fa;
-      border-radius: 2px;
-    }
-
-    .quest-list {
-      max-height: 300px;
-      overflow-y: auto;
-      padding-right: 8px;
-    }
-
-    .quest-list::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .quest-list::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.03);
-    }
-
-    .quest-list::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-    }
-
-    .request-info ul li {
-      color: #cfe0ff;
-      padding: 8px 0;
+      font-weight: bold;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(37,99,235,0.3),
+                  0 0 0 2px rgba(255,255,255,0.1);
+      z-index: 100;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .current-date {
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      padding: 12px;
+    .mega-button:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(37,99,235,0.4),
+                  0 0 0 4px rgba(255,255,255,0.2);
     }
 
-    #statusPanel {
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
+    .mega-button .icon {
+      font-size: 24px;
+      animation: pulse 2s infinite;
     }
 
-    .badge { 
-      font-size: 11px;
-      padding: 4px 7px;
-      border-radius: 999px;
-      background: rgba(96,165,250,0.18);
-      color: #cfe0ff;
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
     }
+    .date-cell:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(2,6,23,0.6); background: rgba(255,255,255,0.06); }
+
+    .date-top { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .date-num { font-weight:700; color:#fff; font-size:14px; }
+    .badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(96,165,250,0.18); color:#cfe0ff; }
+
+    .requests-badge { font-size:11px; padding:4px 7px; border-radius:999px; background: rgba(245,158,11,0.14); color:#ffeccf; margin-left:6px; }
+
+    .events-list { margin-top:8px; display:flex; flex-direction:column; gap:6px; }
     .evt { font-size:12px; padding:6px 8px; border-radius:8px; background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(59,130,246,0.1)); color:#eaf2ff; box-shadow: 0 6px 14px rgba(2,6,23,0.3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
     .timeline {
@@ -300,28 +217,7 @@
 
     footer { margin: 24px auto 40px; width:94%; max-width:1200px; text-align:center; color:#cfe0ff; }
 
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center,
-        rgba(37,99,235,0.2) 0%,
-        rgba(2,6,23,0.95) 100%);
-      z-index: 1000;
-      backdrop-filter: blur(8px);
-      transition: all 0.3s ease-in-out;
-    }
-    
-    .modal-backdrop::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0iZyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZmIiBzdG9wLW9wYWNpdHk9IjAuMSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PGNpcmNsZSBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=');
-      opacity: 0.1;
-      pointer-events: none;
-    }
+    .modal-backdrop { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(2,6,23,0.6); z-index: 1000; }
     .modal { width: 92%; max-width: 720px; background: rgba(12,16,28,0.96); border-radius: 12px; padding: 18px; color: #e6eef8; box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
     .modal h2 { margin-bottom:8px; color:#fff; }
     .form-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
@@ -389,80 +285,32 @@
   </header>
 
   <main>
-    <section class="panel glass-effect" id="requestPanel">
-      <div class="header">
+    <section class="panel" id="calendarPanel">
+      <div class="cal-header">
         <div>
-          <h1 class="portal-title">Project Portal</h1>
-          <p class="muted">Enter the gateway to project possibilities</p>
+          <h1>Project Timeline</h1>
+          <p class="muted">Need assistance? Click the glowing button to submit a request! <br>Scroll calendar to move by <strong>year</strong>.</p>
         </div>
-        <div class="nav-actions">
-          <button class="btn btn-primary portal-glow" id="openRequestBtn" title="Submit request">
-            <span class="btn-icon">✧</span> Create New Quest
-          </button>
-        </div>
-      </div>
-
-      <div class="portal-grid">
-        <div class="portal-section glass-effect floating">
-          <div class="mini-calendar">
-            <div class="mini-cal-header">
-              <button class="cal-nav-btn" id="prevMonth">◀</button>
-              <div id="currentDateLabel">Current Date</div>
-              <button class="cal-nav-btn" id="nextMonth">▶</button>
-            </div>
-            <div class="mini-cal-grid" id="miniCalendar"></div>
-          </div>
-        </div>
-
-        <div class="portal-section glass-effect">
-          <h3 class="section-title">Active Quests</h3>
-          <div class="quest-list" id="activeQuests">
-            <!-- Dynamic content -->
-          </div>
-        </div>
-
-        <div class="portal-section glass-effect">
-          <h3 class="section-title">Quest Categories</h3>
-          <div class="category-grid">
-            <div class="category-card portal-glow" data-type="Discord">
-              <span class="category-icon">🎮</span>
-              <span class="category-name">Discord</span>
-            </div>
-            <div class="category-card portal-glow" data-type="Website">
-              <span class="category-icon">🌐</span>
-              <span class="category-name">Website</span>
-            </div>
-            <div class="category-card portal-glow" data-type="Admin">
-              <span class="category-icon">⚡</span>
-              <span class="category-name">Admin</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="portal-section glass-effect">
-          <h3 class="section-title">Quest Stats</h3>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <span class="stat-value" id="totalQuests">0</span>
-              <span class="stat-label">Total Quests</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value" id="activeQuestsCount">0</span>
-              <span class="stat-label">Active</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-value" id="completedQuests">0</span>
-              <span class="stat-label">Completed</span>
-            </div>
-          </div>
+        <div class="cal-nav">
+          <button class="btn" id="prevMonthBtn" title="Previous month">◀</button>
+          <div style="min-width:170px; text-align:center; color:#dbeeff; font-weight:600;" id="monthLabel">Month</div>
+          <button class="btn" id="nextMonthBtn" title="Next month">▶</button>
         </div>
       </div>
+
+      <!-- calendar grid (day names + cells appended in JS) -->
+      <div class="calendar" id="calendarGrid" tabindex="0" aria-label="Calendar grid" style="opacity: 0.85; transform: scale(0.95);"></div>
+      
+      <button class="mega-button" onclick="document.getElementById('requestModal').style.display='flex'">
+        <i class='bx bx-plus-circle icon'></i>
+        Start New Request
+      </button>
     </section>
 
-    <aside class="panel" id="statusPanel">
-      <h3>Request Status</h3>
-      <div id="requestStatusList"></div>
-      <div class="hint">All requests are reviewed by our admin team. Check back here for updates.</div>
+    <aside class="timeline panel" id="timelinePanel">
+      <h3>Upcoming Events</h3>
+      <div id="timelineList"></div>
+      <div class="hint">Events persist online via Firebase. Admin-only edits unlock with Shift+Q.</div>
     </aside>
   </main>
 
@@ -631,8 +479,13 @@
     }
 
     // ---------- DOM Refs ----------
-    const currentDateLabel = document.getElementById('currentDateLabel');
-    const requestStatusList = document.getElementById('requestStatusList');
+    const calendarGrid = document.getElementById('calendarGrid');
+    const monthLabel = document.getElementById('monthLabel');
+    const prevBtn = document.getElementById('prevMonthBtn');
+    // If you named your next button 'nextMonthBtn', ensure you use that here
+    // For consistency with your HTML, I'm assuming 'nextMonthBtn' is correct.
+    const nextMonthBtn = document.getElementById('nextMonthBtn');
+    const timelineList = document.getElementById('timelineList');
 
     const dayModal = document.getElementById('dayModal');
     const dayModalTitle = document.getElementById('dayModalTitle');
@@ -1085,12 +938,11 @@
     // ---------- Init ----------
     (function init(){
       const today = new Date();
-      currentDateLabel.textContent = today.toLocaleDateString(undefined, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
+      currentYear = today.getFullYear();
+      currentMonth = today.getMonth();
+      // initial quick render so UI isn't empty while waiting for first snapshot
+      maybeRender(()=> renderCalendar(currentYear, currentMonth));
+      maybeRender(()=> renderTimeline());
       refreshMailbox(); // Initial check for admin status and mailbox content
     })();
 
