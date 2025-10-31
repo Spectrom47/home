@@ -3,333 +3,272 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Staff Directory - Spectroms Kingdom</title>
+  <title>Spectroms Kingdom — Forum (classic)</title>
   <style>
-    /* Base layout + typography (keeps look consistent with your site) */
-    * { box-sizing: border-box; margin:0; padding:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+    /* Lightweight "classic forum" skin (Enjin-era inspired) */
+    * { box-sizing:border-box; margin:0; padding:0; font-family: "Helvetica Neue", Arial, Helvetica, sans-serif; }
     body {
+      background: linear-gradient(180deg,#0b1220 0%, #0f1724 60%), url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=60') center/cover fixed;
+      color:#dfe8f8;
       min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      color:#e6eef8;
-      background: linear-gradient(120deg, rgba(15,23,42,0.95), rgba(30,58,138,0.9)),
-                  url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-      background-size:cover;
-    }
-    header { background: rgba(15,23,36,0.85); color:#fff; padding:16px 20px; backdrop-filter: blur(6px); }
-    .container { max-width:1024px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-    .logo { font-weight:700; letter-spacing:0.6px; }
-    nav ul { list-style:none; display:flex; gap:8px; align-items:center; }
-    nav a { display:inline-block; padding:8px 12px; color:#d1d5db; text-decoration:none; border-radius:8px; transition:all .15s ease; }
-    nav a:hover { color:#fff; background: rgba(255,255,255,0.08); transform: translateY(-1px); }
-    nav li.tab-active > a, nav a.tab-active { color:#0f1724; background:#60a5fa; box-shadow: 0 6px 18px rgba(96,165,250,0.3); }
-
-    main { flex:1; padding:28px 20px; max-width:1024px; margin:40px auto; width:100%; }
-    .panel { background: rgba(255,255,255,0.06); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.25); backdrop-filter: blur(8px); color:#e5e7eb; }
-    h1 { color:#fff; margin-bottom:8px; }
-
-    /* Directory controls */
-    .controls { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 18px 0; align-items:center; }
-    .search { flex:1 1 260px; display:flex; gap:8px; }
-    .search input { flex:1; padding:10px 12px; border-radius:10px; border:none; outline:none; background:rgba(255,255,255,0.03); color:#e5e7eb; }
-    .select {
-      padding:10px 12px;
-      border-radius:10px;
-      background: rgba(15,23,36,0.85);
-      color: #fff;
-      border:none;
-      /* Remove native styling */
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-    }
-
-    /* Grid – display exactly three columns */
-    .grid {
-      display:grid;
-      gap:12px;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top:12px;
-    }
-    .card { background: rgba(255,255,255,0.06); padding:12px; border-radius:12px; text-align:center; box-shadow:0 6px 20px rgba(0,0,0,0.35); transition: transform .18s ease, background .18s ease; }
-    .card:hover { transform:translateY(-6px); background: rgba(255,255,255,0.09); }
-    .avatar { width:100%; height:140px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
-    .name { font-weight:700; color:#fff; margin-bottom:6px; }
-    .role { font-size:13px; opacity:0.9; margin-bottom:8px; }
-    .bio { font-size:13px; color:#cbd5e1; min-height:40px; margin-bottom:10px; }
-    .contact { display:flex; gap:8px; justify-content:center; flex-wrap: wrap; }
-    .pill { padding:8px 10px; border-radius:999px; background: rgba(96,165,250,0.12); font-weight:600; color:#dbeafe; font-size:13px; border:1px solid rgba(96,165,250,0.2); }
-
-    /* small details */
-    .count { font-size:13px; color:#cbd5e1; }
-    footer { padding:14px 20px; text-align:center; font-size:13px; color:#9ca3af; background: rgba(15,23,36,0.8); backdrop-filter: blur(4px); margin-top:20px; }
-
-    /* Modal styles */
-    .admin-modal {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background:rgba(0,0,0,0.6);
-      display:flex; align-items:center; justify-content:center;
       padding:20px;
-      z-index:1000;
-      backdrop-filter: blur(5px);
     }
 
-    @media (max-width:560px) {
-      .avatar { height:120px; }
-      .controls { flex-direction:column; align-items:stretch; }
-      .grid { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); }
+    header { background:rgba(8,12,20,0.85); padding:14px 18px; border-radius:6px; margin-bottom:18px; box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+    .container { max-width:1100px; margin:0 auto; }
+
+    .brand { display:flex; align-items:center; gap:12px; }
+    .logo { font-weight:700; font-size:20px; color:#fff; }
+    .sub { color:#9fb3e6; font-size:13px; }
+
+    .board {
+      margin-top:16px;
+      background: rgba(255,255,255,0.03);
+      border-radius:6px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 8px 26px rgba(2,6,23,0.6);
     }
+
+    /* toolbar */
+    .toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 12px; background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(255,255,255,0.02); }
+    .toolbar .left { display:flex; gap:8px; align-items:center; }
+    .search input { padding:8px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.25); color:#eaf2ff; }
+    .btn { background:#1e90ff; color:#081228; padding:8px 10px; border-radius:4px; font-weight:700; border:0; cursor:pointer; }
+    .btn.ghost { background:transparent; color:#9fb3e6; border:1px solid rgba(255,255,255,0.04); }
+
+    /* forum table */
+    .forum-table { width:100%; border-collapse:collapse; }
+    .forum-row { display:grid; grid-template-columns: 56% 12% 12% 20%; gap:8px; align-items:center; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.02); }
+    .forum-row.alt { background: linear-gradient(90deg, rgba(255,255,255,0.006), rgba(255,255,255,0.004)); }
+    .forum-left { display:flex; gap:12px; align-items:center; }
+    .forum-icon { width:60px; height:48px; background:#102233; border-radius:4px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#9fb3e6; border:1px solid rgba(255,255,255,0.03); }
+    .forum-title { font-weight:700; color:#eaf2ff; font-size:15px; }
+    .forum-desc { color:#9fb3e6; font-size:13px; margin-top:6px; }
+
+    .stat { text-align:center; color:#cfe3ff; font-weight:700; }
+    .small { font-weight:400; font-size:13px; color:#9fb3e6; margin-top:4px; text-align:center; }
+
+    .lastpost { text-align:right; font-size:13px; color:#9fb3e6; }
+    .lastpost .who { color:#eaf2ff; font-weight:700; display:block; }
+    .lastpost .when { font-size:12px; color:#9fb3e6; margin-top:4px; }
+
+    /* topic list inside a forum (simulated) */
+    .topics { padding:12px 14px; background:rgba(255,255,255,0.01); display:none; flex-direction:column; gap:8px; border-top:1px dashed rgba(255,255,255,0.02); }
+    .topic { display:flex; gap:12px; align-items:flex-start; padding:8px; background:rgba(255,255,255,0.01); border-radius:4px; }
+    .topic .avatar { width:46px; height:46px; border-radius:4px; object-fit:cover; border:1px solid rgba(255,255,255,0.05); }
+    .topic .info { flex:1; }
+    .topic .title { font-weight:700; color:#eaf2ff; }
+    .topic .meta { color:#9fb3e6; font-size:13px; margin-top:6px; }
+
+    /* mobile */
+    @media (max-width:860px) {
+      .forum-row { grid-template-columns: 1fr 18% 18%; }
+      .lastpost { display:none; }
+      .forum-icon { width:48px; height:44px; }
+    }
+    @media (max-width:520px) {
+      .forum-row { grid-template-columns: 1fr; gap:6px; padding:10px; }
+      .stat, .small { text-align:left; }
+      .lastpost { text-align:left; }
+    }
+
+    footer { margin-top:18px; color:#9fb3e6; text-align:center; font-size:13px; }
+    a.link { color:#7fb7ff; text-decoration:none; }
+    a.link:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div class="logo">Spectroms Kingdom</div>
-      <nav aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html" class="tab">Home</a></li>
-          <li><a href="projects.html" class="tab">Projects</a></li>
-          <li><a href="contact.html" class="tab">Contact</a></li>
-          <li class="tab-active"><a href="staff_directory.html" class="tab tab-active">Staff Directory</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main>
-    <section class="panel" aria-labelledby="staff-heading">
-      <h1 id="staff-heading">Staff Directory</h1>
-      <p style="margin-top:6px; color:#cbd5e1;">Browse and search your server staff. Click a card for more details. Replace sample entries below with your real staff list (see notes).</p>
-      <div class="controls">
-        <div class="search">
-          <input id="searchBox" type="search" placeholder="Search name, role, tag...">
-          <button id="clearBtn" title="Clear search" style="padding:10px 12px; border-radius:10px; border:none; cursor:pointer; background:rgba(255,255,255,0.04); color:#e5e7eb;">✖</button>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div>
+          <div class="logo">Spectroms Kingdom Forums</div>
+          <div class="sub">Classic forum layout — categories, threads, last post</div>
         </div>
-        <select id="roleFilter" class="select" aria-label="Filter by role">
-          <option value="">All roles</option>
-          <option value="Server Manager">Server Manager</option>
-          <option value="Vice Manager">Vice Manager</option>
-          <option value="Vetted Manager">Vetted Manager</option>
-          <option value="Spectre | TCM | VCM | WA">Spectre | TCM | VCM | WA</option>
-          <option value="Captain">Captain</option>
-          <option value="Mod Text CM">Mod Text CM</option>
-          <option value="Mod Voice CM">Mod Voice CM</option>
-        </select>
-        <div class="count" id="resultCount">0 staff</div>
       </div>
-      <div id="grid" class="grid" role="list">
-        <!-- Cards will be rendered here by JS -->
+    </header>
+
+    <div class="board" aria-live="polite">
+      <div class="toolbar">
+        <div class="left">
+          <button class="btn" id="newTopicBtn">New Topic</button>
+          <button class="btn ghost" id="markRead">Mark all read</button>
+        </div>
+        <div class="right" style="display:flex; gap:8px; align-items:center;">
+          <div class="search">
+            <input id="searchBox" placeholder="Search forums, topics or users..." />
+          </div>
+        </div>
       </div>
-    </section>
-  </main>
-  <footer>&copy; 2025 Spectroms Kingdom — staff directory</footer>
+
+      <div id="forumsRoot">
+        <!-- Forums rendered here -->
+      </div>
+    </div>
+
+    <footer>&copy; 2025 Spectroms Kingdom — classic forum skin</footer>
+  </div>
+
   <script>
-    /*
-      Staff Directory script
-      - Data: edit the STAFF_DATA array below (or fetch from a JSON endpoint)
-      - Rendering is simple and nested: renderGrid -> renderCard -> attachEvents
-    */
     (function () {
-      const STAFF_DATA = [
+      const FORUM_DATA = [
         {
-          id: "s1",
-          name: "Spectrom",
-          role: "Server Manager",
-          avatar: "https://i.pravatar.cc/400?img=1",
-          bio: "Server Manager for the community.",
-          tags: [],
-          contact: {}
+          id: 'f1',
+          title: 'Announcements',
+          desc: 'Official news, updates and server-wide information.',
+          icon: 'A',
+          threads: 18,
+          posts: 142,
+          last: { who: 'Spectrom', when: 'Today, 09:12' },
+          topics: [
+            { id:'t1', title:'Server Update 2.4 Released', author:'Spectrom', replies:12, views:621, time:'Today, 08:50', avatar:'https://i.pravatar.cc/80?img=1' },
+            { id:'t2', title:'Maintenance schedule', author:'Oynx', replies:4, views:120, time:'Yesterday, 19:02', avatar:'https://i.pravatar.cc/80?img=2' }
+          ]
         },
         {
-          id: "s2",
-          name: "Oynx",
-          role: "Vice Manager",
-          avatar: "https://i.pravatar.cc/400?img=2",
-          bio: "Vice Manager for the community.",
-          tags: [],
-          contact: {}
+          id: 'f2',
+          title: 'General Discussion',
+          desc: 'Chat about anything related to the community.',
+          icon: 'G',
+          threads: 432,
+          posts: 3892,
+          last: { who: 'miss.the_rage', when: 'Yesterday, 22:37' },
+          topics: [
+            { id:'t3', title:'Introduce yourself!', author:'TopDilf', replies:86, views:2301, time:'2 days ago', avatar:'https://i.pravatar.cc/80?img=3' },
+            { id:'t4', title:'Favorite spawn locations', author:'Trippy', replies:9, views:412, time:'Yesterday, 13:10', avatar:'https://i.pravatar.cc/80?img=12' }
+          ]
         },
         {
-          id: "s3",
-          name: "TopDilf",
-          role: "Vetted Manager",
-          avatar: "https://i.pravatar.cc/400?img=3",
-          bio: "Vetted Manager for the community.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s4",
-          name: "FAN",
-          role: "Spectre | TCM | VCM | WA",
-          avatar: "https://i.pravatar.cc/400?img=4",
-          bio: "A key member of the staff team.",
-          tags: ["Mod Text CM"],
-          contact: {}
-        },
-        {
-          id: "s5",
-          name: "Gunslinger5484",
-          role: "Spectre | TCM | VCM | WA",
-          avatar: "https://i.pravatar.cc/400?img=5",
-          bio: "A key member of the staff team.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s6",
-          name: "nzshooter88",
-          role: "Spectre | TCM | VCM | WA",
-          avatar: "https://i.pravatar.cc/400?img=6",
-          bio: "A key member of the staff team.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s7",
-          name: "Dwarfninja",
-          role: "Captain",
-          avatar: "https://i.pravatar.cc/400?img=7",
-          bio: "Team Captain and Voice Mod.",
-          tags: ["Mod Voice CM"],
-          contact: {}
-        },
-        {
-          id: "s8",
-          name: "LucJamez",
-          role: "Captain",
-          avatar: "https://i.pravatar.cc/400?img=8",
-          bio: "Team Captain for the community.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s9",
-          name: "miss.the_rage",
-          role: "Captain",
-          avatar: "https://i.pravatar.cc/400?img=9",
-          bio: "Team Captain for the community.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s10",
-          name: "whiteboycarter",
-          role: "Captain",
-          avatar: "https://i.pravatar.cc/400?img=10",
-          bio: "Team Captain and Community Moderator.",
-          tags: ["Mod Text CM", "Mod Voice CM"],
-          contact: {}
-        },
-        {
-          id: "s11",
-          name: "Ethangames2012",
-          role: "Mod Voice CM",
-          avatar: "https://i.pravatar.cc/400?img=11",
-          bio: "Voice channel Community Moderator.",
-          tags: [],
-          contact: {}
-        },
-        {
-          id: "s12",
-          name: "Trippy",
-          role: "Mod Voice CM",
-          avatar: "https://i.pravatar.cc/400?img=12",
-          bio: "Voice channel Community Moderator.",
-          tags: [],
-          contact: {}
+          id: 'f3',
+          title: 'Staff Corner',
+          desc: 'Private or semi-private staff discussions and coordination.',
+          icon: 'S',
+          threads: 67,
+          posts: 558,
+          last: { who: 'FAN', when: 'Today, 06:11' },
+          topics: [
+            { id:'t5', title:'Shift rotations (updated)', author:'Gunslinger5484', replies:3, views:78, time:'Today, 05:50', avatar:'https://i.pravatar.cc/80?img=5' }
+          ]
         }
       ];
-      
-      const Utils = (function () {
-        function el(tag, attrs = {}, children = []) {
-          const node = document.createElement(tag);
-          for (const k in attrs) {
-            if (k === "class") node.className = attrs[k];
-            else if (k === "text") node.textContent = attrs[k];
-            else node.setAttribute(k, attrs[k]);
-          }
-          (Array.isArray(children) ? children : [children]).forEach(c => {
-            if (!c) return;
-            if (typeof c === "string") node.appendChild(document.createTextNode(c));
-            else node.appendChild(c);
-          });
-          return node;
+
+      const root = document.getElementById('forumsRoot');
+      const searchBox = document.getElementById('searchBox');
+      const newTopicBtn = document.getElementById('newTopicBtn');
+
+      function createNode(tag, attrs = {}, children = []) {
+        const el = document.createElement(tag);
+        for (const k in attrs) {
+          if (k === 'class') el.className = attrs[k];
+          else if (k === 'text') el.textContent = attrs[k];
+          else el.setAttribute(k, attrs[k]);
         }
-        function matchesFilter(item, q, role) {
-          const qLower = q.trim().toLowerCase();
-          if (role && item.role !== role) return false;
-          if (!qLower) return true;
-          return (item.name + " " + item.role + " " + (item.tags || []).join(" ") + " " + (item.bio || "")).toLowerCase().includes(qLower);
-        }
-        return { el, matchesFilter };
-      })();
-      
-      const grid = document.getElementById("grid");
-      const searchBox = document.getElementById("searchBox");
-      const roleFilter = document.getElementById("roleFilter");
-      const clearBtn = document.getElementById("clearBtn");
-      const resultCount = document.getElementById("resultCount");
-      
-      function renderCard(staff) {
-        const img = Utils.el("img", { class: "avatar", src: staff.avatar || "https://i.pravatar.cc/400", alt: staff.name });
-        const name = Utils.el("div", { class: "name", text: staff.name });
-        const role = Utils.el("div", { class: "role", text: staff.role });
-        const bio = Utils.el("div", { class: "bio", text: staff.bio || "" });
-        const tagsWrap = Utils.el("div", { class: "contact" }, (staff.tags || []).map(t => Utils.el("span", { class: "pill", text: t })));
-        const card = Utils.el("article", { class: "card", role: "listitem", "data-id": staff.id }, [
-          img, name, role, bio, tagsWrap
-        ]);
-      
-        card.addEventListener("click", () => showDetails(staff));
-        return card;
+        (Array.isArray(children) ? children : [children]).forEach(c => {
+          if (!c) return;
+          if (typeof c === 'string') el.appendChild(document.createTextNode(c));
+          else el.appendChild(c);
+        });
+        return el;
       }
-      
-      function renderGrid(data, q = "", role = "") {
-        grid.innerHTML = "";
-        const filtered = data.filter(item => Utils.matchesFilter(item, q, role));
-        resultCount.textContent = `${filtered.length} staff`;
-        if (!filtered.length) {
-          grid.appendChild(Utils.el("div", { class: "card", text: "No staff found. Edit STAFF_DATA in the script to add members." }));
-          return;
-        }
-        filtered.forEach(staff => grid.appendChild(renderCard(staff)));
-      }
-      
-      function showDetails(staff) {
-        const modal = Utils.el("div", { class: "admin-modal", role: "dialog", "aria-modal": "true" }, [
-          Utils.el("div", { class: "admin-card", style: "min-width:300px; background:#0f1724; color:#fff; border-radius:10px; padding:16px;" }, [
-            Utils.el("div", { class: "name", text: staff.name }),
-            Utils.el("div", { class: "role", text: staff.role }),
-            Utils.el("img", { src: staff.avatar, class: "avatar", style: "height:160px; margin:10px 0;" }),
-            Utils.el("div", { class: "bio", text: staff.bio || "" }),
-            Utils.el("div", { style: "margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;" }, (staff.contact ? Object.keys(staff.contact).map(k => {
-              const v = staff.contact[k];
-              const node = Utils.el("a", { href: v && v.startsWith("http") ? v : "javascript:void(0)", class: "pill", target: "_blank", rel: "noopener noreferrer", text: `${k}: ${v}` });
-              return node;
-            }) : [] )),
-            Utils.el("div", { style: "margin-top:12px; text-align:right;" }, [
-              Utils.el("button", { style: "padding:8px 10px; border-radius:8px; border:none; background:#60a5fa; color:#0f1724; cursor:pointer;", text: "Close" })
-            ])
+
+      function renderForumRow(forum, index) {
+        const row = createNode('div', { class: 'forum-row' + (index % 2 ? ' alt' : '') });
+
+        // Left: icon, title, description
+        const left = createNode('div', { class: 'forum-left' }, [
+          createNode('div', { class: 'forum-icon', text: forum.icon }),
+          createNode('div', {}, [
+            createNode('div', { class: 'forum-title' }, [
+              createNode('a', { class: 'link', href: '#', text: forum.title })
+            ]),
+            createNode('div', { class: 'forum-desc', text: forum.desc })
           ])
         ]);
-        document.body.appendChild(modal);
-        modal.querySelector("button").addEventListener("click", () => modal.remove());
-        modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+
+        // Threads count
+        const threads = createNode('div', { class: 'stat', text: forum.threads.toString() });
+        const threadsLabel = createNode('div', { class: 'small', text: 'Threads' });
+
+        // Posts count
+        const posts = createNode('div', { class: 'stat', text: forum.posts.toString() });
+        const postsLabel = createNode('div', { class: 'small', text: 'Posts' });
+
+        const countsWrap = createNode('div', {}, [threads, threadsLabel]);
+        const postsWrap = createNode('div', {}, [posts, postsLabel]);
+
+        // Last post info
+        const last = createNode('div', { class: 'lastpost' }, [
+          createNode('span', { class: 'who', text: forum.last.who }),
+          createNode('span', { class: 'when', text: forum.last.when })
+        ]);
+
+        // Put together depending on responsive columns
+        row.appendChild(left);
+        row.appendChild(countsWrap);
+        row.appendChild(postsWrap);
+        row.appendChild(last);
+
+        // topics container (collapsed)
+        const topics = createNode('div', { class: 'topics', id: 'topics-' + forum.id });
+
+        forum.topics.forEach(t => {
+          const topic = createNode('div', { class: 'topic' }, [
+            createNode('img', { class: 'avatar', src: t.avatar, alt: t.author }),
+            createNode('div', { class: 'info' }, [
+              createNode('div', { class: 'title' }, [
+                createNode('a', { class: 'link', href: '#', text: t.title })
+              ]),
+              createNode('div', { class: 'meta', text: `by ${t.author} • ${t.replies} replies • ${t.views} views • ${t.time}` })
+            ])
+          ]);
+          topics.appendChild(topic);
+        });
+
+        // toggle topics on click of title
+        left.querySelector('.forum-title a').addEventListener('click', (e) => {
+          e.preventDefault();
+          const visible = topics.style.display === 'flex';
+          // close all
+          document.querySelectorAll('.topics').forEach(n => n.style.display = 'none');
+          if (!visible) topics.style.display = 'flex';
+        });
+
+        // append row & topics
+        const wrapper = createNode('div');
+        wrapper.appendChild(row);
+        wrapper.appendChild(topics);
+        return wrapper;
       }
-      
-      searchBox.addEventListener("input", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
-      roleFilter.addEventListener("change", () => renderGrid(STAFF_DATA, searchBox.value, roleFilter.value));
-      clearBtn.addEventListener("click", () => { searchBox.value = ""; roleFilter.value = ""; renderGrid(STAFF_DATA, "", ""); });
-      
-      (async function init() {
-        renderGrid(STAFF_DATA);
-        (function highlight() {
-          const tabs = document.querySelectorAll('nav a.tab');
-          const current = window.location.pathname.split('/').pop() || 'index.html';
-          tabs.forEach(tab => { if (tab.getAttribute('href') === current || tab.classList.contains('tab-active')) { tab.classList.add('tab-active'); if (tab.parentElement) tab.parentElement.classList.add('tab-active'); } });
-        })();
-      })();
-      
+
+      function render(forums) {
+        root.innerHTML = '';
+        forums.forEach((f, i) => root.appendChild(renderForumRow(f, i)));
+      }
+
+      // simple search
+      function doSearch(q) {
+        const ql = q.trim().toLowerCase();
+        if (!ql) { render(FORUM_DATA); return; }
+        const filtered = FORUM_DATA.map(f => {
+          const topics = (f.topics || []).filter(t => (t.title + ' ' + t.author).toLowerCase().includes(ql));
+          if (f.title.toLowerCase().includes(ql) || f.desc.toLowerCase().includes(ql) || topics.length) {
+            return Object.assign({}, f, { topics });
+          }
+          return null;
+        }).filter(Boolean);
+        render(filtered);
+      }
+
+      searchBox.addEventListener('input', (e) => doSearch(e.target.value));
+
+      newTopicBtn.addEventListener('click', () => {
+        const title = prompt('Enter topic title (demo):');
+        if (!title) return;
+      });
+
+      // initial render
+      render(FORUM_DATA);
     })();
   </script>
 </body>
