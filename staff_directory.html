@@ -5,77 +5,107 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Spectroms Kingdom — Forum (classic)</title>
   <style>
-    /* Lightweight "classic forum" skin (Enjin-era inspired) */
-    * { box-sizing:border-box; margin:0; padding:0; font-family: "Helvetica Neue", Arial, Helvetica, sans-serif; }
-    body {
-      background: linear-gradient(180deg,#0b1220 0%, #0f1724 60%), url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=60') center/cover fixed;
-      color:#dfe8f8;
-      min-height:100vh;
-      padding:20px;
+    /* Modernized, scalable forum skin */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    :root{
+      --bg-0: #0b1220;
+      --bg-1: #0f1724;
+      --panel: rgba(255,255,255,0.04);
+      --muted: #9fb3e6;
+      --accent: #1e90ff;
+      --text: #eaf2ff;
+      --glass: rgba(255,255,255,0.03);
+      --radius: 10px;
+      --container: 1200px;
+      --gap: 1.1rem;
     }
+    html { font-size: clamp(14px, 1.2vw + 10px, 18px); }
+    * { box-sizing:border-box; margin:0; padding:0; font-family: Inter, "Helvetica Neue", Arial, Helvetica, sans-serif; }
+    body {
+      background: linear-gradient(180deg,var(--bg-0) 0%, var(--bg-1) 60%), url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1920&q=60') center/cover fixed;
+      color:var(--text);
+      min-height:100vh;
+      padding:calc(var(--gap) * 1.5);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .container { max-width:var(--container); margin:0 auto; padding:0 20px; }
 
-    header { background:rgba(8,12,20,0.85); padding:14px 18px; border-radius:6px; margin-bottom:18px; box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
-    .container { max-width:1100px; margin:0 auto; }
-
-    .brand { display:flex; align-items:center; gap:12px; }
-    .logo { font-weight:700; font-size:20px; color:#fff; }
-    .sub { color:#9fb3e6; font-size:13px; }
+    header { background:linear-gradient(180deg, rgba(10,14,20,0.9), rgba(6,8,12,0.7)); padding:16px 20px; border-radius:calc(var(--radius) - 2px); margin-bottom:18px; box-shadow: 0 10px 30px rgba(2,6,23,0.6); }
+    .brand { display:flex; align-items:center; gap:14px; }
+    .logo { font-weight:800; font-size:clamp(18px, 1.6vw, 28px); color:#fff; letter-spacing:0.4px; }
+    .sub { color:var(--muted); font-size:0.95rem; }
 
     .board {
       margin-top:16px;
-      background: rgba(255,255,255,0.03);
-      border-radius:6px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.04);
-      box-shadow: 0 8px 26px rgba(2,6,23,0.6);
+      border:1px solid var(--panel);
+      box-shadow: 0 12px 40px rgba(2,6,23,0.65);
     }
 
     /* toolbar */
-    .toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 12px; background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(255,255,255,0.02); }
-    .toolbar .left { display:flex; gap:8px; align-items:center; }
-    .search input { padding:8px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.06); background:rgba(0,0,0,0.25); color:#eaf2ff; }
-    .btn { background:#1e90ff; color:#081228; padding:8px 10px; border-radius:4px; font-weight:700; border:0; cursor:pointer; }
-    .btn.ghost { background:transparent; color:#9fb3e6; border:1px solid rgba(255,255,255,0.04); }
+    .toolbar { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; background:rgba(255,255,255,0.015); border-bottom:1px solid rgba(255,255,255,0.02); }
+    .toolbar .left { display:flex; gap:10px; align-items:center; }
+    .search input { padding:10px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:rgba(0,0,0,0.32); color:var(--text); width:320px; max-width:40vw; }
+    .search input::placeholder{ color:var(--muted); }
+    .btn { background:var(--accent); color:#071226; padding:10px 12px; border-radius:8px; font-weight:800; border:0; cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; box-shadow: 0 6px 18px rgba(30,144,255,0.12); }
+    .btn:hover{ transform:translateY(-2px); }
+    .btn:active{ transform:translateY(0); }
+    .btn.ghost { background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04); box-shadow:none; }
 
-    /* forum table */
-    .forum-table { width:100%; border-collapse:collapse; }
-    .forum-row { display:grid; grid-template-columns: 56% 12% 12% 20%; gap:8px; align-items:center; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.02); }
-    .forum-row.alt { background: linear-gradient(90deg, rgba(255,255,255,0.006), rgba(255,255,255,0.004)); }
-    .forum-left { display:flex; gap:12px; align-items:center; }
-    .forum-icon { width:60px; height:48px; background:#102233; border-radius:4px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#9fb3e6; border:1px solid rgba(255,255,255,0.03); }
-    .forum-title { font-weight:700; color:#eaf2ff; font-size:15px; }
-    .forum-desc { color:#9fb3e6; font-size:13px; margin-top:6px; }
+    /* forum table (cards that scale) */
+    .forum-list { display:flex; flex-direction:column; gap:8px; }
+    .forum-row { display:grid; grid-template-columns: 1fr 96px 96px minmax(180px, 1fr); gap:12px; align-items:center; padding:14px; border-bottom:1px solid rgba(255,255,255,0.02); background:linear-gradient(180deg, rgba(255,255,255,0.006), transparent); }
+    .forum-row.alt { background: linear-gradient(90deg, rgba(255,255,255,0.008), rgba(255,255,255,0.004)); }
+    .forum-left { display:flex; gap:14px; align-items:center; }
+    .forum-icon { width:64px; height:56px; background:linear-gradient(135deg,#081b2a 0%, #143447 100%); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--muted); border:1px solid rgba(255,255,255,0.03); box-shadow: inset 0 -6px 18px rgba(0,0,0,0.25); font-size:1.05rem; }
+    .forum-details { display:flex; flex-direction:column; min-width:0; }
+    .forum-title { font-weight:700; color:var(--text); font-size:1rem; }
+    .forum-title a { color:inherit; text-decoration:none; display:inline-block; }
+    .forum-title a:focus{ outline:2px solid rgba(30,144,255,0.18); border-radius:6px; }
+    .forum-desc { color:var(--muted); font-size:0.95rem; margin-top:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-    .stat { text-align:center; color:#cfe3ff; font-weight:700; }
-    .small { font-weight:400; font-size:13px; color:#9fb3e6; margin-top:4px; text-align:center; }
+    .stat { text-align:center; color:#cfe3ff; font-weight:800; }
+    .small { font-weight:500; font-size:0.9rem; color:var(--muted); margin-top:6px; text-align:center; }
 
-    .lastpost { text-align:right; font-size:13px; color:#9fb3e6; }
-    .lastpost .who { color:#eaf2ff; font-weight:700; display:block; }
-    .lastpost .when { font-size:12px; color:#9fb3e6; margin-top:4px; }
+    .lastpost { text-align:right; font-size:0.95rem; color:var(--muted); }
+    .lastpost .who { color:var(--text); font-weight:700; display:block; }
+    .lastpost .when { font-size:0.85rem; color:var(--muted); margin-top:6px; }
 
-    /* topic list inside a forum (simulated) */
-    .topics { padding:12px 14px; background:rgba(255,255,255,0.01); display:none; flex-direction:column; gap:8px; border-top:1px dashed rgba(255,255,255,0.02); }
-    .topic { display:flex; gap:12px; align-items:flex-start; padding:8px; background:rgba(255,255,255,0.01); border-radius:4px; }
-    .topic .avatar { width:46px; height:46px; border-radius:4px; object-fit:cover; border:1px solid rgba(255,255,255,0.05); }
-    .topic .info { flex:1; }
-    .topic .title { font-weight:700; color:#eaf2ff; }
-    .topic .meta { color:#9fb3e6; font-size:13px; margin-top:6px; }
+    /* topic list inside a forum */
+    .topics { padding:14px; background:rgba(255,255,255,0.01); display:none; flex-direction:column; gap:10px; border-top:1px dashed rgba(255,255,255,0.02); }
+    .topic { display:flex; gap:12px; align-items:center; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:10px; }
+    .topic .avatar { width:52px; height:52px; border-radius:999px; object-fit:cover; border:1px solid rgba(255,255,255,0.05); }
+    .topic .info { flex:1; min-width:0; }
+    .topic .title { font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .topic .meta { color:var(--muted); font-size:0.95rem; margin-top:6px; }
 
-    /* mobile */
-    @media (max-width:860px) {
-      .forum-row { grid-template-columns: 1fr 18% 18%; }
-      .lastpost { display:none; }
-      .forum-icon { width:48px; height:44px; }
+    /* modal */
+    .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,12,0.6); display:flex; align-items:center; justify-content:center; z-index:1200; }
+    .modal { background:linear-gradient(180deg,#0b1222, #0e1726); border-radius:12px; padding:18px; width:min(720px, 96%); box-shadow:0 18px 60px rgba(2,6,23,0.7); border:1px solid rgba(255,255,255,0.035); }
+    .modal h3{ margin-bottom:8px; }
+    .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+    .field input, .field textarea{ padding:10px 12px; border-radius:8px; background:rgba(0,0,0,0.28); border:1px solid rgba(255,255,255,0.03); color:var(--text); }
+    .modal-actions{ display:flex; gap:8px; justify-content:flex-end; }
+
+    /* responsive */
+    @media (max-width:980px){
+      .forum-row { grid-template-columns: 1fr 86px 86px; }
+      .lastpost{ display:none; }
     }
-    @media (max-width:520px) {
-      .forum-row { grid-template-columns: 1fr; gap:6px; padding:10px; }
+    @media (max-width:560px){
+      .forum-row { grid-template-columns: 1fr; gap:8px; padding:12px; }
       .stat, .small { text-align:left; }
-      .lastpost { text-align:left; }
+      .forum-desc{ white-space:normal; }
     }
 
-    footer { margin-top:18px; color:#9fb3e6; text-align:center; font-size:13px; }
+    footer { margin-top:18px; color:var(--muted); text-align:center; font-size:0.95rem; }
     a.link { color:#7fb7ff; text-decoration:none; }
     a.link:hover { text-decoration:underline; }
+
+    @media (prefers-reduced-motion: reduce){ *{ transition:none!important; animation:none!important; } }
   </style>
 </head>
 <body>
@@ -153,9 +183,11 @@
         }
       ];
 
-      const root = document.getElementById('forumsRoot');
-      const searchBox = document.getElementById('searchBox');
-      const newTopicBtn = document.getElementById('newTopicBtn');
+  const root = document.getElementById('forumsRoot');
+  const searchBox = document.getElementById('searchBox');
+  const newTopicBtn = document.getElementById('newTopicBtn');
+  // accessibility
+  searchBox.setAttribute('aria-label', 'Search forums, topics or users');
 
       function createNode(tag, attrs = {}, children = []) {
         const el = document.createElement(tag);
@@ -209,8 +241,8 @@
         row.appendChild(postsWrap);
         row.appendChild(last);
 
-        // topics container (collapsed)
-        const topics = createNode('div', { class: 'topics', id: 'topics-' + forum.id });
+  // topics container (collapsed)
+  const topics = createNode('div', { class: 'topics', id: 'topics-' + forum.id, 'aria-hidden': 'true' });
 
         forum.topics.forEach(t => {
           const topic = createNode('div', { class: 'topic' }, [
@@ -225,13 +257,22 @@
           topics.appendChild(topic);
         });
 
-        // toggle topics on click of title
-        left.querySelector('.forum-title a').addEventListener('click', (e) => {
+        // toggle topics on click of title (accessible)
+        const titleLink = left.querySelector('.forum-title a');
+        titleLink.setAttribute('role', 'button');
+        titleLink.setAttribute('aria-controls', 'topics-' + forum.id);
+        titleLink.setAttribute('aria-expanded', 'false');
+        titleLink.addEventListener('click', (e) => {
           e.preventDefault();
           const visible = topics.style.display === 'flex';
           // close all
-          document.querySelectorAll('.topics').forEach(n => n.style.display = 'none');
-          if (!visible) topics.style.display = 'flex';
+          document.querySelectorAll('.topics').forEach(n => { n.style.display = 'none'; n.setAttribute('aria-hidden', 'true'); });
+          document.querySelectorAll('.forum-title a').forEach(a => a.setAttribute('aria-expanded', 'false'));
+          if (!visible) { topics.style.display = 'flex'; topics.setAttribute('aria-hidden', 'false'); titleLink.setAttribute('aria-expanded', 'true'); }
+        });
+        // keyboard support (Enter / Space)
+        titleLink.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); titleLink.click(); }
         });
 
         // append row & topics
@@ -243,7 +284,9 @@
 
       function render(forums) {
         root.innerHTML = '';
-        forums.forEach((f, i) => root.appendChild(renderForumRow(f, i)));
+        const list = createNode('div', { class: 'forum-list' });
+        forums.forEach((f, i) => list.appendChild(renderForumRow(f, i)));
+        root.appendChild(list);
       }
 
       // simple search
@@ -262,10 +305,59 @@
 
       searchBox.addEventListener('input', (e) => doSearch(e.target.value));
 
-      newTopicBtn.addEventListener('click', () => {
-        const title = prompt('Enter topic title (demo):');
-        if (!title) return;
-      });
+      // Simple modal to add a demo topic (non-persistent)
+      function openNewTopicModal() {
+        // backdrop
+        const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+        // modal
+        const modal = document.createElement('div'); modal.className = 'modal';
+        modal.innerHTML = `
+          <h3>Create a demo topic</h3>
+          <div class="field">
+            <label>Forum</label>
+            <select id="_modalForumSelect">${FORUM_DATA.map((f, i) => `<option value="${f.id}">${f.title}</option>`).join('')}</select>
+          </div>
+          <div class="field">
+            <label>Title</label>
+            <input id="_modalTitle" placeholder="Topic title" />
+          </div>
+          <div class="field">
+            <label>Author</label>
+            <input id="_modalAuthor" placeholder="Your name" />
+          </div>
+          <div class="modal-actions">
+            <button class="btn ghost" id="_modalCancel">Cancel</button>
+            <button class="btn" id="_modalCreate">Create</button>
+          </div>
+        `;
+        backdrop.appendChild(modal);
+        document.body.appendChild(backdrop);
+
+        const cancel = document.getElementById('_modalCancel');
+        const create = document.getElementById('_modalCreate');
+        cancel.addEventListener('click', () => { backdrop.remove(); });
+        backdrop.addEventListener('click', (e) => { if (e.target === backdrop) backdrop.remove(); });
+        create.addEventListener('click', () => {
+          const forumId = document.getElementById('_modalForumSelect').value;
+          const title = document.getElementById('_modalTitle').value.trim();
+          const author = document.getElementById('_modalAuthor').value.trim() || 'Guest';
+          if (!title) { alert('Please enter a title.'); return; }
+          const forum = FORUM_DATA.find(f => f.id === forumId);
+          if (!forum) { alert('Forum not found'); backdrop.remove(); return; }
+          const newTopic = { id: 't' + Date.now(), title, author, replies:0, views:0, time: 'Just now', avatar: 'https://i.pravatar.cc/80?img=8' };
+          forum.topics.unshift(newTopic);
+          forum.threads = (forum.threads || 0) + 1;
+          forum.posts = (forum.posts || 0) + 1;
+          backdrop.remove();
+          render(FORUM_DATA);
+          // open the forum we just added to
+          setTimeout(() => {
+            const link = document.querySelector(".forum-title a[href='#']:not([data-temp])");
+            // no-op — render will handle collapses
+          }, 60);
+        });
+      }
+      newTopicBtn.addEventListener('click', openNewTopicModal);
 
       // initial render
       render(FORUM_DATA);
